@@ -4,9 +4,10 @@ from django.contrib import admin
 
 from . import models
 
-admin.site.register(models.Person)
+admin.site.register(models.Profile)
 
-@admin.register(models.Entity, models.Platform, models.Publisher, models.Shop, models.Sponsor, models.Studio, models.Studio_type, models.Videogame_common, models.Videogame_rating, models.Tag)
+@admin.register(models.Filter, models.TypeOfShop, models.TypeOfEntity, models.Entity_Category, models.Entity, models.ValueForFilter, models.Platform, models.Publisher, models.Shop, models.Sponsor,
+                models.Studio, models.Studio_type, models.Videogame_common, models.Videogame_rating, models.Tag)
 class AuthorAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
     
