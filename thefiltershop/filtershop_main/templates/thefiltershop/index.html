@@ -1,13 +1,18 @@
-{% extends "base.html" %}
+{% extends "thefiltershop/base.html" %}
 
-{% block title %}Articles for {{ year }}{% endblock %}
+{% block title %}Best games today{% endblock %}
 
 {% block content %}
-<h1>Articles for {{ year }}</h1>
+<h1>Best games</h1>
 
-{% for article in article_list %}
-    <p>{{ article.headline }}</p>
-    <p>By {{ article.reporter.full_name }}</p>
-    <p>Published {{ article.pub_date|date:"F j, Y" }}</p>
+{% for game in latest_games %}
+    <p>{{ game.for_entity.name }}</p>
+    <p>{{ game.for_entity.description }}</p>
+    {% for publisher in game.publishers.all %}
+        <p>Published by {{ publisher.name }}</p>
+    {% endfor %}
+    {% for image in game.for_entity.image_set.all %}
+        <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
+    {% endfor %}
 {% endfor %}
 {% endblock %}
