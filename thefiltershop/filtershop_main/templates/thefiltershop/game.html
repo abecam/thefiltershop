@@ -1,0 +1,17 @@
+{% extends "thefiltershop/base.html" %}
+
+{% block title %}{{ a_game.for_entity.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ a_game.for_entity.name }}s</h1>
+
+<p>{{ a_game.for_entity.name }}</p>
+<p>{{ a_game.for_entity.description }}</p>
+{% for publisher in a_game.publishers.all %}
+     <p>Published by {{ publisher.name }}</p>
+{% endfor %}
+{% for image in a_game.for_entity.image_set.all %}
+    <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
+{% endfor %}
+
+{% endblock %}

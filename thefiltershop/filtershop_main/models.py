@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from PIL import Image
+import PIL.Image
 
 class User(AbstractUser):
     pass
@@ -32,7 +32,7 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         # resize the image
-        img = Image.open(self.avatar.path)
+        img = PIL.Image.open(self.avatar.path)
         if img.height > 300 or img.width > 300:
             output_size = (300, 300)
             # create a thumbnail
@@ -125,6 +125,8 @@ class Entity(models.Model):
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT)
     general_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     
+    vignette = models.ImageField(upload_to='images', null=True, blank=True)
+    
     hidden_full_cost = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     crapometer = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     description = models.TextField(max_length=4000, null=True, blank=True)
@@ -142,6 +144,19 @@ class Entity(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        # save the profile first
+        super().save(*args, **kwargs)
+
+        # resize the image
+        img = PIL.Image.open(self.vignette.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            # create a thumbnail
+            img.thumbnail(output_size)
+            # overwrite the larger image
+            img.save(self.vignette.path)
+            
     # ethical_money_rating = models.IntegerField()
     # ethical_moral_rating = models.IntegerField()
     # ethical_marketing_rating = models.IntegerField()
@@ -172,7 +187,7 @@ class Image(models.Model):
 
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
-       
+
 ########################################
 class Studio_type(models.Model):
     name = models.CharField(max_length=300)

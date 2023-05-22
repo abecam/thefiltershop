@@ -6,7 +6,11 @@
 <h1>Best games</h1>
 
 {% for game in latest_games %}
-    <p>{{ game.for_entity.name }}</p>
+    <div class="artisan_game">
+    <p>
+        <a href="{% url 'filtershop_games:game' game.id %}">{{ game.for_entity.name  }}</a>
+    </p>
+    <img src="{{game.for_entity.vignette.url}}"" alt="{{game.for_entity.vignette.name}}"> 
     <p>{{ game.for_entity.description }}</p>
     {% for publisher in game.publishers.all %}
         <p>Published by {{ publisher.name }}</p>
@@ -14,5 +18,6 @@
     {% for image in game.for_entity.image_set.all %}
         <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
     {% endfor %}
+    </div>
 {% endfor %}
 {% endblock %}
