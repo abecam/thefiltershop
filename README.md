@@ -11,8 +11,8 @@ What we want to do here is to push the good products in front, and less known th
 
 The Filter Shop is actually 2 combined things:
 
-    a filter to the shops,
-    and what I would call progressive marketing.
+* a filter to the shops,
+* and what I would call progressive marketing.
 
 The filter-shop is not a shop: it is a filter for other shops.
 
