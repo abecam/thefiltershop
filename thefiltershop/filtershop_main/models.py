@@ -125,7 +125,7 @@ class Entity(models.Model):
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT)
     general_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     
-    vignette = models.ImageField(upload_to='images', null=True, blank=True)
+    vignette = models.ImageField(upload_to='images', null=False, blank=False)
     
     hidden_full_cost = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     crapometer = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
