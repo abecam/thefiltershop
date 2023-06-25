@@ -68,14 +68,6 @@ class Tag(BaseModel):
     def __str__(self):
         return self.name
     
-########################################
-class Shop(BaseModel):
-    url = models.URLField()
-    identity = models.ImageField()
-    
-    def __str__(self):
-        return self.name
-    
 class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
@@ -120,13 +112,6 @@ class Entity(BaseModel):
 # Should be inline in Entities. 
 class Alias(BaseModel):
     for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
-
-########################################
-class Links_to_shops(BaseModel):
-    link = models.URLField()
-    identity = models.CharField(max_length=300)
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
 
 class Entity_Category(BaseModel):
     for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
@@ -232,6 +217,23 @@ class Physical_shop(Entity):
     they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     shop_logo = models.ImageField()
     group =  models.ManyToManyField(Company_group)
+    
+########## Online Shop ##################
+class Online_Shop(Entity):
+    shop_type = models.CharField(max_length=300)
+    ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    spotlight_count = models.IntegerField(default=0)
+    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    shop_logo = models.ImageField()
+    group =  models.ManyToManyField(Company_group)
+      
+########################################
+class Links_to_shops(BaseModel):
+    link = models.URLField()
+    identity = models.CharField(max_length=300)
+    shop = models.ForeignKey(Online_Shop, on_delete=models.CASCADE, related_name="on_shop")
+    for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
     
 class Software(Entity):
     software_type = models.CharField(max_length=300)

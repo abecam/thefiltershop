@@ -6,7 +6,7 @@ from . import models
 
 admin.site.register(models.Profile)
 
-@admin.register(models.Filter, models.TypeOfShop, models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Shop, models.Sponsor,
+@admin.register(models.Filter, models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
                 models.Studio, models.Studio_type, models.Tag)
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
@@ -25,6 +25,10 @@ class AliasInline(admin.StackedInline):
 class imageAdmin(admin.ModelAdmin):
     list_display = ["title", "image_tag", "photo"] # new
 
+class Links_to_shops_Inline(admin.StackedInline):
+    model = models.Links_to_shops
+    extra = 1
+    
 class Videogame_ratingInline(admin.StackedInline):
     model = models.Videogame_rating
     extra = 1
@@ -44,7 +48,7 @@ class VideoGameAdmin(EntityAdmin):
     ]
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
-    inlines = [Videogame_ratingInline, AliasInline]
+    inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
      
 @admin.register(models.Company_group)
 class Company_groupAdmin(EntityAdmin):
