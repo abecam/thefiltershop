@@ -9,7 +9,23 @@ import PIL.Image
 class User(AbstractUser):
     pass
     
-class Profile(models.Model):
+class BaseModel(models.Model):
+    name = models.CharField(max_length=300)
+    description = models.TextField(max_length=1000, null=True, blank=True)
+    
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
+                                    verbose_name=('Created by'), editable=False, null=True, blank=True, related_name="%(app_label)s_%(class)s_related_type")
+    date_creation = models.DateTimeField("date creation", auto_now_add=True)
+    last_update = models.DateTimeField("last updated", auto_now=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        abstract = True
+        ordering = ['date_creation', 'name']
+        
+class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)
     biography = models.TextField(max_length=3000)
@@ -20,10 +36,7 @@ class Profile(models.Model):
         default='avatar.jpg', # default avatar
         upload_to='profile_avatars' # dir to store the image
     )
-    
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
-    
+
     def __str__(self):
         return f'{self.full_name} Profile'
     
@@ -40,109 +53,44 @@ class Profile(models.Model):
             # overwrite the larger image
             img.save(self.avatar.path)
 
-class Filter(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=4000, null=True, blank=True)
+class Filter(BaseModel):
     is_positive = models.BooleanField(default=False) # Fiters are mostly for bad things (too many IAPS, false Ads,... ) but could be positive too (educative, relaxing, ...)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
 
-class TypeOfShop(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=4000, null=True, blank=True)
-    filters = models.ManyToManyField(Filter)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
-class TypeOfEntity(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=4000, null=True, blank=True)
+class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
+
     
-class Tag(models.Model):
-    name = models.CharField(max_length=300)
+class Tag(BaseModel):
     good_or_bad = models.IntegerField()
     parent_tag = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
     def __str__(self):
         return self.name
     
-
 ########################################
-class Shop(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=4000, null=True, blank=True)
+class Shop(BaseModel):
     url = models.URLField()
     identity = models.ImageField()
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
     def __str__(self):
         return self.name
-
-########################################
-class Links_to_shops(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=1000, null=True, blank=True)
-    link = models.URLField()
-    identity = models.CharField(max_length=300)
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
-    def __str__(self):
-        return self.name
-
-class Entity_Category(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=3000, null=True, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
-    
-class Entity(models.Model):
+class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
-    name = models.CharField(max_length=300)
     url = models.URLField()
-    for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT)
+    for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     
     vignette = models.ImageField(upload_to='images', null=False, blank=False)
     
     hidden_full_cost = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     crapometer = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
-    description = models.TextField(max_length=4000, null=True, blank=True)
-    in_hall_of_shame = models.BooleanField()
+    in_hall_of_shame = models.BooleanField(default=False)
+    descriptionOfShame = models.TextField(max_length=1000)
     
-    Links_to_shops = models.ForeignKey(Links_to_shops, on_delete=models.RESTRICT, null=True, blank=True)
-    Entity_Category = models.ForeignKey(Entity_Category, on_delete=models.RESTRICT, null=True, blank=True)
-    
-    tags = models.ManyToManyField(Tag)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
-    
-    def __str__(self):
-        return self.name
+    tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_related_tags")
 
     def save(self, *args, **kwargs):
         # save the profile first
@@ -169,18 +117,27 @@ class Entity(models.Model):
     # desc_insulting_ads = models.CharField(max_length=1000)
     # desc_misleading_ads = models.CharField(max_length=1000)
     
+# Should be inline in Entities. 
+class Alias(BaseModel):
+    for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
+
+########################################
+class Links_to_shops(BaseModel):
+    link = models.URLField()
+    identity = models.CharField(max_length=300)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
+
+class Entity_Category(BaseModel):
+    for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
+        
 # ValueForFilter should be set-up by the application from the TypeOfEntity
-class ValueForFilter(models.Model):
+class ValueForFilter(BaseModel):
     value = models.IntegerField(null=False, default=50) # From 0 to 100
     filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
     for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
-    description = models.TextField(max_length=1000, null=True, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
 
-class Image(models.Model):
+class Image(BaseModel):
     title = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='images')
     Entity = models.ForeignKey(Entity, null=True, blank=True, on_delete=models.CASCADE)
@@ -189,81 +146,57 @@ class Image(models.Model):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
 
 ########################################
-class Studio_type(models.Model):
-    name = models.CharField(max_length=300)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+class Studio_type(BaseModel):
     size = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
     def __str__(self):
         return self.name
     
 ########################################
-class Studio(models.Model):
-    name_of_studio = models.CharField(max_length=300)
-    type_of_studio = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
+class Studio(BaseModel):
+    type = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
     url = models.URLField()
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # 'They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us) 
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
-    fully_rotten = models.BooleanField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
     def __str__(self):
-        return self.name_of_studio
+        return self.name
 
 ########################################
-class Publisher(models.Model):
-    name = models.CharField(max_length=300)
+class Publisher(BaseModel):
     size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
     url = models.URLField()
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
     def __str__(self):
         return self.name
 
 ########################################
-class Platform(models.Model):
-    name = models.CharField(max_length=300)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
-    
+class Platform(BaseModel):
+
     def __str__(self):
         return self.name
     
 ########################################
-class Videogame_common(models.Model):
+class Videogame_common(Entity):
     game_type = models.CharField(max_length=300)
     gameplay_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE)
     they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
+# Inline
 ########################################
-class Videogame_rating(models.Model):
+class Videogame_rating(BaseModel):
+    for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
     f2pay = models.BooleanField(default=False)
     gameplay_rating = models.IntegerField()
@@ -276,26 +209,40 @@ class Videogame_rating(models.Model):
     could_be_good_if = models.TextField(max_length=1000)
     use_psycho_tech = models.IntegerField(default=0)  
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)
-    platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
+    
     
 # Sponsor too (like a studio, type+size of contribution? +url)
 ########################################
-class Sponsor(models.Model):
-    name = models.CharField(max_length=300)
+class Sponsor(BaseModel):
     url = models.URLField()
-    description = models.TextField(max_length=1000)
-    image = description = models.ImageField
+    sponsor_logo = models.ImageField()
 
-    in_hall_of_shame = models.BooleanField()
+    in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL,
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True)
-    date_creation = models.DateTimeField("date creation", auto_now_add=True)
-    last_update = models.DateTimeField("last updated", auto_now=True)
     
-    def __str__(self):
-        return self.name_of_studio
+class Company_group(Entity):
+    company_logo = models.ImageField()
+    
+########################################
+class Physical_shop(Entity):
+    shop_type = models.CharField(max_length=300)
+    ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    spotlight_count = models.IntegerField(default=0)
+    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    shop_logo = models.ImageField()
+    group =  models.ManyToManyField(Company_group)
+    
+class Software(Entity):
+    software_type = models.CharField(max_length=300)
+    ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    heaviness = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    do_the_minimum = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    
+    spotlight_count = models.IntegerField(default=0)
+    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    
+    publishers =  models.ManyToManyField(Publisher)
+    studios = models.ManyToManyField(Studio)
+    platforms = models.ManyToManyField(Platform)
