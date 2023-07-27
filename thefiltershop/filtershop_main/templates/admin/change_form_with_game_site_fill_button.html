@@ -1,0 +1,11 @@
+{% extends 'admin/change_form.html' %}
+{% load i18n admin_urls admin_modify %}
+
+{% block object-tools %}
+<button class="tablinks" onclick="fillFromExternalIdField()" id="defaultOpen">Fill from Steam/Google Play/Itch.io ID or URL</button>
+{{ block.super }}
+{% endblock %}
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <input type="submit" name="save_and_fetch_images" value="{% trans 'Save and Fetch Images if possible' %}" class="default" />
+{% endblock %}

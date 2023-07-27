@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
+from filtershop_main.admin import admin_site
 
 urlpatterns = [
     path("", include("filtershop_main.urls")),
@@ -44,7 +45,8 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
+    #path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

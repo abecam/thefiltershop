@@ -4,10 +4,71 @@ from django.contrib import admin
 
 from . import models
 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+import requests
+import logging
+
+logger = logging.getLogger(__name__)
+
+class FillModelFromJSONView(admin.AdminSite):
+    def get_urls(self):
+        from django.urls import path
+
+        urls = super().get_urls()
+        my_urls = [
+            path('thefiltershop/admin/fill_model_from_json/', self.fill_model_from_json, name='fill_model_from_json'),
+        ]
+        return my_urls + urls
+
+    def fill_model_from_json(self, request):
+        if request.method == 'POST':
+            id = request.POST.get('id')
+            if id:
+                # Fetch JSON data from the API endpoint
+                api_endpoint = f"http://www.apipoint.org/{id}"
+                response = requests.get(api_endpoint)
+
+                if response.status_code == 200:
+                    # Load the JSON data
+                    data = response.json()
+
+                    # Create Person objects from JSON data
+                    for item in data:
+                        video_game = models.Videogame_common(name=item['name'], description=item['short_description'], url=item['age'])
+                        video_game.save()
+
+                    self.message_user(request, "Person objects created successfully.")
+                else:
+                    self.message_user(request, "Failed to fetch JSON data from the API.")
+            else:
+                self.message_user(request, "Please provide an ID.")
+
+            return HttpResponseRedirect(reverse('admin:yourapp_person_changelist'))
+
+        context = {
+            'opts': models.Videogame_common._meta,
+            'app_label': models.Videogame_common._meta.app_label,
+        }
+        return self.render(request, 'admin/fill_model_from_json.html', context)
+    
+        # Text to put at the end of each page's <title>.
+    site_title = 'The Filter Shop Admin page'
+
+    # Text to put in each page's <h1> (and above login form).
+    site_header = 'The Filter Shop Admin page'
+
+    # Text to put at the top of the admin index page.
+    index_title = 'The Filter Shop Admin main page'
+        
+
+admin_site = FillModelFromJSONView(name='customadmin')
+
 admin.site.register(models.Profile)
 
 @admin.register(models.Filter, models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
-                models.Studio, models.Studio_type, models.Tag)
+                models.Studio, models.Studio_type, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
     
@@ -21,9 +82,13 @@ class AliasInline(admin.StackedInline):
     model = models.Alias
     extra = 1
     
-@admin.register(models.Image)     
-class imageAdmin(admin.ModelAdmin):
-    list_display = ["title", "image_tag", "photo"] # new
+class ImagesInline(admin.StackedInline):
+    model = models.Image
+    extra = 3
+    
+#@admin.register(models.Image, site=admin_site)     
+#class imageAdmin(admin.ModelAdmin):
+#    list_display = ["title", "image_tag", "photo"] # new
 
 class Links_to_shops_Inline(admin.StackedInline):
     model = models.Links_to_shops
@@ -38,9 +103,12 @@ class EntityAdmin(admin.ModelAdmin):
             ("General info", {"fields": ["name","description"]}),
             (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','crapometer','in_hall_of_shame','descriptionOfShame', 'tags']}),
     ]
+    
+    inlines = [ImagesInline]
    
-@admin.register(models.Videogame_common)
+@admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
+    change_form_template = 'admin/change_form_with_game_site_fill_button.html'
     fieldsets = [
         (None, {"fields": ["game_type"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
@@ -49,8 +117,52 @@ class VideoGameAdmin(EntityAdmin):
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
-     
-@admin.register(models.Company_group)
+    
+    inlines.insert(0, EntityAdmin.inlines[0])
+    
+    def save_model(self, request, obj, form, change):
+        # Override the save_model method to include additional logic
+        # Fetch images from the external website here and perform any necessary operations
+        # For simplicity, let's assume the fetched images are stored in a variable called 'images'
+        context = {
+            'opts': models.Videogame_common._meta,
+            'app_label': models.Videogame_common._meta.app_label,
+        }
+        
+        logger.info("Using our custom save_model");
+        
+        # Will check if there is a Steam/Itch.io/Google Play/Apple ID and fetch the images from there if possible
+        if request.method == 'POST':
+            id = request.POST.get('external_id')
+            logger.info(f"Will try to fetch using id {id}");
+            if id:
+                # check if Steam ID
+                # Fetch JSON data from the API endpoint
+                api_endpoint = f"https://store.steampowered.com/api/appdetails?appids={id}"
+                response = requests.get(api_endpoint)
+
+                if response.status_code == 200:
+                    # Load the JSON data
+                    data = response.json()
+
+                    # Create Person objects from JSON data
+                    for item in data:
+                        video_game = models.Videogame_common(name=item['name'], description=item['short_description'], url=f"https://store.steampowered.com/app/{id}")
+                        video_game.save()
+
+                    self.message_user(request, "Information fetched successfully.")
+                else:
+                    self.message_user(request, "Failed to fetch data from Steam, check the ID.")
+            else:
+                self.message_user(request, "Please provide an ID.")
+
+            return self.render(request, 'admin/change_form_with_game_site_fill_button.html', context)
+
+        # Save the object
+        super().save_model(request, obj, form, change)
+
+        
+@admin.register(models.Company_group, site=admin_site)
 class Company_groupAdmin(EntityAdmin):
     fieldsets = [
         ("Made Details published by", {"fields": ["company_logo"]}),
@@ -59,7 +171,7 @@ class Company_groupAdmin(EntityAdmin):
     
     inlines = [AliasInline]
 
-@admin.register(models.Physical_shop)
+@admin.register(models.Physical_shop, site=admin_site)
 class Physical_shopAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["shop_type"]}),
@@ -70,7 +182,7 @@ class Physical_shopAdmin(EntityAdmin):
     
     inlines = [AliasInline]
     
-@admin.register(models.Software)
+@admin.register(models.Software, site=admin_site)
 class SoftwareAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["software_type"]}),

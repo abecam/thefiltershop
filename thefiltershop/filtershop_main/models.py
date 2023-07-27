@@ -130,6 +130,22 @@ class Image(BaseModel):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
 
+class ImageForFilter(BaseModel):
+    title = models.CharField(max_length=20)
+    photo = models.ImageField(upload_to='images')
+    Filter = models.ForeignKey(Filter, null=True, blank=True, on_delete=models.CASCADE)
+
+    def image_tag(self):
+        return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
+    
+class ImageForFilterValue(BaseModel):
+    title = models.CharField(max_length=20)
+    photo = models.ImageField(upload_to='images')
+    Filter = models.ForeignKey(ValueForFilter, null=True, blank=True, on_delete=models.CASCADE)
+
+    def image_tag(self):
+        return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
+    
 ########################################
 class Studio_type(BaseModel):
     size = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
@@ -186,17 +202,18 @@ class Videogame_common(Entity):
 # Inline
 ########################################
 class Videogame_rating(BaseModel):
+    external_id = models.CharField(max_length=200, verbose_name="External ID (Steam ID, Itch.io URL, Play Store URL, Apple Store URL)", help_text="The filter shop can try to prefil the details by fetching the information from one of the shops websites.")
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
     f2pay = models.BooleanField(default=False)
-    gameplay_rating = models.IntegerField()
+    gameplay_rating = models.IntegerField(default=50)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     good_wo_iap = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])
     good_wo_ads = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])
     ads_supported = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])
     fully_rotten = models.BooleanField(default=False)
-    would_be_good_if = models.TextField(max_length=1000)
-    could_be_good_if = models.TextField(max_length=1000)
+    would_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
+    could_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
     use_psycho_tech = models.IntegerField(default=0)  
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)
     
@@ -253,3 +270,8 @@ class Software(Entity):
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
+    
+#### Prefilled from Steam API, used to fetch a game ###############
+class Entry_on_Steam(BaseModel):
+    appid = models.IntegerField(null=False, blank=False)
+    name = models.CharField(max_length=600)
