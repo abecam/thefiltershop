@@ -15,7 +15,7 @@ def index(request):
 
 
 # To do: 
-#
+# 
 def game(request, videogame_id):
     a_game = get_object_or_404(Videogame_common, pk=videogame_id)
     return render(request, "thefiltershop/game.html", {"a_game": a_game})

@@ -4,6 +4,8 @@ from django.contrib import admin
 
 from . import models
 
+from django_object_actions import DjangoObjectActions, action
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -34,7 +36,7 @@ class FillModelFromJSONView(admin.AdminSite):
                     # Load the JSON data
                     data = response.json()
 
-                    # Create Person objects from JSON data
+                    # Update Game description from ID
                     for item in data:
                         video_game = models.Videogame_common(name=item['name'], description=item['short_description'], url=item['age'])
                         video_game.save()
@@ -53,7 +55,7 @@ class FillModelFromJSONView(admin.AdminSite):
         }
         return self.render(request, 'admin/fill_model_from_json.html', context)
     
-        # Text to put at the end of each page's <title>.
+    # Text to put at the end of each page's <title>.
     site_title = 'The Filter Shop Admin page'
 
     # Text to put in each page's <h1> (and above login form).
@@ -67,6 +69,15 @@ admin_site = FillModelFromJSONView(name='customadmin')
 
 admin.site.register(models.Profile)
 
+class GeneralAdmin(admin.ModelAdmin):
+    date_hierarchy = "date_creation"
+    
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.create_user = request.user #create_user should only be set once
+        obj.write_user = request.user #write_user can be set at all times
+        super().save_model(request, obj, form, change)
+        
 @admin.register(models.Filter, models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
                 models.Studio, models.Studio_type, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):
@@ -105,6 +116,56 @@ class EntityAdmin(admin.ModelAdmin):
     ]
     
     inlines = [ImagesInline]
+    
+@admin.register(models.Entry_on_Steam, site=admin_site)
+class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+    @action(
+        label="Fetch the full Video Game information from Steam"
+    )
+    def make_published(modeladmin, request, queryset):
+        for one_entry in queryset:
+            print(one_entry)
+            id = one_entry.appid
+            logger.info(f"Will try to fetch using id {id}");
+            if id:
+                # check if Steam ID
+                # Fetch JSON data from the API endpoint
+                api_endpoint = f"https://store.steampowered.com/api/appdetails?appids={id}"
+                response = requests.get(api_endpoint)
+
+                if response.status_code == 200:
+                    # Load the JSON data
+                    data = response.json()
+                    # Check if success is true
+                    subdata = data[f"{id}"]
+
+                    success = subdata['success']
+                    if not success:
+                        modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                        return
+                    
+                    content = subdata['data']
+                    
+                    # If there is no video game type yet, create it
+                    try: 
+                        video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
+                    except models.TypeOfEntity.DoesNotExist: 
+                        video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
+                        video_game_type.save()
+
+                    # Check if updating or creating
+                    
+                    # Create Video Game from JSON data
+                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
+                    video_game.save()
+
+                    modeladmin.message_user(request, "Information fetched successfully.")
+                else:
+                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+            else:
+                modeladmin.message_user(request, "Please provide an ID.")
+            
+    changelist_actions = ('make_published', )
    
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):

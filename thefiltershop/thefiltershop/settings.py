@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'filtershop_main.apps.FiltershopMainConfig',
+    'django_object_actions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,5 +143,22 @@ LOGGING = {
     "root": {
         "handlers": ["console"],
         "level": "WARNING",
+    },
+}
+
+# Celery configuration
+import os
+from celery import Celery
+from celery.schedules import crontab
+
+app = Celery('thefiltershop')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
+
+# Define the Celery Beat schedule
+app.conf.beat_schedule = {
+    'populate_steam_entries': {
+        'task': 'myapp.tasks.populate_steam_entries',
+        'schedule': crontab(minute=0),  # Run every hour
     },
 }

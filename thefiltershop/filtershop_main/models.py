@@ -65,20 +65,17 @@ class Tag(BaseModel):
     good_or_bad = models.IntegerField()
     parent_tag = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     
-    def __str__(self):
-        return self.name
-    
 class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
     url = models.URLField()
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
-    general_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
     vignette = models.ImageField(upload_to='images', null=False, blank=False)
     
-    hidden_full_cost = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
-    crapometer = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000)
     
@@ -150,9 +147,6 @@ class ImageForFilterValue(BaseModel):
 class Studio_type(BaseModel):
     size = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
     
-    def __str__(self):
-        return self.name
-    
 ########################################
 class Studio(BaseModel):
     size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
@@ -164,9 +158,6 @@ class Studio(BaseModel):
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.name
 
 ########################################
 class Publisher(BaseModel):
@@ -178,31 +169,30 @@ class Publisher(BaseModel):
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.name
 
 ########################################
 class Platform(BaseModel):
-
-    def __str__(self):
-        return self.name
+    pass
+    
+########################################
+class Game_Category(BaseModel):
+   pass
     
 ########################################
 class Videogame_common(Entity):
     game_type = models.CharField(max_length=300)
-    gameplay_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    gameplay_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
+    categories = models.ManyToManyField(Game_Category)
     
 # Inline
 ########################################
 class Videogame_rating(BaseModel):
-    external_id = models.CharField(max_length=200, verbose_name="External ID (Steam ID, Itch.io URL, Play Store URL, Apple Store URL)", help_text="The filter shop can try to prefil the details by fetching the information from one of the shops websites.")
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
     f2pay = models.BooleanField(default=False)
@@ -236,7 +226,7 @@ class Physical_shop(Entity):
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     shop_logo = models.ImageField()
     group =  models.ManyToManyField(Company_group)
     
@@ -246,7 +236,7 @@ class Online_Shop(Entity):
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     shop_logo = models.ImageField()
     group =  models.ManyToManyField(Company_group)
       
@@ -265,7 +255,7 @@ class Software(Entity):
     do_the_minimum = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField() # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
@@ -274,4 +264,12 @@ class Software(Entity):
 #### Prefilled from Steam API, used to fetch a game ###############
 class Entry_on_Steam(BaseModel):
     appid = models.IntegerField(null=False, blank=False)
+    name = models.CharField(max_length=600)
+    
+class Entry_on_GooglePlay(BaseModel):
+    appid = models.CharField(max_length=600, null=False, blank=False)
+    name = models.CharField(max_length=600)
+    
+class Entry_on_AppleStore(BaseModel):
+    appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
