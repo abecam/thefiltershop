@@ -119,14 +119,116 @@ class EntityAdmin(admin.ModelAdmin):
     
 @admin.register(models.Entry_on_Steam, site=admin_site)
 class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+
     @action(
-        label="Fetch the full Video Game information from Steam"
+        label="Fetch all full Video Game information from Steam"
     )
-    def make_published(modeladmin, request, queryset):
+    @admin.action(description="Fetch the full Video Game information from Steam")
+    def update_one_from_steam(modeladmin, request, queryset):
+        id = queryset.appid
+        logger.info(f"Will try to fetch using id {id} for {queryset}");
+        if id:
+            # check if Steam ID
+            # Fetch JSON data from the API endpoint
+            api_endpoint = f"https://store.steampowered.com/api/appdetails?appids={id}"
+            response = requests.get(api_endpoint)
+            if response.status_code == 200:
+                # Load the JSON data
+                data = response.json()
+                # Check if success is true
+                subdata = data[f"{id}"]
+                success = subdata['success']
+                if not success:
+                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                    return
+                
+                content = subdata['data']
+                
+                # If there is no video game type yet, create it
+                try: 
+                    video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
+                except models.TypeOfEntity.DoesNotExist: 
+                    video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
+                    video_game_type.save()
+                # Check if updating or creating
+                try: 
+                    video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                    modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
+                except models.Videogame_common.DoesNotExist:               
+                    
+                    # Create Video Game from JSON data
+                    
+                    # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
+                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
+                    video_game.save()
+                    modeladmin.message_user(request, "Information fetched successfully.")
+            else:
+                modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+        else:
+            modeladmin.message_user(request, "Please provide an ID.")
+    
+    @action(
+        label="Fetch all full Video Game information from Steam and force the update"
+    )
+    @admin.action(description="Fetch the full Video Game information from Steam and update the game entry even if it already exists")
+    def force_update_one_from_steam(modeladmin, request, queryset):
+        id = queryset.appid
+        logger.info(f"Will try to fetch using id {id} for {queryset}");
+        if id:
+            # check if Steam ID
+            # Fetch JSON data from the API endpoint
+            api_endpoint = f"https://store.steampowered.com/api/appdetails?appids={id}"
+            response = requests.get(api_endpoint)
+            if response.status_code == 200:
+                # Load the JSON data
+                data = response.json()
+                # Check if success is true
+                subdata = data[f"{id}"]
+                success = subdata['success']
+                if not success:
+                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                    return
+                
+                content = subdata['data']
+                
+                # If there is no video game type yet, create it
+                try: 
+                    video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
+                except models.TypeOfEntity.DoesNotExist: 
+                    video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
+                    video_game_type.save()
+                # Check if updating or creating
+                try: 
+                    video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                    modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Updating all information from Steam.")
+                    video_game.name = content['name']
+                    video_game.description = content['short_description']
+                    video_game.url = f"https://store.steampowered.com/app/{id}"
+                    video_game.for_type =video_game_type
+                    video_game.save()
+                    
+                except models.Videogame_common.DoesNotExist:               
+                    
+                    # Create Video Game from JSON data
+                    
+                    # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
+                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
+                    video_game.save()
+                    modeladmin.message_user(request, "Information fetched successfully.")
+            else:
+                modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+        else:
+            modeladmin.message_user(request, "Please provide an ID.")
+            
+    @action(
+        label="Fetch all full Video Game information from Steam for all games missing in the filter shop"
+    )
+    @admin.action(description="Fetch the full Video Game information from Steam for all game known here and missing in the filter shop")
+    def update_several_from_steam(modeladmin, request, queryset):
         for one_entry in queryset:
             print(one_entry)
             id = one_entry.appid
-            logger.info(f"Will try to fetch using id {id}");
+            logger.info(f"Will try to fetch using id {id}  for {one_entry}");
             if id:
                 # check if Steam ID
                 # Fetch JSON data from the API endpoint
@@ -154,18 +256,26 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                         video_game_type.save()
 
                     # Check if updating or creating
-                    
-                    # Create Video Game from JSON data
-                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
-                    video_game.save()
+                    try: 
+                        video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                        modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
+                    except models.Videogame_common.DoesNotExist:               
+                        
+                        # Create Video Game from JSON data
+                        
+                        # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
+                        video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
+                        video_game.save()
 
-                    modeladmin.message_user(request, "Information fetched successfully.")
+                        modeladmin.message_user(request, "Information fetched successfully.")
                 else:
                     modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
             else:
                 modeladmin.message_user(request, "Please provide an ID.")
             
-    changelist_actions = ('make_published', )
+    change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
+    changelist_actions = ('update_several_from_steam', )
+    actions = [update_several_from_steam]
    
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
