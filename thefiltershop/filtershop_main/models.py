@@ -273,3 +273,16 @@ class Entry_on_GooglePlay(BaseModel):
 class Entry_on_AppleStore(BaseModel):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
+    
+### Mirror tables to fetch stupidly all new entries
+class New_Entry_on_Steam(BaseModel):
+    appid = models.IntegerField(null=False, blank=False)
+    name = models.CharField(max_length=600)
+    
+class New_Entry_on_GooglePlay(BaseModel):
+    appid = models.CharField(max_length=600, null=False, blank=False)
+    name = models.CharField(max_length=600)
+    
+class New_Entry_on_AppleStore(BaseModel):
+    appid = models.CharField(max_length=600, null=False, blank=False)
+    name = models.CharField(max_length=600)

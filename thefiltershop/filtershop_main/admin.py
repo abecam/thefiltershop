@@ -1,3 +1,7 @@
+import requests
+import logging
+import tempfile
+
 from django.contrib import admin
 
 # Register your models here.
@@ -9,8 +13,9 @@ from django_object_actions import DjangoObjectActions, action
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-import requests
-import logging
+
+
+from django.core import files
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +122,10 @@ class EntityAdmin(admin.ModelAdmin):
     
     inlines = [ImagesInline]
     
+@admin.register(models.New_Entry_on_Steam, site=admin_site)
+class NewEntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+    pass
+
 @admin.register(models.Entry_on_Steam, site=admin_site)
 class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 
@@ -264,17 +273,116 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                         # Create Video Game from JSON data
                         
                         # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
-                        video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
+                        video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
                         video_game.save()
+                        
+                        # creating images
+                        # header_image
+                        
+                        # capsule_image
+                        #
 
+                        # screenshots
+                        # screenshots	
+                        #   0	
+                        #   id	0
+                        # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
+                        # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
+                        
+                        # link to shop: f"https://store.steampowered.com/app/{id}"
                         modeladmin.message_user(request, "Information fetched successfully.")
                 else:
                     modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
             else:
-                modeladmin.message_user(request, "Please provide an ID.")
+                modeladmin.message_user(request, "Please select an item first.")
+             
+    def getAllThumbnails()
+        for image_url in image_urls:
+            # Stream the image from the url
+            response = requests.get(image_url, stream=True)
+
+            # Was the request OK?
+            if response.status_code != requests.codes.ok:
+                # Nope, error handling, skip file etc etc etc
+                continue
+    
+            # Get the filename from the url, used for saving later
+            file_name = image_url.split('/')[-1]
+    
+            # Create a temporary file
+            lf = tempfile.NamedTemporaryFile()
+
+            # Read the streamed image in sections
+            for block in response.iter_content(1024 * 8):
+        
+                # If no more file then stop
+                if not block:
+                    break
+
+                # Write image block to temporary file
+                lf.write(block)
+
+            # Create the model you want to save the image to
+            image = Image()
+
+            # Save the temporary image to the model#
+            # This saves the model so be sure that it is valid
+            image.image.save(file_name, files.File(lf))   
+        
+    @action(
+        label="Fetch all Video Game entries from Steam"
+    )
+    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
+    def fetch_all_from_steam(modeladmin, request, queryset):
+        steam_api_url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
+        response = requests.get(steam_api_url)
+        data = response.json()
+
+        # Populate the model
+        for app_data in data['applist']['apps']:
+            app_id = app_data['appid']
+            app_name = app_data['name']
+
+            # Update or create the model entry
+            models.Entry_on_Steam.objects.update_or_create(
+                appid=app_id,
+                defaults={'name': app_name}
+            )
+        
+        modeladmin.message_user(request, "Finished.")
+        
+    @action(
+        label="Fetch all Video Game entries from Steam - fast ?"
+    )
+    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
+    def fetch_all_from_steam_fast(modeladmin, request, queryset):
+        logger.info("Fetching all games from Steam");
+        steam_api_url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
+        response = requests.get(steam_api_url)
+        data = response.json()
+        logger.info("Fetching all games from Steam - downloaded");
+        
+        models.New_Entry_on_Steam.objects.all().delete()
+        
+        logger.info("Fetching all games from Steam - all models deleted");
+        
+        # Populate the model
+        for app_data in data['applist']['apps']:
+            app_id = app_data['appid']
+            app_name = app_data['name']
             
+            # Update or create the model entry
+            models.New_Entry_on_Steam.objects.create(
+                appid=app_id,
+                name=app_name
+            )
+        
+        logger.info("Fetching all games from Steam - all models created");
+        modeladmin.message_user(request, "Finished.")
+                
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
-    changelist_actions = ('update_several_from_steam', )
+    #changelist_actions = ('update_several_from_steam')
+    changelist_actions = ('fetch_all_from_steam', 'fetch_all_from_steam_fast')
     actions = [update_several_from_steam]
    
 @admin.register(models.Videogame_common, site=admin_site)
