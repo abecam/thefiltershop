@@ -68,7 +68,7 @@ class Tag(BaseModel):
 class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
-    url = models.URLField()
+    url = models.URLField(null=True)
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     

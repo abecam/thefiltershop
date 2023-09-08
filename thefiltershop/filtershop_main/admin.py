@@ -19,47 +19,7 @@ from django.core import files
 
 logger = logging.getLogger(__name__)
 
-class FillModelFromJSONView(admin.AdminSite):
-    def get_urls(self):
-        from django.urls import path
-
-        urls = super().get_urls()
-        my_urls = [
-            path('thefiltershop/admin/fill_model_from_json/', self.fill_model_from_json, name='fill_model_from_json'),
-        ]
-        return my_urls + urls
-
-    def fill_model_from_json(self, request):
-        if request.method == 'POST':
-            id = request.POST.get('id')
-            if id:
-                # Fetch JSON data from the API endpoint
-                api_endpoint = f"http://www.apipoint.org/{id}"
-                response = requests.get(api_endpoint)
-
-                if response.status_code == 200:
-                    # Load the JSON data
-                    data = response.json()
-
-                    # Update Game description from ID
-                    for item in data:
-                        video_game = models.Videogame_common(name=item['name'], description=item['short_description'], url=item['age'])
-                        video_game.save()
-
-                    self.message_user(request, "Person objects created successfully.")
-                else:
-                    self.message_user(request, "Failed to fetch JSON data from the API.")
-            else:
-                self.message_user(request, "Please provide an ID.")
-
-            return HttpResponseRedirect(reverse('admin:yourapp_person_changelist'))
-
-        context = {
-            'opts': models.Videogame_common._meta,
-            'app_label': models.Videogame_common._meta.app_label,
-        }
-        return self.render(request, 'admin/fill_model_from_json.html', context)
-    
+class MyAdminSite(admin.AdminSite):
     # Text to put at the end of each page's <title>.
     site_title = 'The Filter Shop Admin page'
 
@@ -70,7 +30,7 @@ class FillModelFromJSONView(admin.AdminSite):
     index_title = 'The Filter Shop Admin main page'
         
 
-admin_site = FillModelFromJSONView(name='customadmin')
+admin_site = MyAdminSite(name='customadmin')
 
 admin.site.register(models.Profile)
 
@@ -274,20 +234,22 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                         
                         # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
                         video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
-                        video_game.save()
                         
                         # creating images
                         # header_image
                         
                         # capsule_image
                         #
-
+                        EntryOnSteam.getCapsuleAndHeader(content['capsule_image'],content['header_image'],video_game)
                         # screenshots
                         # screenshots	
                         #   0	
                         #   id	0
                         # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
                         # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
+                        EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
+                        
+                        video_game.save()
                         
                         # link to shop: f"https://store.steampowered.com/app/{id}"
                         modeladmin.message_user(request, "Information fetched successfully.")
@@ -295,9 +257,76 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
             else:
                 modeladmin.message_user(request, "Please select an item first.")
-             
-    def getAllThumbnails()
-        for image_url in image_urls:
+        
+    def getCapsuleAndHeader(capsule_url, header_url, model):
+            # Stream the image from the url
+            response = requests.get(capsule_url, stream=True)
+
+            # Was the request OK?
+            if response.status_code == requests.codes.ok:
+                # Get the filename from the url, used for saving later
+                file_name = model.name+"_capsule.jpg"
+    
+                # Create a temporary file
+                lf = tempfile.NamedTemporaryFile()
+
+                # Read the streamed image in sections
+                for block in response.iter_content(1024 * 8):
+        
+                    # If no more file then stop
+                    if not block:
+                        break
+
+                    # Write image block to temporary file
+                    lf.write(block)
+
+                # Save the temporary image to the model#
+                # This saves the model so be sure that it is valid
+                model.vignette.save(file_name, files.File(lf)) 
+                #model.save()   
+                    
+            # Stream the image from the url
+            response = requests.get(header_url, stream=True)
+
+            # Was the request OK?
+            if response.status_code == requests.codes.ok:
+                # Get the filename from the url, used for saving later
+                file_name =model.name+"_header.jpg"
+    
+                # Create a temporary file
+                lf = tempfile.NamedTemporaryFile()
+
+                # Read the streamed image in sections
+                for block in response.iter_content(1024 * 8):
+        
+                    # If no more file then stop
+                    if not block:
+                        break
+
+                    # Write image block to temporary file
+                    lf.write(block)
+                    
+                image = models.Image()
+                image.title = file_name
+                image.Entity = model
+
+                # Save the temporary image to the model#
+                # This saves the model so be sure that it is valid
+                image.photo.save(file_name, files.File(lf))   
+            
+    def getAllThumbnails(thumbnails, model):
+        #
+        #  screenshots
+        #  screenshots	
+        #   0	
+        #   id	0
+        # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
+        # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
+        #
+        nb_thumbnail = 0
+        for  one_entry in thumbnails:
+            image_url = one_entry['path_thumbnail']
+            
             # Stream the image from the url
             response = requests.get(image_url, stream=True)
 
@@ -307,8 +336,9 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 continue
     
             # Get the filename from the url, used for saving later
-            file_name = image_url.split('/')[-1]
-    
+            file_name =f"{model.name}_thumbnail_{nb_thumbnail}.jpg"
+            nb_thumbnail+=1
+            
             # Create a temporary file
             lf = tempfile.NamedTemporaryFile()
 
@@ -322,12 +352,13 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 # Write image block to temporary file
                 lf.write(block)
 
-            # Create the model you want to save the image to
-            image = Image()
+            image = models.Image()
+            image.title = file_name
+            image.Entity = model
 
             # Save the temporary image to the model#
             # This saves the model so be sure that it is valid
-            image.image.save(file_name, files.File(lf))   
+            image.photo.save(file_name, files.File(lf))   
         
     @action(
         label="Fetch all Video Game entries from Steam"
@@ -393,6 +424,7 @@ class VideoGameAdmin(EntityAdmin):
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
         ("Made and published by", {"fields": ["studios","publishers","platforms"], "classes": ["collapse"]}),
     ]
+    fieldsets.insert(0, EntityAdmin.fieldsets[1])
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]

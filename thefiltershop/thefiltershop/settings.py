@@ -135,14 +135,24 @@ MEDIA_URL = '/media/'
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)3.3s %(asctime)22.22s [%(name)s:%(funcName)s] {%(process)d} %(message)s'
+        }
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
         },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "./log/debug.log",
+        },
     },
     "root": {
-        "handlers": ["console"],
-        "level": "WARNING",
+        "handlers": ["console", "file"],
+        "level": "INFO",
     },
 }
 
