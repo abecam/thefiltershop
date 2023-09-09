@@ -53,6 +53,8 @@ class GeneralAdmin(admin.ModelAdmin):
             obj.create_user = request.user #create_user should only be set once
         obj.write_user = request.user #write_user can be set at all times
         super().save_model(request, obj, form, change)
+        
+    search_fields = ["name"]
    
 class AliasInline(admin.StackedInline):
     model = models.Alias
@@ -217,6 +219,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     
                     content = subdata['data']
                     
+                    # TODO: Move all into a method with the force update as parameter.
+                     
                     # If there is no video game type yet, create it
                     try: 
                         video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
@@ -375,10 +379,11 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             app_name = app_data['name']
 
             # Update or create the model entry
-            models.Entry_on_Steam.objects.update_or_create(
-                appid=app_id,
-                defaults={'name': app_name}
-            )
+            if "Demo" not in app_name: 
+                models.Entry_on_Steam.objects.update_or_create(
+                    appid=app_id,
+                    defaults={'name': app_name}
+                )
         
         modeladmin.message_user(request, "Finished.")
         
@@ -403,27 +408,60 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             app_name = app_data['name']
             
             # Update or create the model entry
-            models.New_Entry_on_Steam.objects.create(
-                appid=app_id,
-                name=app_name
-            )
+            if "Demo" not in app_name: 
+                models.New_Entry_on_Steam.objects.create(
+                    appid=app_id,
+                    name=app_name
+                )
         
-        logger.info("Fetching all games from Steam - all models created");
+        # Now check if we got something and how many we got
+        nb_new_games = models.New_Entry_on_Steam.objects.count() - models.Entry_on_Steam.objects.count()
+        update_actual_entries = False
+        if nb_new_games > 0 :
+            logger.info(f"Fetching all games from Steam - all models created, got {nb_new_games} new applications");
+            modeladmin.message_user(request, f"Fetching all games from Steam - all models created, got {nb_new_games} new applications")
+            update_actual_entries = True
+        elif nb_new_games < 0 :
+            logger.info(f"Fetching all games from Steam - got too few models ({models.New_Entry_on_Steam.objects.count} - {-nb_new_games} less than already there)");
+            modeladmin.message_user(request, f"Fetching all games from Steam - got too few models ({models.New_Entry_on_Steam.objects.count} - {-nb_new_games} less than already there), not updating.")
+            update_actual_entries = True
+        else :
+            logger.info(f"Fetching all games from Steam - all models created, got no new applications (by number)");
+            modeladmin.message_user(request, f"Fetching all games from Steam - all models created, got no new applications (by number)")
+            update_actual_entries = True
+        
+        if update_actual_entries:
+            models.Entry_on_Steam.objects.all().delete()
+            
+            for one_entry in models.New_Entry_on_Steam.objects.all():
+               models.Entry_on_Steam.objects.create(
+                    appid=one_entry.appid,
+                    name=one_entry.name
+                )
+
         modeladmin.message_user(request, "Finished.")
                 
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
     #changelist_actions = ('update_several_from_steam')
     changelist_actions = ('fetch_all_from_steam', 'fetch_all_from_steam_fast')
     actions = [update_several_from_steam]
+    list_display = ["name", "appid"]
+    ordering = ["name"]
+    readonly_fields = ["name", "appid"]
+    search_fields = ["name", "appid"]
    
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
+    list_filter = ["game_type", "platforms"]
     change_form_template = 'admin/change_form_with_game_site_fill_button.html'
     fieldsets = [
         (None, {"fields": ["game_type"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
         ("Made and published by", {"fields": ["studios","publishers","platforms"], "classes": ["collapse"]}),
     ]
+    autocomplete_fields = ["studios","platforms"]
+    search_fields = ["name"]
+    
     fieldsets.insert(0, EntityAdmin.fieldsets[1])
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
