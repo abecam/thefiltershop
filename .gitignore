@@ -51,6 +51,13 @@
 # Embedded web-server pid file
 /.web-server-pid
 *.pyc
+
+# Uploaded images
 thefiltershop/media/images/
-thefiltershop/thefiltershop/__pycache__/
+
+# Temporary dev db
 thefiltershop/db.sqlite3_thefiltershop
+
+# Python cache
+thefiltershop/thefiltershop/__pycache__/
+thefiltershop/filtershop_main/__pycache__/
