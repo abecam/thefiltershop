@@ -72,7 +72,7 @@ class Entity(BaseModel):
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
-    vignette = models.ImageField(upload_to='images', null=False, blank=False)
+    vignette = models.ImageField(upload_to='images', null=True, blank=False)
     
     hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
@@ -151,7 +151,7 @@ class Studio_type(BaseModel):
 class Studio(BaseModel):
     size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
     type = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
-    url = models.URLField()
+    url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # 'They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us) 
@@ -162,7 +162,7 @@ class Studio(BaseModel):
 ########################################
 class Publisher(BaseModel):
     size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
-    url = models.URLField()
+    url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
@@ -245,7 +245,7 @@ class Links_to_shops(BaseModel):
     link = models.URLField()
     identity = models.CharField(max_length=300)
     shop = models.ForeignKey(Online_Shop, on_delete=models.CASCADE, related_name="on_shop")
-    for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
+    for_Entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=True, blank=True)
     
 class Software(Entity):
     software_type = models.CharField(max_length=300)

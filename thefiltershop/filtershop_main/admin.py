@@ -252,7 +252,18 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                         # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
                         # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
                         EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
+                        # studio(s) and publisher(s)
+                        EntryOnSteam.setStudioAndPublisher(content['developers'],content['publishers'],video_game)
                         
+                        # 
+                        EntryOnSteam.setPlatforms(content['platforms'],video_game)
+                        
+                        # Categories
+                        if 'genres' in content :
+                            EntryOnSteam.setCategories(content['genres'],video_game)
+                        
+                        # And the link to Steam
+                        EntryOnSteam.addLinkToSteam(id,video_game)
                         video_game.save()
                         
                         # link to shop: f"https://store.steampowered.com/app/{id}"
@@ -327,8 +338,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
         # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
         #
-        nb_thumbnail = 0
-        for  one_entry in thumbnails:
+
+        for nb_thumbnail, one_entry in enumerate(thumbnails):
             image_url = one_entry['path_thumbnail']
             
             # Stream the image from the url
@@ -341,7 +352,6 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     
             # Get the filename from the url, used for saving later
             file_name =f"{model.name}_thumbnail_{nb_thumbnail}.jpg"
-            nb_thumbnail+=1
             
             # Create a temporary file
             lf = tempfile.NamedTemporaryFile()
@@ -363,6 +373,111 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             # Save the temporary image to the model#
             # This saves the model so be sure that it is valid
             image.photo.save(file_name, files.File(lf))   
+        
+    def setStudioAndPublisher(developers,publishers,video_game):
+        for one_entry in developers:
+            print(one_entry)
+            # Find back the developer or create it
+            try: 
+                studio = models.Studio.objects.all().get(name=one_entry) 
+            except models.Studio.DoesNotExist: 
+                studio = models.Studio(name=one_entry, description="")
+                # And need a studio type first
+                try: 
+                    studioType = models.Studio_type.objects.all().get(name="Artisan") 
+                except models.Studio_type.DoesNotExist: 
+                    studioType = models.Studio_type(name="Artisan", description="Very small indie developer generally without publisher.", size=0)
+                    studioType.save()
+                studio.type = studioType
+                studio.save()
+                
+            # And add it
+            video_game.studios.add(studio) 
+                
+        for one_entry in publishers:
+            print(f"Publisher: {one_entry}")
+            
+            # Find back the publisher or create it
+            try: 
+                publisher = models.Publisher.objects.all().get(name=one_entry) 
+            except models.Publisher.DoesNotExist: 
+                publisher = models.Publisher(name=one_entry, description="")
+                publisher.save()
+    
+             # And add it
+            video_game.publishers.add(publisher) 
+            
+    def setPlatforms(platforms, video_game):
+        # currently only a boolean for Windows, Linux and Mac
+        if platforms['windows']:
+            # Find back the Windows platform or create it
+            try: 
+                platform = models.Platform.objects.all().get(name="Windows") 
+            except models.Platform.DoesNotExist: 
+                platform = models.Platform(name="Windows", description="Windows 7 and after.")
+                platform.save()
+                
+            # And add it
+            video_game.platforms.add(platform)
+        if platforms['linux']:
+            # Find back the Linux platform or create it
+            try: 
+                platform = models.Platform.objects.all().get(name="Linux") 
+            except models.Platform.DoesNotExist: 
+                platform = models.Platform(name="Linux", description="Linux.")
+                platform.save()
+                
+            # And add it
+            video_game.platforms.add(platform)
+            
+        if platforms['mac']:
+            # Find back the Linux platform or create it
+            try: 
+                platform = models.Platform.objects.all().get(name="Mac") 
+            except models.Platform.DoesNotExist: 
+                platform = models.Platform(name="Mac", description="Mac.")
+                platform.save()   
+                
+            # And add it
+            video_game.platforms.add(platform)
+          
+    def setCategories(genres,video_game):
+        for one_entry in genres:
+            print(one_entry)
+            one_genre = one_entry['description']
+            # Find back the developer or create it
+            try: 
+                category = models.Game_Category.objects.all().get(name=one_genre) 
+            except models.Game_Category.DoesNotExist: 
+                category = models.Game_Category(name=one_genre, description="")
+                category.save()
+                
+             # And add it
+            video_game.categories.add(category)
+          
+    def addLinkToSteam(steam_id, video_game):
+        url=f"https://store.steampowered.com/app/{steam_id}"
+        
+        # Fond back the Steam shop or create it
+        try: 
+            steam_shop = models.Online_Shop.objects.all().get(name="Steam") 
+        except models.Online_Shop.DoesNotExist: 
+            steam_shop = models.Online_Shop(name="Steam", description="Steam, the biggest online store for Video Games", shop_type="Online Video Games for PC", ethical_rating=100, clarity_rating=100, 
+                        spotlight_count = 0, they_have_made_it=1)
+            
+             # If there is no video game online shop type yet, create it
+            try: 
+                video_game_online_shop_type = models.TypeOfEntity.objects.all().get(name="Online Video Games Online Shop") 
+            except models.TypeOfEntity.DoesNotExist: 
+                video_game_online_shop_type = models.TypeOfEntity(name="Online Video Games Online Shop", description="An Online Shop selling Video Games also fully Online (no physical products or seldom).")
+                video_game_online_shop_type.save()
+                
+            steam_shop.for_type = video_game_online_shop_type
+                    
+            steam_shop.save()
+        
+        linkToSteam = models.Links_to_shops(link=url, identity="Steam", shop=steam_shop, for_Entity=video_game)
+        linkToSteam.save()
         
     @action(
         label="Fetch all Video Game entries from Steam"
