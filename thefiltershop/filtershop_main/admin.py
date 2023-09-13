@@ -120,7 +120,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
                 except models.Videogame_common.DoesNotExist:               
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
             else:
                 modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
         else:
@@ -171,7 +171,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game.save()
                     
                 except models.Videogame_common.DoesNotExist:               
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
             else:
                 modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
         else:
@@ -210,14 +210,14 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
                 except models.Videogame_common.DoesNotExist:
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
                     
                 else:
                     modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
             else:
                 modeladmin.message_user(request, "Please select an item first.")
                 
-    def getDataFromSteam(modeladmin, request, content):
+    def getDataFromSteam(modeladmin, request, content, id):
         # If there is no video game type yet, create it
         try: 
             video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
@@ -227,6 +227,10 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 
         # Create Video Game from JSON data
 
+        # First check if not >18 - required_age	"18"
+        if content['required_age'] == "18":
+            modeladmin.message_user(request, "Sorry, the filter shop does not support mature content (yet).")
+            return
         # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
         video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
 
@@ -547,47 +551,6 @@ class VideoGameAdmin(EntityAdmin):
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
     
     inlines.insert(0, EntityAdmin.inlines[0])
-    
-    def save_model(self, request, obj, form, change):
-        # Override the save_model method to include additional logic
-        # Fetch images from the external website here and perform any necessary operations
-        # For simplicity, let's assume the fetched images are stored in a variable called 'images'
-        context = {
-            'opts': models.Videogame_common._meta,
-            'app_label': models.Videogame_common._meta.app_label,
-        }
-        
-        logger.info("Using our custom save_model");
-        
-        # Will check if there is a Steam/Itch.io/Google Play/Apple ID and fetch the images from there if possible
-        if request.method == 'POST':
-            id = request.POST.get('external_id')
-            logger.info(f"Will try to fetch using id {id}");
-            if id:
-                # check if Steam ID
-                # Fetch JSON data from the API endpoint
-                api_endpoint = f"https://store.steampowered.com/api/appdetails?appids={id}"
-                response = requests.get(api_endpoint)
-
-                if response.status_code == 200:
-                    # Load the JSON data
-                    data = response.json()
-
-                    # Create Person objects from JSON data
-                    for item in data:
-                        video_game = models.Videogame_common(name=item['name'], description=item['short_description'], url=f"https://store.steampowered.com/app/{id}")
-                        video_game.save()
-
-                    self.message_user(request, "Information fetched successfully.")
-                else:
-                    self.message_user(request, "Failed to fetch data from Steam, check the ID.")
-            else:
-                self.message_user(request, "Please provide an ID.")
-
-            return self.render(request, 'admin/change_form_with_game_site_fill_button.html', context)
-
-        # Save the object
-        super().save_model(request, obj, form, change)
 
         
 @admin.register(models.Company_group, site=admin_site)
