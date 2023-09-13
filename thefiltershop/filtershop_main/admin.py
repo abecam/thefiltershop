@@ -115,24 +115,12 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 
                 content = subdata['data']
                 
-                # If there is no video game type yet, create it
-                try: 
-                    video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
-                except models.TypeOfEntity.DoesNotExist: 
-                    video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
-                    video_game_type.save()
                 # Check if updating or creating
                 try: 
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
                 except models.Videogame_common.DoesNotExist:               
-                    
-                    # Create Video Game from JSON data
-                    
-                    # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
-                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
-                    video_game.save()
-                    modeladmin.message_user(request, "Information fetched successfully.")
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
             else:
                 modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
         else:
@@ -162,30 +150,28 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 
                 content = subdata['data']
                 
-                # If there is no video game type yet, create it
-                try: 
-                    video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
-                except models.TypeOfEntity.DoesNotExist: 
-                    video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
-                    video_game_type.save()
-                # Check if updating or creating
+
                 try: 
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                                    # If there is no video game type yet, create it
+                    try: 
+                        video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
+                    except models.TypeOfEntity.DoesNotExist: 
+                        video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
+                        video_game_type.save()
+                    # Check if updating or creating
+                
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Updating all information from Steam.")
+                    
+                    # Would be better to reuse the getDataFromSteam but currently it would block on the images...
                     video_game.name = content['name']
                     video_game.description = content['short_description']
                     video_game.url = f"https://store.steampowered.com/app/{id}"
-                    video_game.for_type =video_game_type
+                    video_game.for_type = video_game_type
                     video_game.save()
                     
                 except models.Videogame_common.DoesNotExist:               
-                    
-                    # Create Video Game from JSON data
-                    
-                    # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
-                    video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=f"https://store.steampowered.com/app/{id}", for_type=video_game_type)
-                    video_game.save()
-                    modeladmin.message_user(request, "Information fetched successfully.")
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
             else:
                 modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
         else:
@@ -219,60 +205,61 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     
                     content = subdata['data']
                     
-                    # TODO: Move all into a method with the force update as parameter.
-                     
-                    # If there is no video game type yet, create it
-                    try: 
-                        video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
-                    except models.TypeOfEntity.DoesNotExist: 
-                        video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
-                        video_game_type.save()
-
-                    # Check if updating or creating
-                    try: 
-                        video_game = models.Videogame_common.objects.all().get(name=content['name']) 
-                        modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
-                    except models.Videogame_common.DoesNotExist:               
-                        
-                        # Create Video Game from JSON data
-                        
-                        # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
-                        video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
-                        
-                        # creating images
-                        # header_image
-                        
-                        # capsule_image
-                        #
-                        EntryOnSteam.getCapsuleAndHeader(content['capsule_image'],content['header_image'],video_game)
-                        # screenshots
-                        # screenshots	
-                        #   0	
-                        #   id	0
-                        # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
-                        # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
-                        EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
-                        # studio(s) and publisher(s)
-                        EntryOnSteam.setStudioAndPublisher(content['developers'],content['publishers'],video_game)
-                        
-                        # 
-                        EntryOnSteam.setPlatforms(content['platforms'],video_game)
-                        
-                        # Categories
-                        if 'genres' in content :
-                            EntryOnSteam.setCategories(content['genres'],video_game)
-                        
-                        # And the link to Steam
-                        EntryOnSteam.addLinkToSteam(id,video_game)
-                        video_game.save()
-                        
-                        # link to shop: f"https://store.steampowered.com/app/{id}"
-                        modeladmin.message_user(request, "Information fetched successfully.")
+                            # Check if updating or creating
+                try: 
+                    video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                    modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
+                except models.Videogame_common.DoesNotExist:
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content)
+                    
                 else:
                     modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
             else:
                 modeladmin.message_user(request, "Please select an item first.")
-        
+                
+    def getDataFromSteam(modeladmin, request, content):
+        # If there is no video game type yet, create it
+        try: 
+            video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
+        except models.TypeOfEntity.DoesNotExist: 
+            video_game_type = models.TypeOfEntity(name="Video Game", description="A Video Game of all kind.")
+            video_game_type.save()
+
+        # Create Video Game from JSON data
+
+        # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
+        video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
+
+        # creating images
+        # header_image
+
+        # capsule_image
+        #
+        EntryOnSteam.getCapsuleAndHeader(content['capsule_image'],content['header_image'],video_game)
+        # screenshots
+        # screenshots	
+        #   0	
+        #   id	0
+        # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
+        # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
+        EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
+        # studio(s) and publisher(s)
+        EntryOnSteam.setStudioAndPublisher(content['developers'],content['publishers'],video_game)
+
+        # 
+        EntryOnSteam.setPlatforms(content['platforms'],video_game)
+
+        # Categories
+        if 'genres' in content :
+            EntryOnSteam.setCategories(content['genres'],video_game)
+
+        # And the link to Steam
+        EntryOnSteam.addLinkToSteam(id,video_game)
+        video_game.save()
+
+        # link to shop: f"https://store.steampowered.com/app/{id}"
+        modeladmin.message_user(request, "Information fetched successfully.")
+                        
     def getCapsuleAndHeader(capsule_url, header_url, model):
             # Stream the image from the url
             response = requests.get(capsule_url, stream=True)
@@ -480,33 +467,10 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         linkToSteam.save()
         
     @action(
-        label="Fetch all Video Game entries from Steam"
+        label="Refresh the list of all Video Game entries from Steam - warning, takes several minutes"
     )
     @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
     def fetch_all_from_steam(modeladmin, request, queryset):
-        steam_api_url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
-        response = requests.get(steam_api_url)
-        data = response.json()
-
-        # Populate the model
-        for app_data in data['applist']['apps']:
-            app_id = app_data['appid']
-            app_name = app_data['name']
-
-            # Update or create the model entry
-            if "Demo" not in app_name: 
-                models.Entry_on_Steam.objects.update_or_create(
-                    appid=app_id,
-                    defaults={'name': app_name}
-                )
-        
-        modeladmin.message_user(request, "Finished.")
-        
-    @action(
-        label="Fetch all Video Game entries from Steam - fast ?"
-    )
-    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
-    def fetch_all_from_steam_fast(modeladmin, request, queryset):
         logger.info("Fetching all games from Steam");
         steam_api_url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
         response = requests.get(steam_api_url)
@@ -557,8 +521,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         modeladmin.message_user(request, "Finished.")
                 
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
-    #changelist_actions = ('update_several_from_steam')
-    changelist_actions = ('fetch_all_from_steam', 'fetch_all_from_steam_fast')
+    #changelist_actions = ('update_several_from_steam',)
+    changelist_actions = ('fetch_all_from_steam',)
     actions = [update_several_from_steam]
     list_display = ["name", "appid"]
     ordering = ["name"]
