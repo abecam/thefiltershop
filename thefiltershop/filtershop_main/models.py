@@ -77,7 +77,7 @@ class Entity(BaseModel):
     hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     in_hall_of_shame = models.BooleanField(default=False)
-    descriptionOfShame = models.TextField(max_length=1000)
+    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
     
     tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_related_tags")
 
