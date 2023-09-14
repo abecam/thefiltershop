@@ -377,7 +377,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 try: 
                     studioType = models.Studio_type.objects.all().get(name="Artisan") 
                 except models.Studio_type.DoesNotExist: 
-                    studioType = models.Studio_type(name="Artisan", description="Very small indie developer generally without publisher.", size=0)
+                    studioType = models.Studio_type(name="Artisan", description="Very small indie developer generally without publisher.", size_in_persons=0)
                     studioType.save()
                 studio.type = studioType
                 studio.save()

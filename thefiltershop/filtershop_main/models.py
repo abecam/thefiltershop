@@ -145,11 +145,11 @@ class ImageForFilterValue(BaseModel):
     
 ########################################
 class Studio_type(BaseModel):
-    size = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
+    size_in_persons = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
     
 ########################################
 class Studio(BaseModel):
-    size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
     type = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
@@ -161,7 +161,7 @@ class Studio(BaseModel):
 
 ########################################
 class Publisher(BaseModel):
-    size = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)

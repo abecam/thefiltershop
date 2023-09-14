@@ -1,0 +1,16 @@
+{% extends "thefiltershop/base.html" %}
+
+{% block title %}{{ a_shop.shop }}{% endblock %}
+
+{% block content %}
+<h1>{{ a_shop.name }}s
+    <img src="{{a_shop.vignette.url}}"" alt="{{a_shop.vignette.name}}"> 
+</h1>
+
+<p>{{ a_shop.name }}</p>
+<p>{{ a_shop.description }}</p>
+{% for image in a_shop.image_set.all %}
+    <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
+{% endfor %}
+
+{% endblock %}
