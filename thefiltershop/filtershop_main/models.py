@@ -79,7 +79,7 @@ class Entity(BaseModel):
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
     
-    tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_related_tags")
+    tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_related_tags", blank=True)
 
     def save(self, *args, **kwargs):
         # save the profile first
@@ -228,7 +228,7 @@ class Physical_shop(Entity):
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     shop_logo = models.ImageField()
-    group =  models.ManyToManyField(Company_group)
+    group =  models.ManyToManyField(Company_group, blank=True)
     
 ########## Online Shop ##################
 class Online_Shop(Entity):
@@ -238,7 +238,7 @@ class Online_Shop(Entity):
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     shop_logo = models.ImageField()
-    group =  models.ManyToManyField(Company_group)
+    group =  models.ManyToManyField(Company_group, blank=True)
       
 ########################################
 class Links_to_shops(BaseModel):

@@ -54,6 +54,7 @@
 
 # Uploaded images
 thefiltershop/media/images/
+thefiltershop/media/
 
 # Temporary dev db
 thefiltershop/db.sqlite3_thefiltershop
