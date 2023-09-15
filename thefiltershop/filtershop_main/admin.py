@@ -45,7 +45,7 @@ class GeneralAdmin(admin.ModelAdmin):
       
     search_fields = ["name"]
       
-@admin.register(models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
+@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
                 models.Studio, models.Studio_type, models.Tag, site=admin_site)
 class GeneralAdmin(GeneralAdmin):
     pass    
