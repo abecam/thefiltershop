@@ -56,6 +56,17 @@ class Profile(BaseModel):
 class Filter(BaseModel):
     is_positive = models.BooleanField(default=False) # Fiters are mostly for bad things (too many IAPS, false Ads,... ) but could be positive too (educative, relaxing, ...)
 
+    long_description = models.TextField(max_length=20000, null=True, blank=True)
+    what_to_change = models.TextField(max_length=20000, null=True, blank=True)
+
+class TypeOfRelationBetweenFilter(BaseModel):
+    both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
+    
+# Relation to filter with a base model (i.e. name and description) so as to define the nature of the relation
+class RelatedFilters(BaseModel):
+    from_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="from_filter")
+    to_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="to_filter")
+    with_type = models.ForeignKey(TypeOfRelationBetweenFilter, on_delete=models.PROTECT)
     
 class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter)
@@ -115,7 +126,7 @@ class Entity_Category(BaseModel):
         
 # ValueForFilter should be set-up by the application from the TypeOfEntity
 class ValueForFilter(BaseModel):
-    value = models.IntegerField(null=False, default=50) # From 0 to 100
+    value = models.IntegerField(null=False, default=50, validators=[MaxValueValidator(100), MinValueValidator(0)]) # From 0 to 100
     filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
     for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
 

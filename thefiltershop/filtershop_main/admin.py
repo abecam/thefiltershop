@@ -42,30 +42,43 @@ class GeneralAdmin(admin.ModelAdmin):
             obj.create_user = request.user #create_user should only be set once
         obj.write_user = request.user #write_user can be set at all times
         super().save_model(request, obj, form, change)
-        
-@admin.register(models.Filter, models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
-                models.Studio, models.Studio_type, models.Tag, site=admin_site)
-class GeneralAdmin(admin.ModelAdmin):
-    date_hierarchy = "date_creation"
-    
-    def save_model(self, request, obj, form, change):
-        if not obj.pk:
-            obj.create_user = request.user #create_user should only be set once
-        obj.write_user = request.user #write_user can be set at all times
-        super().save_model(request, obj, form, change)
-        
+      
     search_fields = ["name"]
+      
+@admin.register(models.TypeOfEntity, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
+                models.Studio, models.Studio_type, models.Tag, site=admin_site)
+class GeneralAdmin(GeneralAdmin):
+    pass    
+    
    
+class RelatedFromFiltersInline(admin.StackedInline):
+    model = models.RelatedFilters
+    extra = 1
+    classes = ['collapse']
+    fk_name = "from_filter"
+    verbose_name  = "Relation from filter (or both ways)"
+
+class RelatedToFiltersInline(admin.StackedInline):
+    model = models.RelatedFilters
+    extra = 1
+    classes = ['collapse']
+    fk_name = "to_filter"
+    verbose_name  = "Relation to filter (or both ways)"
+    
 class AliasInline(admin.StackedInline):
     model = models.Alias
     extra = 1
+    classes = ['collapse']
+    verbose_name = "Alias"
+    verbose_name_plural = "Aliases"
     
 class ImagesInline(admin.StackedInline):
     model = models.Image
-    extra = 3
+    extra = 1
+    classes = ['collapse']
     
 #@admin.register(models.Image, site=admin_site)     
-#class imageAdmin(admin.ModelAdmin):
+#class imageAdmin(GeneralAdmin):
 #    list_display = ["title", "image_tag", "photo"] # new
 
 class Links_to_shops_Inline(admin.StackedInline):
@@ -76,7 +89,7 @@ class Videogame_ratingInline(admin.StackedInline):
     model = models.Videogame_rating
     extra = 1
     
-class EntityAdmin(admin.ModelAdmin):
+class EntityAdmin(GeneralAdmin):
     fieldsets = [
             ("General info", {"fields": ["name","description"]}),
             (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','crapometer','in_hall_of_shame','descriptionOfShame', 'tags']}),
@@ -84,12 +97,16 @@ class EntityAdmin(admin.ModelAdmin):
     
     inlines = [ImagesInline]
     
+@admin.register(models.Filter, site=admin_site)
+class FilterAdmin(GeneralAdmin):
+    inlines = [RelatedFromFiltersInline, RelatedToFiltersInline]
+    
 @admin.register(models.New_Entry_on_Steam, site=admin_site)
-class NewEntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+class NewEntryOnSteam(DjangoObjectActions, GeneralAdmin):
     pass
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
-class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+class EntryOnSteam(DjangoObjectActions, GeneralAdmin):
 
     @action(
         label="Fetch all full Video Game information from Steam"
@@ -536,7 +553,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
     list_filter = ["game_type", "platforms"]
-    change_form_template = 'admin/change_form_with_game_site_fill_button.html'
+
     fieldsets = [
         (None, {"fields": ["game_type"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
