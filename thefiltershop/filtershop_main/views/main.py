@@ -12,7 +12,7 @@ from ..models import Publisher
 from ..models import Studio
 from ..models import Online_Shop
  
-import filtershop_main.constants
+from filtershop_main.constants import SPOTLIGHT_LIMIT
  
 # To do: show featured game (low popularity, low spotlight)
 # Also cut by categories
@@ -30,7 +30,7 @@ def index(request):
     elif len(last_in_spotlight) == 1 :
         game_in_spotlight = last_in_spotlight.first()
         # Check if still in the spotlight
-        if game_in_spotlight.spotlight_count > constants.SPOTLIGHT_LIMIT :
+        if game_in_spotlight.spotlight_count > SPOTLIGHT_LIMIT :
             game_in_spotlight.in_the_spotlight = False
             game_in_spotlight.save(update_fields=['in_the_spotlight'])
             # TODO: when all game have the maximum spotlight_count, it should be restored to 0 for all
