@@ -5,27 +5,54 @@ from django.template import loader
 from django.http import Http404
 from django.db.models import F
 from django.db.models import Max
+from  logging import Logger
 
 from ..models import Videogame_common
 from ..models import Publisher
 from ..models import Studio
 from ..models import Online_Shop
  
+import filtershop_main.constants
+ 
 # To do: show featured game (low popularity, low spotlight)
 # Also cut by categories
 def index(request):
     #latest_games = Videogame_common.objects.order_by("-date_creation")[:5]
     
-    print(Videogame_common.objects)
-    queryset = Videogame_common.objects.filter(studios__size_in_persons__lt = 5, publishers__size_in_persons__lt = 5)
-    print(str(queryset.query))
-
-    latest_games = queryset.order_by("-known_popularity").order_by("-spotlight_count")[:5]
+    # Artisan first
     
-    for aGame in latest_games:
-        aGame.spotlight_count+=1
-        aGame.save(update_fields=['spotlight_count'])
+    # See if we already have a game to show
+    last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_in_persons__lt = 5, publishers__size_in_persons__lt = 5)
+    
+    if len(last_in_spotlight) > 1 :
+        # We did something wrong somewhere
+        Logger.warning("Got more than one game in the spotlight for Artisan, that should not happen!")
+    elif len(last_in_spotlight) == 1 :
+        game_in_spotlight = last_in_spotlight.first()
+        # Check if still in the spotlight
+        if game_in_spotlight.spotlight_count > constants.SPOTLIGHT_LIMIT :
+            game_in_spotlight.in_the_spotlight = False
+            game_in_spotlight.save(update_fields=['in_the_spotlight'])
+            # TODO: when all game have the maximum spotlight_count, it should be restored to 0 for all
+        else:
+            game_in_spotlight.spotlight_count+=1
+            game_in_spotlight.save(update_fields=['spotlight_count'])
+    else :
+        # None yet, so we filter again    
+        # Small studio and small publisher, and no negative filter!
+        game_from_artisan = Videogame_common.objects.filter(studios__size_in_persons__lt = 5, publishers__size_in_persons__lt = 5)
+        print(str(game_from_artisan.query))
+        game_in_spotlight=game_from_artisan.first()
+        game_in_spotlight.in_the_spotlight = True
+        game_in_spotlight.spotlight_count+=1
+        game_in_spotlight.save(update_fields=['spotlight_count','in_the_spotlight'])
+
+    current_spotlight = Videogame_common.objects.filter(in_the_spotlight=False, studios__size_in_persons__lt = 5, publishers__size_in_persons__lt = 5)
+    latest_games = current_spotlight.order_by("-known_popularity").order_by("-spotlight_count")[:1]
+
         
+    
+    # TODO: One game for Artisan, one for indie... 
     context = {"latest_games": latest_games}
     return render(request, "thefiltershop/index.html", context)
 

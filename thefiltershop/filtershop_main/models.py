@@ -58,7 +58,7 @@ class Filter(BaseModel):
 
     long_description = models.TextField(max_length=20000, null=True, blank=True)
     what_to_change = models.TextField(max_length=20000, null=True, blank=True)
-
+    
 class TypeOfRelationBetweenFilter(BaseModel):
     both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
     
@@ -104,18 +104,6 @@ class Entity(BaseModel):
             img.thumbnail(output_size)
             # overwrite the larger image
             img.save(self.vignette.path)
-            
-    # ethical_money_rating = models.IntegerField()
-    # ethical_moral_rating = models.IntegerField()
-    # ethical_marketing_rating = models.IntegerField()
-    # ethical_educational_rating = models.IntegerField()
-    # cheating_review = models.IntegerField()
-    # cheating_ads = models.IntegerField()
-    # insulting_ads = models.IntegerField()
-    # misleading_ads = models.IntegerField()
-    # desc_cheating_ads = models.CharField(max_length=1000)
-    # desc_insulting_ads = models.CharField(max_length=1000)
-    # desc_misleading_ads = models.CharField(max_length=1000)
     
 # Should be inline in Entities. 
 class Alias(BaseModel):
@@ -195,6 +183,7 @@ class Videogame_common(Entity):
     gameplay_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
+    in_the_spotlight = models.BooleanField(default=False)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
