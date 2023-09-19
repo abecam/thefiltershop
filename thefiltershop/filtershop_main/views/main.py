@@ -5,7 +5,7 @@ from django.template import loader
 from django.http import Http404
 from django.db.models import F
 from django.db.models import Max
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from  logging import Logger
 
 from ..models import Videogame_common
@@ -31,7 +31,7 @@ def index(request):
     elif len(last_in_spotlight) == 1 :
         game_in_spotlight = last_in_spotlight.first()
         # Check if still in the spotlight
-        if game_in_spotlight.spotlight_count > SPOTLIGHT_LIMIT and game_in_spotlight.in_the_spotlight_since.__gt__ (datetime.now() + timedelta(days=7)) :
+        if (game_in_spotlight.spotlight_count > SPOTLIGHT_LIMIT and game_in_spotlight.in_the_spotlight_since  is None) or (game_in_spotlight.spotlight_count > SPOTLIGHT_LIMIT and datetime.now(timezone.utc).__gt__(game_in_spotlight.in_the_spotlight_since + timedelta(days=7))) :
             game_in_spotlight.in_the_spotlight = False
             game_in_spotlight.save(update_fields=['in_the_spotlight'])
             # TODO: when all game have the maximum spotlight_count, it should be restored to 0 for all
@@ -47,9 +47,9 @@ def index(request):
         print(str(latest_games.query))
         game_in_spotlight=latest_games.first()
         game_in_spotlight.in_the_spotlight = True
-        game_in_spotlight.in_the_spotlight_since = datetime.now()
+        game_in_spotlight.in_the_spotlight_since = datetime.now(timezone.utc)
         game_in_spotlight.spotlight_count+=1
-        game_in_spotlight.save(update_fields=['spotlight_count','in_the_spotlight'])
+        game_in_spotlight.save(update_fields=['spotlight_count','in_the_spotlight','in_the_spotlight_since'])
 
     current_spotlight = Videogame_common.objects.filter(in_the_spotlight=False, studios__size_in_persons__lt = 5, publishers__size_in_persons__lt = 5)
     latest_games = current_spotlight.order_by("-known_popularity").order_by("-spotlight_count")[:1]       

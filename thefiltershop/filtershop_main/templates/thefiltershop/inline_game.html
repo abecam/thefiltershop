@@ -3,7 +3,7 @@
 </p>
 <img src="{{game.vignette.url}}"" alt="{{game.vignette.name}}"> 
 <p>{{ game.description }}</p>
-<p>{{ game.spotlight_count }}
+<p>{{ game.spotlight_count }} - {{ game.in_the_spotlight_since }}
 {% for publisher in game.publishers.all %}
     <p>Published by {{ publisher.name }}</p>
 {% endfor %}
