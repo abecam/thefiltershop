@@ -1,0 +1,12 @@
+<p>
+    <a href="{% url 'filtershop_games:game' game.id %}">{{ game.name  }}</a>
+</p>
+<img src="{{game.vignette.url}}"" alt="{{game.vignette.name}}"> 
+<p>{{ game.description }}</p>
+<p>{{ game.spotlight_count }}
+{% for publisher in game.publishers.all %}
+    <p>Published by {{ publisher.name }}</p>
+{% endfor %}
+{% for image in game.image_set.all %}
+    <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
+{% endfor %}

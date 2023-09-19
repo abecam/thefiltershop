@@ -184,6 +184,7 @@ class Videogame_common(Entity):
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     in_the_spotlight = models.BooleanField(default=False)
+    in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
