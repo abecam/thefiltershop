@@ -55,7 +55,7 @@ def index(request):
     latest_games = current_spotlight.order_by("-known_popularity").order_by("-spotlight_count")[:1]       
     
     # TODO: One game for Artisan, one for indie... 
-    context = {"artisan_of_the_week": game_in_spotlight}
+    context = {"artisan_of_the_week": game_in_spotlight, "artisan_of_the_week_title_image": game_in_spotlight.image_set.first(), "artisan_of_the_week_title_screenshots": game_in_spotlight.image_set.all()[2:] }
     return render(request, "thefiltershop/index.html", context)
 
 # To do: 
