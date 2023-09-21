@@ -1,0 +1,9 @@
+{% extends "thefiltershop/base.html" %}
+
+{% block main_content %}
+<div class="Sub-Menu">
+<!-- Glametrix Bold --><a href="/">Under the spotlight!</a>  <a href="{% url 'filtershop_games:index_online_shops' %}">Artisan's games</a>  <a href="/indexRegularShops.html">Indie's games</a>  <a href="/indexRegularShops.html">Our curators</a>  <a href="/indexRegularShops.html">Sponsors</a>
+</div>
+    {% block content %}
+    {% endblock %}
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "thefiltershop/base.html" %}
+{% extends "thefiltershop/base_games.html" %}
 
 {% block title %}Best games today{% endblock %}
 
@@ -7,7 +7,12 @@
 
 <h2>Artisan's game of the time!</h2>
 <div class="artisan_game">
-    {% include "thefiltershop/inline_game.html" with game=artisan_of_the_week title_image=artisan_of_the_week_title_image  screenshots=artisan_of_the_week_title_screenshots %}
+    {% include "thefiltershop/inline_game.html" with game=artisan_of_the_week title_image=artisan_of_the_week_title_image  screenshots=artisan_of_the_week_title_screenshots defaul_headline="Developed with love by an Artisan"%}
+</div>
+
+<h2>Indie game of the time!</h2>
+<div class="indie_game">
+    {% include "thefiltershop/inline_game.html" with game=indie_of_the_week title_image=indie_of_the_week_title_image  screenshots=indie_of_the_week_title_screenshots defaul_headline="Developed with love by an Indie" %}
 </div>
 
 {% endblock %}

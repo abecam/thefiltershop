@@ -143,16 +143,16 @@ class ImageForFilterValue(BaseModel):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
     
-########################################
+######################################## TO DELETE ???
 class Studio_type(BaseModel):
     size_in_persons = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
     
 ########################################
 class Studio(BaseModel):
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
     type = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
     url = models.URLField(null=True, blank=True)
-    known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # 'They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us) 
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
@@ -161,9 +161,9 @@ class Studio(BaseModel):
 
 ########################################
 class Publisher(BaseModel):
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
     url = models.URLField(null=True, blank=True)
-    known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])

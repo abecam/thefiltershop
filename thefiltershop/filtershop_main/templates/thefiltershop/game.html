@@ -1,13 +1,12 @@
-{% extends "thefiltershop/base.html" %}
+{% extends "thefiltershop/base_games.html" %}
 
 {% block title %}{{ a_game.name }}{% endblock %}
 
 {% block content %}
-<h1>{{ a_game.name }}s
+<h1>
     <img src="{{a_game.vignette.url}}"" alt="{{a_game.vignette.name}}"> 
 </h1>
 
-<p>{{ a_game.name }}</p>
 <p>{{ a_game.description }}</p>
 {% for publisher in a_game.publishers.all %}
      <p>Published by {{ publisher.name }}</p>
