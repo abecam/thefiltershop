@@ -79,6 +79,7 @@ class Tag(BaseModel):
 class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
+    headline = models.CharField(max_length=500, null=True, blank=True) # Line to show if on the front page
     url = models.URLField(null=True)
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
@@ -118,8 +119,8 @@ class ValueForFilter(BaseModel):
     filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
     for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
 
-class Image(BaseModel):
-    title = models.CharField(max_length=20)
+class Image(models.Model):
+    title = models.CharField(max_length=200)
     photo = models.ImageField(upload_to='images')
     Entity = models.ForeignKey(Entity, null=True, blank=True, on_delete=models.CASCADE)
 
@@ -242,7 +243,7 @@ class Online_Shop(Entity):
     group =  models.ManyToManyField(Company_group, blank=True)
       
 ########################################
-class Links_to_shops(BaseModel):
+class Links_to_shops(models.Model):
     link = models.URLField()
     identity = models.CharField(max_length=300)
     shop = models.ForeignKey(Online_Shop, on_delete=models.CASCADE, related_name="on_shop")

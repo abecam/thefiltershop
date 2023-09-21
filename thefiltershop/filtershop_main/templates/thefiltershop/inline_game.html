@@ -1,4 +1,10 @@
 <p>
+    {% if game.headline is not None %}
+        <p>{{ game.headline }}</p>
+    {% endif %}
+        <p>Developed with love by an Artisan</p>
+</p>
+<p>
     <a href="{% url 'filtershop_games:game' game.id %}"><img src="{{title_image.photo.url}}"" alt="{{game.name}}"></a>
 </p>
 <p>{{ game.description }}</p>

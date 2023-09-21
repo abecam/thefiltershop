@@ -45,12 +45,17 @@ class GeneralAdmin(admin.ModelAdmin):
       
     search_fields = ["name"]
       
-@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.ValueForFilter, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
+@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
                 models.Studio, models.Studio_type, models.Tag, site=admin_site)
 class GeneralAdmin(GeneralAdmin):
     pass    
     
-   
+class ValueForFilterAdmin(admin.StackedInline) :
+    model = models.ValueForFilter
+    extra = 0
+    verbose_name = "Filtered with"
+    verbose_name_plural = "Applied filters"
+
 class RelatedFromFiltersInline(admin.StackedInline):
     model = models.RelatedFilters
     extra = 1
@@ -83,19 +88,23 @@ class ImagesInline(admin.StackedInline):
 
 class Links_to_shops_Inline(admin.StackedInline):
     model = models.Links_to_shops
-    extra = 1
+    extra = 0
+    verbose_name = "On Sale on"
+    verbose_name_plural = "On Sale on"
     
 class Videogame_ratingInline(admin.StackedInline):
     model = models.Videogame_rating
-    extra = 1
+    extra = 0
+    verbose_name = "Rating for one platform"
+    verbose_name_plural = "Ratings by platforms"
     
 class EntityAdmin(GeneralAdmin):
     fieldsets = [
-            ("General info", {"fields": ["name","description"]}),
+            ("General info", {"fields": ["name","description","headline"]}),
             (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','crapometer','in_hall_of_shame','descriptionOfShame', 'tags']}),
     ]
     
-    inlines = [ImagesInline]
+    inlines = [ValueForFilterAdmin, ImagesInline]
     
 @admin.register(models.Filter, site=admin_site)
 class FilterAdmin(GeneralAdmin):
@@ -338,15 +347,6 @@ class EntryOnSteam(DjangoObjectActions, GeneralAdmin):
                 image.photo.save(file_name, files.File(lf))   
             
     def getAllThumbnails(thumbnails, model):
-        #
-        #  screenshots
-        #  screenshots	
-        #   0	
-        #   id	0
-        # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
-        # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
-        #
-
         for nb_thumbnail, one_entry in enumerate(thumbnails):
             image_url = one_entry['path_thumbnail']
             
@@ -568,6 +568,9 @@ class VideoGameAdmin(EntityAdmin):
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
     
     inlines.insert(0, EntityAdmin.inlines[0])
+    
+    verbose_name = "A Video Game"
+    verbose_name_plural = "Video Games"
 
         
 @admin.register(models.Company_group, site=admin_site)
