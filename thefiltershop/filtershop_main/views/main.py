@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, timezone
 from  logging import Logger
 
 from ..models import Videogame_common
+from ..models import Filter
 from ..models import Publisher
 from ..models import Studio
 from ..models import Online_Shop
@@ -88,7 +89,10 @@ def get_game_for_spotlight(max_size_of_studio_or_publisher) :
 # 
 def game(request, videogame_id):
     a_game = get_object_or_404(Videogame_common, pk=videogame_id)
-    return render(request, "thefiltershop/game.html", {"a_game": a_game})
+    negative_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk, valueforfilter__filter__is_positive=False)
+    positive_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk,  valueforfilter__filter__is_positive=True)
+    
+    return render(request, "thefiltershop/game.html", {"a_game": a_game, "negative_filters": negative_filters, "positive_filters": positive_filters})
 
 def index_online_shops(request):
     latest_shops = Online_Shop.objects.order_by("-date_creation")[:5]
