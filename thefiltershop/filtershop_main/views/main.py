@@ -92,7 +92,8 @@ def game(request, videogame_id):
     negative_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk, valueforfilter__filter__is_positive=False)
     positive_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk,  valueforfilter__filter__is_positive=True)
     
-    return render(request, "thefiltershop/game.html", {"a_game": a_game, "negative_filters": negative_filters, "positive_filters": positive_filters})
+    return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
+                                                       "negative_filters": negative_filters, "positive_filters": positive_filters})
 
 def index_online_shops(request):
     latest_shops = Online_Shop.objects.order_by("-date_creation")[:5]

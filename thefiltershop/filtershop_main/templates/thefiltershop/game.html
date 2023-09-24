@@ -23,16 +23,27 @@
 </div>
 
 <h1>
-    <img src="{{a_game.vignette.url}}"" alt="{{a_game.vignette.name}}"> 
+    <img src="{{title_image.photo.url}}"" alt="{{a_game.name}}" class="game_title_image">
 </h1>
-
 <p>{{ a_game.description }}</p>
-{% for publisher in a_game.publishers.all %}
-     <p>Published by {{ publisher.name }}</p>
+<div class="grid-container">
+    {% for studio in a_game.studios.all %}
+        <div class="grid-item">Developed by {{ studio.name }}</div>
+        <!-- TODO: Add link to studio page -->
+    {% endfor %}
+    {% for publisher in a_game.publishers.all %}
+        <div class="grid-item">Published by {{ publisher.name }}</div>
+        <!-- TODO: Add link to publisher page -->
+    {% endfor %}
+</div>
+<div class="grid-container">
+{% for image in screenshots.all %}
+
+    <div class="grid-item">
+        <img src="{{image.photo.url}}"" alt="{{image.name}}" width="400px" class="game_screenshot"> 
+    </div>
 {% endfor %}
-{% for image in a_game.image_set.all %}
-    <img src="{{image.photo.url}}"" alt="{{image.name}}" width="500px"> 
-{% endfor %}
+</div>
 
 <div class="filters">
     {% for filter in negative_filters %}

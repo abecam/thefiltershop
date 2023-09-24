@@ -14,7 +14,7 @@ class BaseModel(models.Model):
     description = models.TextField(max_length=1000, null=True, blank=True)
     
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, 
-                                    verbose_name=('Created by'), editable=False, null=True, blank=True, related_name="%(app_label)s_%(class)s_related_type")
+                                    verbose_name=('created by'), editable=False, null=True, blank=True, related_name="%(app_label)s_%(class)s_related_type")
     date_creation = models.DateTimeField("date creation", auto_now_add=True)
     last_update = models.DateTimeField("last updated", auto_now=True)
     

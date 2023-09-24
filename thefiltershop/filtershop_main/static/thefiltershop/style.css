@@ -1,7 +1,69 @@
+@font-face {
+    font-family: Glametrix;
+    src: url(Glametrix.otf);
+}
+
+@font-face {
+    font-family: Glametrix;
+    src: url(GlametrixBold.otf);
+    font-weight: bold;
+  }
+
 li a {
     color: green;
 }
 
 body {
-    background: lightgray;
+    font: 140% Glametrix;
+    background: #d6f5f7;
 }
+
+a {
+        border: 2px solid #bbd6d8;
+        border-radius: 5px;
+        background: #bbd6d8;
+        text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    color: green;
+    background: #a8c0c2;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: rgb(55, 134, 115);
+    background: #b7e2e6;
+  }
+  
+  /* selected link */
+  a:active {
+    color: rgb(79, 148, 100);
+    background: #c6e8eb;
+  }
+
+  .image_link a {
+    border: 2px solid #cfcfcf;
+    border-radius: 0px;
+    background: none;
+    text-decoration: none;
+  }
+
+  img {
+    border-radius: 8px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    background: none;
+    padding: 5px;
+  }
+  .grid-item {
+    background: none;
+    border: none;
+    padding: 5px;
+    font-size: 30px;
+    text-align: center;
+  }
