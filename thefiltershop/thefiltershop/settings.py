@@ -156,20 +156,3 @@ LOGGING = {
         "level": "INFO",
     },
 }
-
-# Celery configuration
-import os
-from celery import Celery
-from celery.schedules import crontab
-
-app = Celery('thefiltershop')
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()
-
-# Define the Celery Beat schedule
-app.conf.beat_schedule = {
-    'populate_steam_entries': {
-        'task': 'myapp.tasks.populate_steam_entries',
-        'schedule': crontab(minute=0),  # Run every hour
-    },
-}
