@@ -1,21 +1,29 @@
-<p>
-    {% if game.headline is not None %}
-        <p>{{ game.headline }}</p>
+{% if game is not None %}
+    <p>
+        {% if game.headline is not None %}
+            <p>{{ game.headline }}</p>
+        {% endif %}
+            <p>{{ defaul_headline }}</p>
+    </p>
+    <p>
+        {% if title_image  is not None %}
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{title_image.photo.url}}"" alt="{{game.name}}"></a>
+        {% endif %}
+    </p>
+    <p>{{ game.description }}</p>
+    <p>{{ game.spotlight_count }} - {{ game.in_the_spotlight_since }}
+    {% for studio in game.studios.all %}
+        <p>Developed by {{ studio.name }}</p>
+        <!-- TODO: Add link to studio page -->
+    {% endfor %}
+    {% for publisher in game.publishers.all %}
+        <p>Published by {{ publisher.name }}</p>
+    {% endfor %}
+    {% if screenshots  is not None %}
+        {% for image in screenshots.all %}
+            <img src="{{image.photo.url}}"" alt="{{image.name}}" width="200px" class="game_thumbnail"> 
+        {% endfor %}
     {% endif %}
-        <p>{{ defaul_headline }}</p>
-</p>
-<p>
-    <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{title_image.photo.url}}"" alt="{{game.name}}"></a>
-</p>
-<p>{{ game.description }}</p>
-<p>{{ game.spotlight_count }} - {{ game.in_the_spotlight_since }}
-{% for studio in game.studios.all %}
-    <p>Developed by {{ studio.name }}</p>
-    <!-- TODO: Add link to studio page -->
-{% endfor %}
-{% for publisher in game.publishers.all %}
-    <p>Published by {{ publisher.name }}</p>
-{% endfor %}
-{% for image in screenshots.all %}
-    <img src="{{image.photo.url}}"" alt="{{image.name}}" width="200px" class="game_thumbnail"> 
-{% endfor %}
+{% else %}
+    <p> No game found! </p>
+{% endif %}

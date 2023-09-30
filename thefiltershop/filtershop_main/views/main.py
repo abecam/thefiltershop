@@ -25,15 +25,21 @@ def index(request):
     
     # Artisan first
     game_in_spotlight_artisan = get_game_for_spotlight(Studio_and_Publisher_Size.ARTISAN)
-    
+    if game_in_spotlight_artisan != None : 
+        artisan_of_the_week_title_image =  game_in_spotlight_artisan.image_set.first()
+        artisan_of_the_week_title_screenshots = game_in_spotlight_artisan.image_set.all()[2:]
+        
+        
     # Indie (bigger so)
     game_in_spotlight_indie = get_game_for_spotlight(Studio_and_Publisher_Size.INDIE)
-    if (game_in_spotlight_indie == None) : 
-        game_in_spotlight_indie = get_game_for_spotlight(Studio_and_Publisher_Size.ARTISAN)
+    if game_in_spotlight_indie != None : 
+        indie_of_the_week_title_image = game_in_spotlight_indie.image_set.first()
+        indie_of_the_week_title_screenshots = game_in_spotlight_indie.image_set.all()[2:]
    
-    # TODO: One game for Artisan, one for indie... 
-    context = {"artisan_of_the_week": game_in_spotlight_artisan, "artisan_of_the_week_title_image": game_in_spotlight_artisan.image_set.first(), "artisan_of_the_week_title_screenshots": game_in_spotlight_artisan.image_set.all()[2:],
+    # TODO: Other kinds 
+    context = {"artisan_of_the_week": game_in_spotlight_artisan, "artisan_of_the_week_title_image": artisan_of_the_week_title_image, "artisan_of_the_week_title_screenshots": artisan_of_the_week_title_screenshots,
                "indie_of_the_week": game_in_spotlight_indie, "indie_of_the_week_title_image": game_in_spotlight_indie.image_set.first(), "indie_of_the_week_title_screenshots": game_in_spotlight_indie.image_set.all()[2:],}
+
     return render(request, "thefiltershop/index.html", context)
 
 def get_game_for_spotlight(max_size_of_studio_or_publisher) :
