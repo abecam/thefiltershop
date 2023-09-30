@@ -29,6 +29,9 @@ def index(request):
     if game_in_spotlight_artisan != None : 
         artisan_of_the_week_title_image =  game_in_spotlight_artisan.image_set.first()
         artisan_of_the_week_title_screenshots = game_in_spotlight_artisan.image_set.all()[2:]
+    else :
+        artisan_of_the_week_title_image =  None
+        artisan_of_the_week_title_screenshots = None
         
         
     # Indie (bigger so)
@@ -36,6 +39,9 @@ def index(request):
     if game_in_spotlight_indie != None : 
         indie_of_the_week_title_image = game_in_spotlight_indie.image_set.first()
         indie_of_the_week_title_screenshots = game_in_spotlight_indie.image_set.all()[2:]
+    else :
+        indie_of_the_week_title_image =  None
+        indie_of_the_week_title_screenshots = None
    
     # TODO: Other kinds: Top Big(ger) Studio, They could be in a top (now or at a later point?)
     context = {"artisan_of_the_week": game_in_spotlight_artisan, "artisan_of_the_week_title_image": artisan_of_the_week_title_image, "artisan_of_the_week_title_screenshots": artisan_of_the_week_title_screenshots,
@@ -56,8 +62,7 @@ def get_game_for_spotlight(max_size_of_studio_or_publisher) :
         last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_in_persons__lt = max_size, studios__size_in_persons__gte = min_size)
     else :
         last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_in_persons__lt = max_size, publishers__size_in_persons__lt = max_size)
-    print(last_in_spotlight.query)
-    
+
     if len(last_in_spotlight) > 1 :
         # We did something wrong somewhere
         Logger.warning("Got more than one game in the spotlight for Artisan, that should not happen!")
@@ -79,8 +84,8 @@ def get_game_for_spotlight(max_size_of_studio_or_publisher) :
             new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter(studios__size_in_persons__lt = max_size, studios__size_in_persons__gte = min_size, number_of_filters = 0)
         else :
             new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter(studios__size_in_persons__lt = max_size, publishers__size_in_persons__lt = max_size, number_of_filters = 0)
-            
-        if len(new_game_for_the_spotlight) == 1 :
+        
+        if len(new_game_for_the_spotlight) >= 1 :
             latest_games = new_game_for_the_spotlight.order_by("known_popularity").order_by("spotlight_count")[:1]
             print(str(latest_games.query))
             game_in_spotlight=latest_games.first()
