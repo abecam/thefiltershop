@@ -36,9 +36,9 @@ def index(request):
         indie_of_the_week_title_image = game_in_spotlight_indie.image_set.first()
         indie_of_the_week_title_screenshots = game_in_spotlight_indie.image_set.all()[2:]
    
-    # TODO: Other kinds 
+    # TODO: Other kinds: Top Big(ger) Studio, They could be in a top (now or at a later point?)
     context = {"artisan_of_the_week": game_in_spotlight_artisan, "artisan_of_the_week_title_image": artisan_of_the_week_title_image, "artisan_of_the_week_title_screenshots": artisan_of_the_week_title_screenshots,
-               "indie_of_the_week": game_in_spotlight_indie, "indie_of_the_week_title_image": game_in_spotlight_indie.image_set.first(), "indie_of_the_week_title_screenshots": game_in_spotlight_indie.image_set.all()[2:],}
+               "indie_of_the_week": game_in_spotlight_indie, "indie_of_the_week_title_image": indie_of_the_week_title_image, "indie_of_the_week_title_screenshots": indie_of_the_week_title_screenshots,}
 
     return render(request, "thefiltershop/index.html", context)
 
