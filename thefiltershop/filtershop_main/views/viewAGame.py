@@ -1,21 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
+from django.shortcuts import get_object_or_404
 
 from ..models import Videogame_common
-from ..models import Studio
-from ..models import Publisher
+from ..models import Filter
  
-def index(request):
-    # For small studio first
-    #smallest_studio = Studio.objects.order_by("-known_popularity").order_by("-spotlight_count")[:5]
+def game(request, videogame_id):
+    a_game = get_object_or_404(Videogame_common, pk=videogame_id)
+    negative_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk, valueforfilter__filter__is_positive=False)
+    positive_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk,  valueforfilter__filter__is_positive=True)
     
-    # also with no publisher or a small one
-    # Find the game with lowest time in the spotlight, and the fewer (bad) filters. Give a bonus for good filters
-    latest_games = Videogame_common.objects.filter(Videogame_common.studios_set__size <= 5).filter(Videogame_common.publishers_set__size <= 5).order_by("-known_popularity").order_by("-spotlight_count")[:5]
-    for aGame in latest_games:
-        aGame.spotlight_count+=1
-        aGame.save()
+    return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
+                                                       "negative_filters": negative_filters, "positive_filters": positive_filters})
     
-    context = {"latest_games": latest_games}
-    return render(request, "thefiltershop/index.html", context)

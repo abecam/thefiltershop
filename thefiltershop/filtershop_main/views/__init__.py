@@ -1,4 +1,4 @@
 from .main import index
-from .main import game
-from .main import index_online_shops
-from .main import online_shop
+from .viewAGame import game
+from .indexOnlineShop import index_online_shops
+from .indexOnlineShop import online_shop

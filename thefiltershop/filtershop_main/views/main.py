@@ -6,6 +6,8 @@ from django.http import Http404
 from django.db.models import Q
 from django.db.models import Max
 from django.db.models import Count
+from django.views.generic import ListView
+
 from datetime import datetime, timedelta, timezone
 from  logging import Logger
 
@@ -13,7 +15,6 @@ from ..models import Videogame_common
 from ..models import Filter
 from ..models import Publisher
 from ..models import Studio
-from ..models import Online_Shop
  
 from filtershop_main.constants import SPOTLIGHT_LIMIT
 from filtershop_main.constants import Studio_and_Publisher_Size
@@ -91,21 +92,3 @@ def get_game_for_spotlight(max_size_of_studio_or_publisher) :
             # No game available...
             game_in_spotlight = None
     return game_in_spotlight
-# To do: 
-# 
-def game(request, videogame_id):
-    a_game = get_object_or_404(Videogame_common, pk=videogame_id)
-    negative_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk, valueforfilter__filter__is_positive=False)
-    positive_filters = Filter.objects.filter(valueforfilter__for_entity__pk = a_game.pk,  valueforfilter__filter__is_positive=True)
-    
-    return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
-                                                       "negative_filters": negative_filters, "positive_filters": positive_filters})
-
-def index_online_shops(request):
-    latest_shops = Online_Shop.objects.order_by("-date_creation")[:5]
-    context = {"latest_shops": latest_shops}
-    return render(request, "thefiltershop/index_online_shops.html", context)
-
-def online_shop(request, shop_id):
-    a_game = get_object_or_404(Online_Shop, pk=shop_id)
-    return render(request, "thefiltershop/online_shop.html", {"a_shop": a_game})
