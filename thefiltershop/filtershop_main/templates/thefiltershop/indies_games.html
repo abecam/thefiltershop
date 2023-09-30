@@ -1,0 +1,10 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}All (bigger) indies' games{% endblock %}
+
+{% block content %}
+<br/>
+
+{% include "thefiltershop/list_of_games.html" with page_obj=page_obj%}
+
+{% endblock %}
