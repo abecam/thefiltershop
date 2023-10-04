@@ -12,5 +12,6 @@ urlpatterns = [
     path("online_shop/<int:shop_id>/", views.online_shop, name="online_shop"),
     path("artisans_games", views.get_artisans_games, name="artisans_games"),
     path("indies_games", views.get_indies_games, name="indies_games"),
+    path("curators", views.get_curators, name="curators"),
     #path('admin/', admin_site.urls),
 ]

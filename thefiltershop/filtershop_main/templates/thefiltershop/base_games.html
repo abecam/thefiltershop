@@ -3,7 +3,7 @@
 {% block main_content %}
 <div class="Sub-Menu">
 <!-- Glametrix Bold --><a href="/">Under the spotlight!</a>  <a href="{% url 'filtershop_games:artisans_games' %}">Artisan's games</a>  <a href="{% url 'filtershop_games:indies_games' %}">Indie's games</a>
-  <a href="/indexRegularShops.html">Our curators</a>  <a href="/indexRegularShops.html">Filters for games</a>  <a href="/indexRegularShops.html">They made it!</a>
+<a href="{% url 'filtershop_games:curators' %}">Our curators</a>  <a href="/indexRegularShops.html">Filters for games</a>  <a href="/indexRegularShops.html">They made it!</a>
 </div>
     {% block content %}
     {% endblock %}

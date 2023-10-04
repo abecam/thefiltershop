@@ -32,7 +32,9 @@ class MyAdminSite(admin.AdminSite):
 
 admin_site = MyAdminSite(name='customadmin')
 
-admin.site.register(models.Profile)
+@admin.register(models.Profile, models.User, models.Group, site=admin_site)
+class ProfileAdmin(admin.ModelAdmin):
+    pass   
 
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
