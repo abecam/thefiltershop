@@ -1,0 +1,27 @@
+<!-- A Button will switch between the positive and the negative up or down -->
+{% if is_on_top %}
+
+{% endif %}
+<div class="filters">
+    {% for filter in negative_filters %}
+        <div class="negative_filters">{{ filter.name }}
+            <div class="filter_description">
+                <details>
+                    <summary>More details</summary>
+                    <span>{{ filter.description }}</span>
+                </details>
+            </div>
+        </div>
+
+    {% endfor %}
+    {% for filter in positive_filters %}
+        <div class="positive_filters">{{ filter.name }}
+            <div class="filter_description">
+                <details>
+                    <summary>More details</summary>
+                    <span>{{ filter.description }}</span>
+                </details>
+            </div>
+        </div>
+    {% endfor %}
+</div>
