@@ -1,20 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from django.template import loader
-from django.http import Http404
 from django.db.models import Q
-from django.db.models import Max
 from django.db.models import Count
-from django.views.generic import ListView
 
 from datetime import datetime, timedelta, timezone
 from  logging import Logger
 
 from ..models import Videogame_common
-from ..models import Filter
-from ..models import Publisher
-from ..models import Studio
  
 from filtershop_main.constants import SPOTLIGHT_LIMIT
 from filtershop_main.constants import Studio_and_Publisher_Size

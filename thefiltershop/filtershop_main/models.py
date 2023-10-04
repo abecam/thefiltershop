@@ -73,7 +73,6 @@ class RelatedFilters(BaseModel):
     
 class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter)
-
     
 class Tag(BaseModel):
     good_or_bad = models.IntegerField()

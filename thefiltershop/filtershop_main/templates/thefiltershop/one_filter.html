@@ -1,0 +1,62 @@
+<!-- General view of one filter -->
+
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}
+    {{ a_filter.name }}
+{% endblock %}
+
+{% block content %}
+
+<h1>
+    {{ a_filter.name }}
+</h1>
+<div class="filter_positive_or_negative">
+    {% if a_filter.is_positive %}
+        A good filter! (To be replaced by a logo)
+    {% else %}
+        A bad filter! (To be replaced by a logo)
+    {% endif %}
+</div>
+
+<h2> Short description </h2>
+<div class="filter_description">{{ a_filter.description }}</div>
+<h2> Long description </h2>
+<div class="filter_long_description">{{ a_filter.long_description }}</div>
+<h2> What to change ? </h2>
+{% if a_filter.is_positive %}
+    Nothing! :)
+{% else %}
+    <div class="filter_description">{{ a_filter.what_to_change }}</div>
+{% endif %}
+
+<h2> Related filters </h2>
+<div class="related_filters">
+    <div class="related_filters_siblings">
+        {% for related_filter in siblings_filters_from.all %}
+            <div class="a_related_filters_sibling">
+                {{ related_filter.with_type.name }} <a href="{% url 'filtershop_games:one_filter' related_filter.from_filter.id %}" class="filter_link">{{related_filter.from_filter.name}}</a>    {{ related_filter.from_filter.description }}
+            </div>
+        {% endfor %}
+        {% for related_filter in siblings_filters_to.all %}
+            <div class="a_related_filters_sibling">
+                {{ related_filter.with_type.name }} <a href="{% url 'filtershop_games:one_filter' related_filter.to_filter.id %}" class="filter_link">{{related_filter.to_filter.name}}</a>    {{ related_filter.to_filter.description }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="related_filters_children">
+        {% for related_filter in children_filters.all %}
+            <div class="a_related_filters_child">
+                {{ related_filter.with_type.name }} <a href="{% url 'filtershop_games:one_filter' related_filter.to_filter.id %}" class="filter_link">{{related_filter.to_filter.name}}</a>    {{ related_filter.to_filter.description }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="related_filters_parents">
+    {% for related_filter in parents_filters.all %}
+        <div class="a_related_filters_parent">
+            {{ related_filter.with_type.name }} <a href="{% url 'filtershop_games:one_filter' related_filter.from_filter.id %}" class="filter_link">{{related_filter.from_filter.name}}</a>    {{ related_filter.from_filter.description }}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

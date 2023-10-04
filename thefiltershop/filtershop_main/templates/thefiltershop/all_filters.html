@@ -1,0 +1,34 @@
+<!-- Show all filters -->
+
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}All filters{% endblock %}
+
+{% block content %}
+<br/>
+
+<div class="positive_filters">
+    <h2>Good filters</h2>
+    <div class="positive_filters_general_description">
+        These are specific "plus".
+    </div>
+    {% for one_filter in positive_filters %}
+        <div class="one_filter">
+            <a href="{% url 'filtershop_games:filter' one_filter.id %}" class="filter_link">{{one_filter.name}}</a>    {{ one_filter.description }}<br>
+        </div>
+    {% endfor %}
+</div>
+<br/>
+<div class="negative_filters">
+    <h2>Bad filters</h2>
+    <div class="negative_filters_general_description">
+        The ones to look for: some of these can make your experience quite miserable. If you are concerned and get filtered by ones of those, you can find our suggestions to get out of them in their individual pages.
+    </div>
+    {% for one_filter in negative_filters %}
+        <div class="one_filter">
+            <a href="{% url 'filtershop_games:one_filter' one_filter.id %}" class="filter_link">{{one_filter.name}}</a>    {{ one_filter.description }}<br>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
