@@ -1,18 +1,24 @@
 {% extends "thefiltershop/base_games.html" %}
 
-{% block title %}Best games today{% endblock %}
+{% block title %}Best games today{% endblock title%}
 
 {% block content %}
-<h1>Best games</h1>
+<h1 class="text-center md:text-2xl font-bold">Best games</h1>
 
-<h2>Artisan's game of the time!</h2>
-<div class="artisan_game">
+<section class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
+    <div class="artisan_game">
+    <h2>Artisan's game of the time!</h2>
     {% include "thefiltershop/inline_game.html" with game=artisan_of_the_week title_image=artisan_of_the_week_title_image  screenshots=artisan_of_the_week_title_screenshots defaul_headline="Developed with love by an Artisan"%}
 </div>
+</section>
 
-<h2>Indie game of the time!</h2>
-<div class="indie_game">
-    {% include "thefiltershop/inline_game.html" with game=indie_of_the_week title_image=indie_of_the_week_title_image  screenshots=indie_of_the_week_title_screenshots defaul_headline="Developed with love by an Indie" %}
-</div>
+<section class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
+
+    <h2>Indie game of the time!</h2>
+    <div class="indie_game">
+        {% include "thefiltershop/inline_game.html" with game=indie_of_the_week title_image=indie_of_the_week_title_image  screenshots=indie_of_the_week_title_screenshots defaul_headline="Developed with love by an Indie" %}
+    </div>
+    
+</section>
 
 {% endblock %}

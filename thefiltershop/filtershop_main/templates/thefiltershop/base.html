@@ -1,17 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'thefiltershop/style.css' %}">
 <html lang="en-US">
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-</head>
-<body>
-    <div class="Top-Menu">
-    <img src="{% static 'images/Title617x107.png' %}" alt="Logo"><!-- Glametrix Bold --><a href="/">Games</a><a href="{% url 'filtershop_games:index_online_shops' %}">Online Shops</a><a href="/indexRegularShops.html">Regular Shops</a><a href="/indexRegularShops.html">All filters</a>
-    <a href="/indexRegularShops.html">Hall of shame!</a><a href="/indexRegularShops.html">Who are we</a><a href="/indexRegularShops.html">Our mission</a>  <a href="/indexRegularShops.html">Sponsors</a>
-    </div>
-    <img src="{% static 'images/FilterWhite.png' %}" alt="FilterHeader">
-    {% block main_content %}{% endblock %}
-</body>
+    <link rel="stylesheet" href="{% static 'thefiltershop/src/styles.css' %}" />
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    {% include "thefiltershop/header.html" %}
+
+    <main class="h-full bg-base-50">{% block main_content %}{% endblock %}</main>
+  </body>
 </html>

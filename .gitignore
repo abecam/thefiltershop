@@ -4,6 +4,10 @@
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 
+# Python Environment
+/env
+# node modules
+node_modules
 # Email spool folder
 /app/spool/*
 

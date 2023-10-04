@@ -1,0 +1,118 @@
+{% load static %}
+
+<header
+  x-data="
+        {
+          navbarOpen: false
+        }
+      "
+  class="flex w-full items-center bg-base-300"
+>
+  <div class="container mx-auto">
+    <div class="relative -mx-4 flex items-center justify-between">
+      <div class="w-80 max-w-full px-4">
+        <a href="javascript:void(0)" class="block w-full py-5">
+          <img
+            src="{% static 'images/Title617x107.png' %}"
+            alt="Logo"
+            class="w-full"
+          />
+        </a>
+      </div>
+      <div class="flex items-center px-4">
+        <div>
+          <button
+            @click="navbarOpen = !navbarOpen"
+            :class="navbarOpen && 'navbarTogglerActive' "
+            id="navbarToggler"
+            class="ring-primary absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] focus:ring-2 lg:hidden"
+          >
+            <span
+              class="bg-black relative my-[6px] block h-[2px] w-[30px]"
+            ></span>
+            <span
+              class="bg-black relative my-[6px] block h-[2px] w-[30px]"
+            ></span>
+            <span
+              class="bg-black relative my-[6px] block h-[2px] w-[30px]"
+            ></span>
+          </button>
+          <nav
+            :class="!navbarOpen && 'hidden' "
+            id="navbarCollapse"
+            class="absolute right-4 top-full w-full max-w-[250px] bg-base-100 rounded-lg py-5 px-6 shadow lg:static lg:block lg:w-full lg:max-w-full lg:shadow-none"
+          >
+            <ul class="block lg:flex items-center">
+              <li>
+                <a
+                  href="/"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Games
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{% url 'filtershop_games:index_online_shops' %}"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Online Shops
+                </a>
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Regular Shops
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  All filters
+                </a>
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Hall of shame!
+                </a>
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Who are we
+                </a>
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Our mission
+                </a>
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="text-dark hover:text-base-200 flex py-2 text-base font-medium lg:ml-12 lg:inline-flex"
+                >
+                  Sponsors
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- ====== Navbar Section End -->

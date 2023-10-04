@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "npx tailwindcss -i ./filtershop_main/static/thefiltershop/src/input.css -o ./filtershop_main/static/thefiltershop/src/styles.css --watch"
+   },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}

@@ -79,7 +79,10 @@ WSGI_APPLICATION = 'thefiltershop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3_thefiltershop',
+        'NAME': BASE_DIR / 'thefiltershop.sqlite3',
+    },
+    'OPTIONS':{  
+      'timeout': 20 # For Database Lock issue  
     }
 }
 

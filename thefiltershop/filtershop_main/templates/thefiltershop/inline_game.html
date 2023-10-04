@@ -1,29 +1,56 @@
-{% if game is not None %}
-    <p>
-        {% if game.headline is not None %}
-            <p>{{ game.headline }}</p>
-        {% endif %}
-            <p>{{ defaul_headline }}</p>
-    </p>
-    <p>
-        {% if title_image  is not None %}
-            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{title_image.photo.url}}"" alt="{{game.name}}"></a>
-        {% endif %}
-    </p>
-    <p>{{ game.description }}</p>
-    <p>{{ game.spotlight_count }} - {{ game.in_the_spotlight_since }}
-    {% for studio in game.studios.all %}
-        <p>Developed by {{ studio.name }}</p>
-        <!-- TODO: Add link to studio page -->
-    {% endfor %}
-    {% for publisher in game.publishers.all %}
-        <p>Published by {{ publisher.name }}</p>
-    {% endfor %}
-    {% if screenshots  is not None %}
-        {% for image in screenshots.all %}
-            <img src="{{image.photo.url}}"" alt="{{image.name}}" width="200px" class="game_thumbnail"> 
+<div>
+  {% if game is not None %}
+  <div
+    class="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
+    <div class="mb-16 lg:mb-0 lg:max-w-xl lg:pr-5 space-y-4">
+      <div class="max-w-xl mb-6">
+        <h2
+          class="font-sans text-3xl sm:mt-0 mt-6 font-medium tracking-tight text-black sm:text-4xl sm:leading-none max-w-lg mb-6">
+          {% if game.headline is not None %} {{ game.headline }} {% endif %} {{ defaul_headline }}
+        </h2>
+        <p class="text-black text-base md:text-lg">{{ game.description }}</p>
+      </div>
+      <div className="space-x-4 mb-6">
+        <button
+          class="text-neutral-800 text-lg font-medium inline-flex items-center">
+          <span>
+            Spotlight Count: {{ game.spotlight_count }} - In Spotlight Since: {{ game.in_the_spotlight_since }}
+          </span>
+        </button>
+      </div>
+      <div class="flex flex-col w-full">
+        <p>Developed by :</p>
+        <div class="flex items-center gap-2">
+          {% for studio in game.studios.all %}
+          {{ studio.name }}
+          <!-- TODO: Add link to studio page -->
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex flex-col w-full">
+        <p>Published by :</p>
+        {% for publisher in game.publishers.all %}
+        <small>{{ publisher.name }}</small>
         {% endfor %}
-    {% endif %}
-{% else %}
-    <p> No game found! </p>
-{% endif %}
+      </div>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <a href="{% url 'filtershop_games:game' game.id %}">
+        <img
+          width="420"
+          height="120"
+          src="{{title_image.photo.url}}"
+          alt="{{game.name}}" />
+      </a>
+      <div class="flex gap-2 rounded-md shadow-md flex-wrap">
+        {% if screenshots is not None %} {% for image in screenshots.all %} <img
+        src="{{image.photo.url}}" alt="{{image.name}}" width="100px"
+        class="game_thumbnail"> {% endfor %} {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <p>No game found!</p>
+  {% endif %}
+</div>

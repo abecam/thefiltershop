@@ -1,10 +1,9 @@
-{% extends "thefiltershop/base.html" %}
+{% extends "thefiltershop/base.html" %} {% block main_content %}
 
-{% block main_content %}
-<div class="Sub-Menu">
-<!-- Glametrix Bold --><a href="/">Under the spotlight!</a>  <a href="{% url 'filtershop_games:artisans_games' %}">Artisan's games</a>  <a href="{% url 'filtershop_games:indies_games' %}">Indie's games</a>
-  <a href="/indexRegularShops.html">Our curators</a>  <a href="/indexRegularShops.html">Filters for games</a>  <a href="/indexRegularShops.html">They made it!</a>
+<div class="bg-base-400 py-2 shadow">
+  {% include "thefiltershop/sub_menu.html" %}
 </div>
-    {% block content %}
-    {% endblock %}
+
+<section>{% block content %} {% endblock %}</section>
+
 {% endblock %}
