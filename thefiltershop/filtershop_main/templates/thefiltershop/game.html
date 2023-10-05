@@ -10,6 +10,12 @@
     <img src="{{title_image.photo.url}}"" alt="{{a_game.name}}" class="game_title_image">
 </h1>
 <p>{{ a_game.description }}</p>
+
+{% for link_to_shop in links_to_shops %}
+    <!-- TODO: Replace by shop icon (?) -->
+    <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}</a>
+{% endfor %}
+
 <div class="grid-container">
     {% for studio in a_game.studios.all %}
         <div class="grid-item">Developed by {{ studio.name }}</div>
