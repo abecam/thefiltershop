@@ -63,6 +63,7 @@ class Filter(BaseModel):
     what_to_change = models.TextField(max_length=20000, null=True, blank=True)
     
 class TypeOfRelationBetweenFilter(BaseModel):
+    reverse_name = models.CharField(max_length=300, null=True, blank=True) # When the link if not both way and the relation if to to from.
     both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
     
 # Relation to filter with a base model (i.e. name and description) so as to define the nature of the relation

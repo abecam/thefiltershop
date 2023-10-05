@@ -54,7 +54,7 @@
     <div class="related_filters_parents">
     {% for related_filter in parents_filters.all %}
         <div class="a_related_filters_parent">
-            {{ related_filter.with_type.name }} <a href="{% url 'filtershop_games:one_filter' related_filter.from_filter.id %}" class="filter_link">{{related_filter.from_filter.name}}</a>    {{ related_filter.from_filter.description }}
+            {{ related_filter.with_type.reverse_name }} <a href="{% url 'filtershop_games:one_filter' related_filter.from_filter.id %}" class="filter_link">{{related_filter.from_filter.name}}</a>    {{ related_filter.from_filter.description }}
         </div>
     {% endfor %}
 </div>

@@ -62,15 +62,15 @@ class RelatedFromFiltersInline(admin.StackedInline):
     model = models.RelatedFilters
     extra = 1
     classes = ['collapse']
-    fk_name = "from_filter"
-    verbose_name  = "Relation from filter (or both ways)"
+    fk_name = "to_filter"
+    verbose_name  = "Relation from filter (or both ways) - Like parents to this filter"
 
 class RelatedToFiltersInline(admin.StackedInline):
     model = models.RelatedFilters
     extra = 1
     classes = ['collapse']
-    fk_name = "to_filter"
-    verbose_name  = "Relation to filter (or both ways)"
+    fk_name = "from_filter"
+    verbose_name  = "Relation to filter (or both ways) - Like children to this filter"
     
 class AliasInline(admin.StackedInline):
     model = models.Alias
