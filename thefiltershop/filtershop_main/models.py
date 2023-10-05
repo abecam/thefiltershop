@@ -83,7 +83,7 @@ class Entity(BaseModel):
     # Ideally I would like an unique string id like type_product.publisher_name.studio_name.game_name
     # But I also don't think it should be a database ID (at least until the model is 100% set)
     headline = models.CharField(max_length=500, null=True, blank=True) # Line to show if on the front page
-    url = models.URLField(null=True)
+    url = models.URLField(null=True, blank=True)
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
@@ -213,7 +213,7 @@ class Videogame_rating(BaseModel):
     fully_rotten = models.BooleanField(default=False)
     would_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
     could_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
-    use_psycho_tech = models.IntegerField(default=0)  
+    use_psycho_tech = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])  
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)
     
     class Meta:
@@ -232,11 +232,11 @@ class FiltersForAVideoGameRating(models.Model):
 # Sponsor too (like a studio, type+size of contribution? +url)
 ########################################
 class Sponsor(BaseModel):
-    url = models.URLField()
+    url = models.URLField(null=True, blank=True)
     sponsor_logo = models.ImageField()
 
     in_hall_of_shame = models.BooleanField(default=False)
-    descriptionOfShame = models.TextField(max_length=1000)
+    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
     
 class Company_group(Entity):
     company_logo = models.ImageField()

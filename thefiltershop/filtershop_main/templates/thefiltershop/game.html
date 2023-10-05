@@ -37,4 +37,8 @@
 
 {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False %}
 
+<!-- Ratings for the game, including filters as well -->
+
+{% include "thefiltershop/partials/game_rating.html" with ratings_with_filters=ratings_with_filters %}
+
 {% endblock %}

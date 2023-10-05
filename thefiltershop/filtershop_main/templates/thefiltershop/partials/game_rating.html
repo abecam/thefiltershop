@@ -1,0 +1,31 @@
+{% for a_rating_with_filters in ratings_with_filters %}
+
+    <h2>Present on {{ a_rating_with_filters.rating.for_platform.name }}</h2>
+
+    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=True no_button=True %}
+
+    <div class="grid-container">
+        <div class="grid-item">{{ a_rating_with_filters.rating.f2play | yesno:"F2P,Premium"}}</div>
+        <div class="grid-item">{{ a_rating_with_filters.rating.f2pay | yesno:"Paywall(s),No major Paywall" }}</div>
+        <div class="grid-item">Gameplay rating {{ a_rating_with_filters.rating.gameplay_rating }}%</div>
+        <div class="grid-item">Money rating {{ a_rating_with_filters.rating.money_rating }}%</div>
+        {% if a_rating_with_filters.rating.good_wo_iap > -1 %}
+            <div class="grid-item">Gameplay without IAP would be {{ a_rating_with_filters.rating.good_wo_iap  }}%</div>
+        {% endif %}
+        {% if a_rating_with_filters.rating.good_wo_ads > -1 %}
+            <div class="grid-item">Gameplay without ads would be {{ a_rating_with_filters.rating.good_wo_ads }}%</div>
+        {% endif %}
+        {% if a_rating_with_filters.rating.ads_supported > -1 %}
+            <div class="grid-item">Ads-supported at {{ a_rating_with_filters.rating.ads_supported }}%</div>
+        {% endif %}
+        <div class="grid-item">{{ a_rating_with_filters.rating.fully_rotten  | yesno:"Fully rotten!,"}}</div>
+        {% if a_rating_with_filters.rating.use_psycho_tech > -1 %}
+            <div class="grid-item">Uses  psychology tricks at {{  a_rating_with_filters.rating.use_psycho_tech }}%</div>
+        {% endif %}
+    </div>
+    <div class="info_would_be_good">{{ a_rating_with_filters.rating.would_be_good_if }}</div>
+    <div class="info_could_be_good">{{ a_rating_with_filters.rating.could_be_good_if }}</div>
+
+    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=False no_button=True %}
+
+{% endfor %}

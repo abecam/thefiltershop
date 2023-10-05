@@ -31,7 +31,7 @@ function toggleVisibilityFilters(evt) {
     }
 }
 </script>
-{% if is_on_top %}
+{% if is_on_top and not no_button %}
 <button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show bad filters first</button>
 {% endif %}
 <div class="filters">
@@ -68,7 +68,9 @@ function toggleVisibilityFilters(evt) {
         {% endfor %}
     </div>
 </div>
-<script>
-    // Working as it is called twice (top & bottom)
-    document.getElementById("button_toggle_filters_pos").click();
-</script>
+{% if not no_button %}
+    <script>
+        // Working as it is called twice (top & bottom)
+        document.getElementById("button_toggle_filters_pos").click();
+    </script>
+{% endif %}
