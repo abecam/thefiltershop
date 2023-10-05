@@ -67,7 +67,7 @@ class TypeOfRelationBetweenFilter(BaseModel):
     both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
     
 # Relation to filter with a base model (i.e. name and description) so as to define the nature of the relation
-class RelatedFilters(BaseModel):
+class RelatedFilters(models.Model):
     from_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="from_filter")
     to_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="to_filter")
     with_type = models.ForeignKey(TypeOfRelationBetweenFilter, on_delete=models.PROTECT)
@@ -117,7 +117,7 @@ class Entity_Category(BaseModel):
     for_Entity = models.ForeignKey(Entity, on_delete=models.RESTRICT, null=True, blank=True)
         
 # ValueForFilter should be set-up by the application from the TypeOfEntity
-class ValueForFilter(BaseModel):
+class ValueForFilter(models.Model):
     value = models.IntegerField(null=False, default=50, validators=[MaxValueValidator(100), MinValueValidator(0)]) # From 0 to 100
     filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
     for_entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=False)
@@ -130,7 +130,7 @@ class Image(models.Model):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
 
-class ImageForFilter(BaseModel):
+class ImageForFilter(models.Model):
     title = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='images')
     Filter = models.ForeignKey(Filter, null=True, blank=True, on_delete=models.CASCADE)
@@ -138,7 +138,7 @@ class ImageForFilter(BaseModel):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
     
-class ImageForFilterValue(BaseModel):
+class ImageForFilterValue(models.Model):
     title = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='images')
     Filter = models.ForeignKey(ValueForFilter, null=True, blank=True, on_delete=models.CASCADE)
@@ -146,7 +146,7 @@ class ImageForFilterValue(BaseModel):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
     
-######################################## TO DELETE ???
+######################################## TO DELETE OR Should replace studio size... ???
 class Studio_type(BaseModel):
     size_in_persons = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
     
@@ -195,6 +195,10 @@ class Videogame_common(Entity):
     platforms = models.ManyToManyField(Platform)
     categories = models.ManyToManyField(Game_Category)
     
+    class Meta:
+        verbose_name = "A Video Game"
+        verbose_name_plural = "Video Games"
+    
 # Inline
 ########################################
 class Videogame_rating(BaseModel):
@@ -212,6 +216,18 @@ class Videogame_rating(BaseModel):
     use_psycho_tech = models.IntegerField(default=0)  
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)
     
+    class Meta:
+        verbose_name = "Rating with filters for one platform"
+        verbose_name_plural = "Ratings with filters by platforms"
+    
+# Many time the video games will be ok on a platform (generally PC, consoles and Mac) and not on another (mobiles). In that case the filters apply on the rating, which if for a specific platform
+class FiltersForAVideoGameRating(models.Model):
+    value = models.IntegerField(null=False, default=50, validators=[MaxValueValidator(100), MinValueValidator(0)]) # From 0 to 100
+    filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
+    for_rating = models.ForeignKey(Videogame_rating, on_delete=models.CASCADE, null=False)   
+    
+    verbose_name = "Filtered for this platform with"
+    verbose_name_plural = "Applied filters for this platform"
     
 # Sponsor too (like a studio, type+size of contribution? +url)
 ########################################
@@ -267,27 +283,27 @@ class Software(Entity):
     platforms = models.ManyToManyField(Platform)
     
 #### Prefilled from Steam API, used to fetch a game ###############
-class Entry_on_Steam(BaseModel):
+class Entry_on_Steam(models.Model):
     appid = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=600)
     
-class Entry_on_GooglePlay(BaseModel):
+class Entry_on_GooglePlay(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
     
-class Entry_on_AppleStore(BaseModel):
+class Entry_on_AppleStore(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
     
 ### Mirror tables to fetch stupidly all new entries
-class New_Entry_on_Steam(BaseModel):
+class New_Entry_on_Steam(models.Model):
     appid = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=600)
     
-class New_Entry_on_GooglePlay(BaseModel):
+class New_Entry_on_GooglePlay(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
     
-class New_Entry_on_AppleStore(BaseModel):
+class New_Entry_on_AppleStore(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)

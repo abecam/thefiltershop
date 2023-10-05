@@ -52,34 +52,40 @@ class GeneralAdmin(admin.ModelAdmin):
 class GeneralAdmin(GeneralAdmin):
     pass    
     
-class ValueForFilterAdmin(admin.StackedInline) :
+class FiltersForAVideoGameRating(admin.TabularInline) :
+    model = models.FiltersForAVideoGameRating
+    extra = 0
+    verbose_name = "Filtered for this platform with"
+    verbose_name_plural = "Applied filters for this platform"
+    
+class ValueForFilterAdmin(admin.TabularInline) :
     model = models.ValueForFilter
     extra = 0
     verbose_name = "Filtered with"
     verbose_name_plural = "Applied filters"
 
-class RelatedFromFiltersInline(admin.StackedInline):
+class RelatedFromFiltersInline(admin.TabularInline):
     model = models.RelatedFilters
     extra = 1
     classes = ['collapse']
     fk_name = "to_filter"
     verbose_name  = "Relation from filter (or both ways) - Like parents to this filter"
 
-class RelatedToFiltersInline(admin.StackedInline):
+class RelatedToFiltersInline(admin.TabularInline):
     model = models.RelatedFilters
     extra = 1
     classes = ['collapse']
     fk_name = "from_filter"
     verbose_name  = "Relation to filter (or both ways) - Like children to this filter"
     
-class AliasInline(admin.StackedInline):
+class AliasInline(admin.TabularInline):
     model = models.Alias
     extra = 1
     classes = ['collapse']
     verbose_name = "Alias"
     verbose_name_plural = "Aliases"
     
-class ImagesInline(admin.StackedInline):
+class ImagesInline(admin.TabularInline):
     model = models.Image
     extra = 1
     classes = ['collapse']
@@ -88,7 +94,7 @@ class ImagesInline(admin.StackedInline):
 #class imageAdmin(GeneralAdmin):
 #    list_display = ["title", "image_tag", "photo"] # new
 
-class Links_to_shops_Inline(admin.StackedInline):
+class Links_to_shops_Inline(admin.TabularInline):
     model = models.Links_to_shops
     extra = 0
     verbose_name = "On Sale on"
@@ -100,6 +106,11 @@ class Videogame_ratingInline(admin.StackedInline):
     verbose_name = "Rating for one platform"
     verbose_name_plural = "Ratings by platforms"
     
+@admin.register(models.Videogame_rating, site=admin_site)
+class Videogame_rating(DjangoObjectActions, GeneralAdmin):
+
+    inlines = [FiltersForAVideoGameRating]
+ 
 class EntityAdmin(GeneralAdmin):
     fieldsets = [
             ("General info", {"fields": ["name","description","headline"]}),
@@ -113,11 +124,11 @@ class FilterAdmin(GeneralAdmin):
     inlines = [RelatedFromFiltersInline, RelatedToFiltersInline]
     
 @admin.register(models.New_Entry_on_Steam, site=admin_site)
-class NewEntryOnSteam(DjangoObjectActions, GeneralAdmin):
+class NewEntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     pass
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
-class EntryOnSteam(DjangoObjectActions, GeneralAdmin):
+class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 
     @action(
         label="Fetch all full Video Game information from Steam"
@@ -570,10 +581,6 @@ class VideoGameAdmin(EntityAdmin):
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
     
     inlines.insert(0, EntityAdmin.inlines[0])
-    
-    verbose_name = "A Video Game"
-    verbose_name_plural = "Video Games"
-
         
 @admin.register(models.Company_group, site=admin_site)
 class Company_groupAdmin(EntityAdmin):
