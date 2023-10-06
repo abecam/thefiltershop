@@ -14,7 +14,7 @@
     </div>
     {% for one_filter in positive_filters %}
         <div class="one_filter">
-            <a href="{% url 'filtershop_games:filter' one_filter.id %}" class="filter_link">{{one_filter.name}}</a>    {{ one_filter.description }}<br>
+            <a href="{% url 'filtershop_games:one_filter' one_filter.id %}" class="filter_link">{{one_filter.name}}</a>    {{ one_filter.description }}<br>
         </div>
     {% endfor %}
 </div>

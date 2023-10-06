@@ -12,5 +12,5 @@ class Studio_and_Publisher_Size(Enum):
     
     def __init__(self, min, max):
 
-        self.min = min       # in kilograms
-        self.max = max   # in meters
+        self.min = min
+        self.max = max

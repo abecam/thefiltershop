@@ -1,0 +1,16 @@
+{% extends "thefiltershop/base_physical_shops.html" %}
+
+{% block title %}Best physical shops today{% endblock %}
+
+{% block content %}
+    <h1>Best physical shops</h1>
+
+    {% for shop in latest_shops %}
+        <div class="physical">
+            <div class="shop_title">
+               <a href="{% url 'filtershop_games:physical_shop' shop.id %}" class="shop_logo">{{ shop.name  }}<img src="{{shop.vignette.url}}"" alt="{{shop.vignette.name}}"> </a>
+            </div>
+            <div class="shop_description">{{ shop.description }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}

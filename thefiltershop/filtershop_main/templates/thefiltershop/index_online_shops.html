@@ -1,17 +1,16 @@
-{% extends "thefiltershop/base.html" %}
+{% extends "thefiltershop/base_online_shops.html" %}
 
 {% block title %}Best online shops today{% endblock %}
 
 {% block content %}
-<h1>Best online shops</h1>
+    <h1>Best online shops</h1>
 
-{% for shop in latest_shops %}
-    <div class="artisan_game">
-    <p>
-        <a href="{% url 'filtershop_games:online_shop' shop.id %}">{{ shop.name  }}</a>
-    </p>
-    <img src="{{shop.vignette.url}}"" alt="{{shop.vignette.name}}"> 
-    <p>{{ shop.description }}</p>
-    </div>
-{% endfor %}
+    {% for shop in latest_shops %}
+        <div class="online_shop">
+            <div class="shop_title">
+               <a href="{% url 'filtershop_games:online_shop' shop.id %}" class="shop_logo">{{ shop.name  }}<img src="{{shop.vignette.url}}"" alt="{{shop.vignette.name}}"> </a>
+            </div>
+            <div class="shop_description">{{ shop.description }}</div>
+        </div>
+    {% endfor %}
 {% endblock %}

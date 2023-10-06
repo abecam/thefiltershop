@@ -27,12 +27,12 @@
     {% endfor %}
 </div>
 <div class="grid-container">
-{% for image in screenshots.all %}
+    {% for image in screenshots.all %}
 
-    <div class="grid-item">
-        <img src="{{image.photo.url}}"" alt="{{image.name}}" width="400px" class="game_screenshot"> 
-    </div>
-{% endfor %}
+        <div class="grid-item">
+            <img src="{{image.photo.url}}"" alt="{{image.name}}" width="400px" class="game_screenshot"> 
+        </div>
+    {% endfor %}
 </div>
 
 {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False %}

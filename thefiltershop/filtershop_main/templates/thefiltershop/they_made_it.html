@@ -1,7 +1,26 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}They made it!{% endblock %}
+
+{% block content %}
+<h1>
+    The games from Artisans and Indies that got popular! Congrats!
+</h1>
 {% for game in page_obj %}
 <div class="one_game">
     <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.description }}
-</div>
+    {% if game.they_have_made_it == 2 %}
+        <!-- we contributed a bit -->
+        <div class="small-contribution">
+            - A bit thanks to us!
+        </div>
+    {% elif game.they_have_made_it == 3 %}
+        <!-- we contributed much :) -->
+        <div class="big-contribution">
+            - with our help :) !
+        </div>
+    {% endif %}
+<div>
 {% endfor %}
 <br/>
 <div class="pagination">
@@ -21,3 +40,5 @@
         {% endif %}
     </span>
 </div>
+
+{% endblock %}

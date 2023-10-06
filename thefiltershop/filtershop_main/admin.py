@@ -47,10 +47,15 @@ class GeneralAdmin(admin.ModelAdmin):
       
     search_fields = ["name"]
       
-@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Publisher, models.Online_Shop, models.Sponsor,
-                models.Studio, models.Studio_type, models.Tag, site=admin_site)
+@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, 
+                models.Studio_type, models.Tag, site=admin_site)
 class GeneralAdmin(GeneralAdmin):
     pass    
+
+@admin.register(models.Publisher, models.Sponsor,
+                models.Studio, site=admin_site) 
+class ElementWithHallOfShame(GeneralAdmin):
+    list_display = ["name", "in_hall_of_shame"]
     
 class FiltersForAVideoGameRating(admin.TabularInline) :
     model = models.FiltersForAVideoGameRating
@@ -581,6 +586,8 @@ class VideoGameAdmin(EntityAdmin):
     inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
     
     inlines.insert(0, EntityAdmin.inlines[0])
+    
+    list_display = ["name", "they_have_made_it", "in_hall_of_shame"]
         
 @admin.register(models.Company_group, site=admin_site)
 class Company_groupAdmin(EntityAdmin):
@@ -598,9 +605,31 @@ class Physical_shopAdmin(EntityAdmin):
         ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
         ("Details", {"fields": ["shop_logo","group"], "classes": ["collapse"]}),
     ]
+    
+    fieldsets.insert(0, EntityAdmin.fieldsets[1])
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
     inlines = [AliasInline]
+    inlines.insert(0, EntityAdmin.inlines[0])
+    
+    list_display = ["name", "in_hall_of_shame"]
+
+@admin.register(models.Online_Shop, site=admin_site)
+class Online_shopAdmin(EntityAdmin):
+    fieldsets = [
+        (None, {"fields": ["shop_type"]}),
+        ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
+        ("Details", {"fields": ["shop_logo","group"], "classes": ["collapse"]}),
+    ]
+    
+    fieldsets.insert(0, EntityAdmin.fieldsets[1])
+    fieldsets.insert(0, EntityAdmin.fieldsets[0])
+    
+    inlines = [AliasInline]
+    inlines.insert(0, EntityAdmin.inlines[0])
+    
+    list_display = ["name", "in_hall_of_shame"]
+    
     
 @admin.register(models.Software, site=admin_site)
 class SoftwareAdmin(EntityAdmin):
@@ -612,3 +641,5 @@ class SoftwareAdmin(EntityAdmin):
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
     inlines = [AliasInline]
+    
+    list_display = ["name", "in_hall_of_shame"]

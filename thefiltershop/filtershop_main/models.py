@@ -73,7 +73,7 @@ class RelatedFilters(models.Model):
     with_type = models.ForeignKey(TypeOfRelationBetweenFilter, on_delete=models.PROTECT)
     
 class TypeOfEntity(BaseModel):
-    filters = models.ManyToManyField(Filter)
+    filters = models.ManyToManyField(Filter, blank=True)
     
 class Tag(BaseModel):
     good_or_bad = models.IntegerField()
@@ -161,6 +161,7 @@ class Studio(BaseModel):
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
+    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
 
 ########################################
 class Publisher(BaseModel):
@@ -172,6 +173,7 @@ class Publisher(BaseModel):
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
+    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
 
 ########################################
 class Platform(BaseModel):
@@ -189,7 +191,7 @@ class Videogame_common(Entity):
     spotlight_count = models.IntegerField(default=0)
     in_the_spotlight = models.BooleanField(default=False)
     in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)], verbose_name="They have made it! (1-> Yes - 2-> Partly thanks to us - 3-> Mostly thanks to us") # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
@@ -244,7 +246,7 @@ class Company_group(Entity):
 ########################################
 class Physical_shop(Entity):
     shop_type = models.CharField(max_length=300)
-    ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    ethical_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
