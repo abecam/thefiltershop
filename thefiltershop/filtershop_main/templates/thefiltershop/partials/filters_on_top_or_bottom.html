@@ -1,25 +1,25 @@
-<!-- A Button will switch between the positive and the negative up or down -->
+<!-- A Button will switch between the filters up or down -->
 <script>
 <!-- Small logic to toggle visibility-->
 function toggleVisibilityFilters(evt) {
     let last_choice = getCookie("filter_view_order"); 
     toggle_button = document.getElementById("button_toggle_filters_pos")
 
-    if (last_choice == "neg_last")
+    if (last_choice == "filters_last")
     {
         display_negative_first = "block";
         display_positive_first = "none";
 
-        setCookie("filter_view_order", "neg_first", 30);
-        toggle_button.innerText = toggle_button.textContent = 'Show good filters first';
+        setCookie("filter_view_order", "filters_first", 30);
+        toggle_button.innerText = toggle_button.textContent = 'Show filters at the end';
     }
     else
     {
         display_negative_first = "none";
         display_positive_first = "block";
 
-        setCookie("filter_view_order", "neg_last", 30);
-        toggle_button.innerText = toggle_button.textContent = 'Show bad filters first';
+        setCookie("filter_view_order", "filters_last", 30);
+        toggle_button.innerText = toggle_button.textContent = 'Show filters first';
     }
     negative_filters = document.getElementsByClassName("negative_filters");
     for (i = 0; i < negative_filters.length; i++) {
@@ -32,16 +32,42 @@ function toggleVisibilityFilters(evt) {
 }
 </script>
 {% if is_on_top and not no_button %}
-<button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show bad filters first</button>
+<button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show filters at the end</button>
 {% endif %}
 <div class="filters">
     {% if is_on_top %}
-    <div class="negative_filters">
+        <div class="negative_filters">
     {% else %}
-    <div class="positive_filters">
+        <div class="positive_filters">
     {% endif %}
-        {% for filter in negative_filters %}
-            <div class="negative_filter">{{ filter.name }}
+    {% for filter in positive_filters %}
+    <div class="positive_filter">{{ filter.name }}
+        <div class="filter_description">
+            <details>
+                <summary>More details</summary>
+                <span>{{ filter.description }}</span>
+            </details>
+        </div>
+    </div>
+    {% endfor %}
+    {% for filter in negative_filters %}
+        <div class="negative_filter">{{ filter.name }}
+            <div class="filter_description">
+                <details>
+                    <summary>More details</summary>
+                    <span>{{ filter.description }}</span>
+                </details>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% if is_on_top %}
+    <div class="positive_filters">
+    {% else %}
+    <div class="negative_filters">
+    {% endif %}
+        {% for filter in positive_filters %}
+            <div class="positive_filter">{{ filter.name }}
                 <div class="filter_description">
                     <details>
                         <summary>More details</summary>
@@ -50,12 +76,6 @@ function toggleVisibilityFilters(evt) {
                 </div>
             </div>
         {% endfor %}
-    </div>
-    {% if is_on_top %}
-    <div class="positive_filters">
-    {% else %}
-    <div class="negative_filters">
-    {% endif %}
         {% for filter in positive_filters %}
             <div class="positive_filter">{{ filter.name }}
                 <div class="filter_description">
