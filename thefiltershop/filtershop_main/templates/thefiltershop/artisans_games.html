@@ -4,7 +4,9 @@
 
 {% block content %}
 <br/>
+<div class="col-container">
 
-{% include "thefiltershop/partials/list_of_games.html" with page_obj=page_obj%}
+  {% include "thefiltershop/partials/list_of_games.html" with page_obj=page_obj%}
+</div>
 
 {% endblock %}

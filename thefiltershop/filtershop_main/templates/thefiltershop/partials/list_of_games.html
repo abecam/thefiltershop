@@ -1,9 +1,16 @@
+<div class="grid-container">
+
 {% for game in page_obj %}
-<div class="one_game">
-    <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.description }}
+<div class="game-card">
+    <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+  
+    <p>{{ game.description }}</p>
+    <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">Read More</a>  
 </div>
 {% endfor %}
 <br/>
+
+</div>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
