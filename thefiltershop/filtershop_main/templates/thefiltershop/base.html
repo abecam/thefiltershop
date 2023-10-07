@@ -10,7 +10,7 @@
 <body>
     <div class="Top-Menu">
     <img src="{% static 'images/Title617x107.png' %}" alt="Logo"><!-- Glametrix Bold --><a href="/">Games</a><a href="{% url 'filtershop_games:index_online_shops' %}">Online Shops</a><a href="{% url 'filtershop_games:index_physical_shops' %}">Physical Shops</a><a href="{% url 'filtershop_games:all_filters' %}">All filters</a>
-    <a href="{% url 'filtershop_games:hall_of_shame' %}">Hall of shame!</a><a href="{% url 'filtershop_games:who_are_we' %}">Who are we</a><a href="{% url 'filtershop_games:our_mission' %}">Our mission</a>  <a href="{% url 'filtershop_games:our_sponsors' %}">Sponsors</a>
+    <a href="{% url 'filtershop_games:hall_of_shame' %}">Hall of shame!</a><a href="{% url 'filtershop_games:curators' %}">Our curators</a><a href="{% url 'filtershop_games:who_are_we' %}">Who are we</a><a href="{% url 'filtershop_games:our_mission' %}">Our mission</a>  <a href="{% url 'filtershop_games:our_sponsors' %}">Sponsors</a>
     </div>
     <img src="{% static 'images/FilterWhite.png' %}" alt="FilterHeader">
     {% block main_content %}{% endblock %}

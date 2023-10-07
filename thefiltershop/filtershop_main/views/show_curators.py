@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from ..models import Profile
 
 def get_curators(request):
-    all_curators = Profile.objects.filter(curating_fields__name__exact="Video Game") # Would be only for group curator!
+    all_curators = Profile.objects.filter()
 
     context = {"all_curators": all_curators}
 
