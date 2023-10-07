@@ -20,8 +20,8 @@
             <div class="hall_of_shame_description">{{ a_shop.descriptionOfShame }}</div>
         {% endif %}
         <div class="grid-container">
-            {% for studio in a_shop.group.all %}
-                <div class="grid-item">Part of {{ studio.name }}<img src="{{studio.company_logo.url}}" alt="{{studio.name}}"  width="400px" class="company_logo"></div>
+            {% for group in a_shop.group.all %}
+                <div class="grid-item">Part of {{ group.name }}<img src="{{group.company_logo.url}}" alt="{{group.name}}"  width="400px" class="company_logo"></div>
             {% endfor %}
         </div>
 
