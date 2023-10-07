@@ -21,5 +21,8 @@ urlpatterns = [
     path("hall_of_shame", views.get_items_in_hall_of_shame, name="hall_of_shame"),
     path("physical_shop/<int:shop_id>/", views.physical_shop, name="physical_shop"),
     path("index_physical_shops", views.index_physical_shops, name="index_physical_shops"),
+    path("our_mission", TemplateView.as_view(template_name="thefiltershop/our_mission.html"), name="our_mission"),
+    path("who_are_we", TemplateView.as_view(template_name="thefiltershop/who_are_we.html"), name="who_are_we"),
+    path("our_sponsors", views.get_sponsors, name="our_sponsors"),
     #path('admin/', admin_site.urls),
 ]

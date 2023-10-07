@@ -1,0 +1,22 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}Our sponsors{% endblock %}
+
+{% block content %}
+<h2> A big thanks to our sponsors! They help keep the filter shop alive!
+<br/>
+{% for sponsor in sponsors %}
+    <div class="one_sponsor">
+        <div class="one_sponsor_name">
+            {{sponsor.name}}
+        </div>
+        <div class="one_sponsor_logo">
+        <img src="{{sponsor.sponsor_logo.url}}" alt="{{sponsor.name}}" width="400px">
+        </div>
+        <div class="one_sponsor_description">
+            {{ sponsor.description }}<br>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

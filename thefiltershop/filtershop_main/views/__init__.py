@@ -12,3 +12,4 @@ from .get_filters import get_one_filter_and_related_filters
 from .get_items_in_hall_of_shame import get_items_in_hall_of_shame
 from .view_a_physical_shop import physical_shop
 from .index_physical_shop import index_physical_shops
+from .our_sponsors import get_sponsors

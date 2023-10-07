@@ -27,12 +27,31 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['date_creation', 'name']
-        
+
+class Filter(BaseModel):
+    is_positive = models.BooleanField(default=False) # Fiters are mostly for bad things (too many IAPS, false Ads,... ) but could be positive too (educative, relaxing, ...)
+
+    long_description = models.TextField(max_length=20000, null=True, blank=True)
+    what_to_change = models.TextField(max_length=20000, null=True, blank=True)
+    
+class TypeOfRelationBetweenFilter(BaseModel):
+    reverse_name = models.CharField(max_length=300, null=True, blank=True) # When the link if not both way and the relation if to to from.
+    both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
+    
+# Relation to filter with a base model (i.e. name and description) so as to define the nature of the relation
+class RelatedFilters(models.Model):
+    from_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="from_filter")
+    to_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="to_filter")
+    with_type = models.ForeignKey(TypeOfRelationBetweenFilter, on_delete=models.PROTECT)
+    
+class TypeOfEntity(BaseModel):
+    filters = models.ManyToManyField(Filter, blank=True)
+
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)
     biography = models.TextField(max_length=3000)
-    
+    curating_fields = models.ManyToManyField(TypeOfEntity, blank=True)
     nb_of_articles = models.IntegerField(editable=False, default=0)
     
     avatar = models.ImageField(
@@ -55,26 +74,7 @@ class Profile(BaseModel):
             img.thumbnail(output_size)
             # overwrite the larger image
             img.save(self.avatar.path)
-
-class Filter(BaseModel):
-    is_positive = models.BooleanField(default=False) # Fiters are mostly for bad things (too many IAPS, false Ads,... ) but could be positive too (educative, relaxing, ...)
-
-    long_description = models.TextField(max_length=20000, null=True, blank=True)
-    what_to_change = models.TextField(max_length=20000, null=True, blank=True)
-    
-class TypeOfRelationBetweenFilter(BaseModel):
-    reverse_name = models.CharField(max_length=300, null=True, blank=True) # When the link if not both way and the relation if to to from.
-    both_way = models.BooleanField(null=False, default=False) # False -> from to, True -> both way
-    
-# Relation to filter with a base model (i.e. name and description) so as to define the nature of the relation
-class RelatedFilters(models.Model):
-    from_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="from_filter")
-    to_filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False, related_name="to_filter")
-    with_type = models.ForeignKey(TypeOfRelationBetweenFilter, on_delete=models.PROTECT)
-    
-class TypeOfEntity(BaseModel):
-    filters = models.ManyToManyField(Filter, blank=True)
-    
+            
 class Tag(BaseModel):
     good_or_bad = models.IntegerField()
     parent_tag = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
@@ -246,6 +246,7 @@ class Company_group(Entity):
 ########################################
 class Physical_shop(Entity):
     shop_type = models.CharField(max_length=300)
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)])
     ethical_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
@@ -256,6 +257,7 @@ class Physical_shop(Entity):
 ########## Online Shop ##################
 class Online_Shop(Entity):
     shop_type = models.CharField(max_length=300)
+    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)])
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
