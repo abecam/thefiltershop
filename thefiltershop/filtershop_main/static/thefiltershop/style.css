@@ -67,3 +67,14 @@ a:visited {
     font-size: 30px;
     text-align: center;
   }
+
+  .single_shop_view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .col-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }

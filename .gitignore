@@ -4,6 +4,8 @@
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 
+env
+node_modules
 # Email spool folder
 /app/spool/*
 
