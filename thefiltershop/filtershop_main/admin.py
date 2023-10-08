@@ -10,11 +10,6 @@ from . import models
 
 from django_object_actions import DjangoObjectActions, action
 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-
-
 from django.core import files
 
 logger = logging.getLogger(__name__)
@@ -568,22 +563,30 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     readonly_fields = ["name", "appid"]
     search_fields = ["name", "appid"]
    
+   
+# Category is also a part of Entity... But then it will be one filtering more to restrict to game.
+@admin.register(models.Game_Category, site=admin_site)
+class Videogame_CategoryAdmin(admin.ModelAdmin):
+    model = models.Game_Category
+    extra = 0
+    search_fields = ["name"]
+    
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
     list_filter = ["game_type", "platforms"]
 
     fieldsets = [
-        (None, {"fields": ["game_type"]}),
+        (None, {"fields": ["game_type","categories"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
         ("Made and published by", {"fields": ["studios","publishers","platforms"], "classes": ["collapse"]}),
     ]
-    autocomplete_fields = ["studios","platforms"]
+    autocomplete_fields = ["studios","platforms","categories"]
     search_fields = ["name"]
     
     fieldsets.insert(0, EntityAdmin.fieldsets[1])
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
     
-    inlines = [Videogame_ratingInline, AliasInline, Links_to_shops_Inline]
+    inlines = [Videogame_ratingInline, Links_to_shops_Inline, AliasInline]
     
     inlines.insert(0, EntityAdmin.inlines[0])
     
@@ -603,7 +606,7 @@ class Physical_shopAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["shop_type"]}),
         ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
-        ("Details", {"fields": ["shop_logo","group"], "classes": ["collapse"]}),
+        ("Details", {"fields": ["group"], "classes": ["collapse"]}),
     ]
     
     fieldsets.insert(0, EntityAdmin.fieldsets[1])
@@ -619,7 +622,7 @@ class Online_shopAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["shop_type"]}),
         ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
-        ("Details", {"fields": ["shop_logo","group"], "classes": ["collapse"]}),
+        ("Details", {"fields": ["group"], "classes": ["collapse"]}),
     ]
     
     fieldsets.insert(0, EntityAdmin.fieldsets[1])

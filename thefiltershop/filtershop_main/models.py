@@ -181,7 +181,9 @@ class Platform(BaseModel):
     
 ########################################
 class Game_Category(BaseModel):
-   pass
+   class Meta:
+        verbose_name = "Video Games' Category"
+        verbose_name_plural = "Video Games' Categories"
     
 ########################################
 class Videogame_common(Entity):
@@ -251,7 +253,6 @@ class Physical_shop(Entity):
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
-    shop_logo = models.ImageField()
     group =  models.ManyToManyField(Company_group, blank=True)
     
 ########## Online Shop ##################
@@ -262,7 +263,6 @@ class Online_Shop(Entity):
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
-    shop_logo = models.ImageField()
     group =  models.ManyToManyField(Company_group, blank=True)
       
 ########################################

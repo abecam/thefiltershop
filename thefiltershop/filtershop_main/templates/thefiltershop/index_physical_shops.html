@@ -6,7 +6,7 @@
     <h1>Best physical shops</h1>
 
     {% for shop in latest_shops %}
-        <div class="physical">
+        <div class="physical_shop">
             <div class="shop_title">
                <a href="{% url 'filtershop_games:physical_shop' shop.id %}" class="shop_logo">{{ shop.name  }}<img src="{{shop.vignette.url}}"" alt="{{shop.vignette.name}}"> </a>
             </div>

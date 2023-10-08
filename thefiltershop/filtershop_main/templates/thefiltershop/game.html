@@ -11,10 +11,18 @@
 </h1>
 <p>{{ a_game.description }}</p>
 
-{% for link_to_shop in links_to_shops %}
-    <!-- TODO: Replace by shop icon (?) -->
-    <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}</a>
-{% endfor %}
+<div style="row-container">
+    {% for link_to_shop in links_to_shops %}
+        <!-- TODO: Replace by shop icon (?) -->
+        <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}</a>
+    {% endfor %}
+</div>
+
+<div style="row-container">
+    {% for category in a_game.categories.all %}
+        <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+    {% endfor %}
+</div>
 
 <div class="grid-container">
     {% for studio in a_game.studios.all %}
