@@ -227,7 +227,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     @admin.action(description="Fetch the full Video Game information from Steam for all game known here and missing in the filter shop")
     def update_several_from_steam(modeladmin, request, queryset):
         for one_entry in queryset:
-            print(one_entry)
+            print('one entry to update ->',one_entry)
             id = one_entry.appid
             logger.info(f"Will try to fetch using id {id}  for {one_entry}");
             if id:

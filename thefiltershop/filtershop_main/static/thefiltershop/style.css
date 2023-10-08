@@ -16,6 +16,9 @@ li a {
 body {
     font: 140% Glametrix;
     background: #d6f5f7;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 a {
@@ -87,6 +90,36 @@ a:visited {
     background-color: azure;
     border-radius: 10px;
     max-width: 300px;
+    gap: 1rem;
+  }
+  
+  .game-card-content p{
+    word-wrap: break-word;
+   }
+
+  .row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
   }
 
-  
+  .badge {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+    border-radius: 10px;
+    background-color: #b7e2e6;
+  }
+
+  .filter-section {
+  text-align: center;
+  }
+
+  .categories-filter {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }

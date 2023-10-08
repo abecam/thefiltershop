@@ -2,20 +2,29 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 
-from ..models import Videogame_common
+from ..models import Videogame_common, Game_Category
 from filtershop_main.constants import Studio_and_Publisher_Size
 
 def get_artisans_games(request):
+    game_categories = Game_Category.objects.all()
+    category_id = request.GET.get('category_id')  # Get the selected category ID from the query parameters
+    page_number = request.GET.get("page")
+
+    # Get all artisan games
     list_of_games_artisan = get_all_games_for_size(Studio_and_Publisher_Size.ARTISAN)
 
-    paginator = Paginator(list_of_games_artisan, 25)  # Show 25 contacts per page.
+    # Apply category filtering if a category is selected
+    if category_id:
+        list_of_games_artisan = list_of_games_artisan.filter(categories__id=category_id)
 
-    page_number = request.GET.get("page")
+    paginator = Paginator(list_of_games_artisan, 8)  
+
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj}
+    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
 
     return render(request, "thefiltershop/artisans_games.html", context)
+
 
 def get_indies_games(request):
     list_of_games_indies = get_all_games_for_size(Studio_and_Publisher_Size.INDIE)
