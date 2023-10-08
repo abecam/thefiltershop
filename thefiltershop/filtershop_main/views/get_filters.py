@@ -18,7 +18,7 @@ def get_all_filters(request):
 def get_all_filters_for_an_entity_type_videogame(request):
     list_of_positive_filters = Filter.objects.filter(is_positive=True, typeofentity__name__exact = "Video Game")
     list_of_negative_filters = Filter.objects.filter(is_positive=False, typeofentity__name__exact = "Video Game")
-  
+
     context = {"positive_filters": list_of_positive_filters, "negative_filters": list_of_negative_filters }
 
     return render(request, "thefiltershop/game_filters.html", context)

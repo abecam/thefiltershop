@@ -27,9 +27,7 @@ def get_artisans_games(request):
 
 
 def get_indies_games(request):
-    # list_of_games_indies = get_all_games_for_size(Studio_and_Publisher_Size.INDIE)
-    # TODO: Temporary Fix to get Indie Games (might need to discuss)
-    list_of_games_indies = Videogame_common.objects.filter(categories__name = "Indie")
+    list_of_games_indies = get_all_games_for_size(Studio_and_Publisher_Size.INDIE)
 
     paginator = Paginator(list_of_games_indies, 25)  # Show 25 contacts per page.
 
