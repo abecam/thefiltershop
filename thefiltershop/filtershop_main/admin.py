@@ -521,7 +521,11 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             app_name = app_data['name']
             
             # Update or create the model entry
-            if "Demo" not in app_name: 
+            if  app_name and not app_name.endswith(" Demo") and not app_name.endswith(" Playtest") and not app_name.endswith(" Pack") and not app_name.endswith(" Soundtrack") and not app_name.endswith(" DLC") and not app_name.endswith(" Add-On") and not app_name.endswith(" Trailer") and not app_name.endswith(" OST") and not app_name.endswith(" Pack)") and not app_name.endswith(" Activation") and not app_name.endswith(" Artbook") and not app_name.endswith(" Server") and not app_name.endswith(" Season Pass") and not app_name.endswith(" Content") and not app_name.endswith(" Outfit") and not app_name.endswith(" Package") and not app_name.endswith(" Expansion") and not app_name.endswith(" Upgrade") and not app_name.endswith(" Editor") and "18+" not in app_name : 
+                # Keep all the remaining extension so we can filter them out eventually
+                all_names = app_name.split()
+                if len(all_names) > 1 :
+                    models.AllEndStringFromSteam.objects.create(name=all_names[-1]);
                 models.New_Entry_on_Steam.objects.create(
                     appid=app_id,
                     name=app_name

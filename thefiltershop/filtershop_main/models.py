@@ -311,3 +311,6 @@ class New_Entry_on_GooglePlay(models.Model):
 class New_Entry_on_AppleStore(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
     name = models.CharField(max_length=600)
+    
+class AllEndStringFromSteam(models.Model):
+    name = models.CharField(max_length=300)
