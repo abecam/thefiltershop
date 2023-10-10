@@ -42,8 +42,7 @@ class GeneralAdmin(admin.ModelAdmin):
       
     search_fields = ["name"]
       
-@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, 
-                models.Studio_type, models.Tag, site=admin_site)
+@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
 class GeneralAdmin(GeneralAdmin):
     pass    
 
@@ -403,13 +402,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 studio = models.Studio.objects.all().get(name=one_entry) 
             except models.Studio.DoesNotExist: 
                 studio = models.Studio(name=one_entry, description="")
-                # And need a studio type first
-                try: 
-                    studioType = models.Studio_type.objects.all().get(name="Artisan") 
-                except models.Studio_type.DoesNotExist: 
-                    studioType = models.Studio_type(name="Artisan", description="Very small indie developer generally without publisher.", size_in_persons=0)
-                    studioType.save()
-                studio.type = studioType
+                
                 studio.save()
                 
             # And add it
@@ -582,9 +575,9 @@ class VideoGameAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["game_type","categories"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
-        ("Made and published by", {"fields": ["studios","publishers","platforms"], "classes": ["collapse"]}),
+        ("Made and published by", {"fields": ["studios","publishers","platforms"]}),
     ]
-    autocomplete_fields = ["studios","platforms","categories"]
+    autocomplete_fields = ["studios","publishers","platforms","categories"]
     search_fields = ["name"]
     
     fieldsets.insert(0, EntityAdmin.fieldsets[1])
@@ -594,7 +587,7 @@ class VideoGameAdmin(EntityAdmin):
     
     inlines.insert(0, EntityAdmin.inlines[0])
     
-    list_display = ["name", "they_have_made_it", "in_hall_of_shame"]
+    list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
         
 @admin.register(models.Company_group, site=admin_site)
 class Company_groupAdmin(EntityAdmin):

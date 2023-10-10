@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group
 from django.utils.safestring import mark_safe
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import gettext_lazy as _
 
 import PIL.Image
 
@@ -146,14 +147,21 @@ class ImageForFilterValue(models.Model):
     def image_tag(self):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
     
-######################################## TO DELETE OR Should replace studio size... ???
-class Studio_type(BaseModel):
-    size_in_persons = models.IntegerField() # Size of the studio (0-> artisan, 10-> really big (>100))
-    
 ########################################
 class Studio(BaseModel):
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)]) # Size of the studio (0-> artisan, 10-> really big (>100))
-    type = models.ForeignKey(Studio_type, on_delete=models.CASCADE)
+    class SizeInPersons(models.TextChoices):
+        ARTISAN = "AR", _("Artisan (5 persons or less)")
+        INDIE = "IN", _("Indie (>5 persons, less than 20)")
+        MEDIUM = "ME", _("Medium (>20, less than 50)")
+        BIG = "BI", _("Big (>50 less than 200)")
+        HUGE = "HU", _("Huge (>200)")
+        
+    size_of_studio = models.CharField(
+        max_length=2,
+        choices=SizeInPersons.choices,
+        default=SizeInPersons.ARTISAN,
+    )
+
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
@@ -165,7 +173,19 @@ class Studio(BaseModel):
 
 ########################################
 class Publisher(BaseModel):
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)]) # Size of the publisher (0-> artisan, 10-> really big (>100))
+    class SizeInPersons(models.TextChoices):
+        ARTISAN = "AR", _("Artisan (5 persons or less)")
+        INDIE = "IN", _("Indie (>5 persons, less than 20)")
+        MEDIUM = "ME", _("Medium (>20, less than 50)")
+        BIG = "BI", _("Big (>50 less than 200)")
+        HUGE = "HU", _("Huge (>200)")
+        
+    size_of_publisher = models.CharField(
+        max_length=2,
+        choices=SizeInPersons.choices,
+        default=SizeInPersons.ARTISAN,
+    )
+    
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
