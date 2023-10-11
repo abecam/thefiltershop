@@ -12,6 +12,8 @@
 </h1>
 <p>{{ a_shop.description }}</p>
 
+<a class="badge" href="{% url 'filtershop_games:physical_artisans_shops' %}?shop_type={{ a_shop.shop_type }}">{{ a_shop.shop_type }}</a>  
+
 {% if a_shop.in_hall_of_shame %}
     <div class="hall_of_shame_title">In the hall of shame!</div>
     <div class="hall_of_shame_description">{{ a_shop.descriptionOfShame }}</div>

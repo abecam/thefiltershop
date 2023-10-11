@@ -19,3 +19,7 @@ from .list_shops import get_others_online_shops
 from .list_shops import get_artisans_and_indies_shops_that_made_it
 from .get_filters import get_all_filters_for_an_entity_type_online_shop
 from .get_filters import get_all_filters_for_an_entity_type_physical_shop
+from .list_shops import get_artisans_physical_shops
+from .list_shops import get_indies_physical_shops
+from .list_shops import get_others_physical_shops
+from .list_shops import get_artisans_and_indies_physical_shops_that_made_it

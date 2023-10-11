@@ -29,5 +29,10 @@ urlpatterns = [
     path("online_other_shops", views.get_others_online_shops, name="online_other_shops"),
     path("they_made_it_online_shops", views.get_artisans_and_indies_shops_that_made_it, name="they_made_it_online_shops"),
     path("online_shop_filters", views.get_all_filters_for_an_entity_type_online_shop, name="online_shop_filters"),
+    path("physical_artisans_shops", views.get_artisans_physical_shops, name="physical_artisans_shops"),
+    path("physical_indies_shops", views.get_indies_physical_shops, name="physical_indies_shops"),
+    path("physical_other_shops", views.get_others_physical_shops, name="physical_other_shops"),
+    path("they_made_it_physical_shops", views.get_artisans_and_indies_physical_shops_that_made_it, name="they_made_it_physical_shops"),
+    path("physical_shop_filters", views.get_all_filters_for_an_entity_type_physical_shop, name="physical_shop_filters"),
     #path('admin/', admin_site.urls),
 ]
