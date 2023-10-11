@@ -601,7 +601,7 @@ class Company_groupAdmin(EntityAdmin):
 @admin.register(models.Physical_shop, site=admin_site)
 class Physical_shopAdmin(EntityAdmin):
     fieldsets = [
-        (None, {"fields": ["shop_type"]}),
+        (None, {"fields": ["shop_type", "size_of_shop"]}),
         ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
         ("Details", {"fields": ["group"], "classes": ["collapse"]}),
     ]
@@ -617,7 +617,7 @@ class Physical_shopAdmin(EntityAdmin):
 @admin.register(models.Online_Shop, site=admin_site)
 class Online_shopAdmin(EntityAdmin):
     fieldsets = [
-        (None, {"fields": ["shop_type"]}),
+        (None, {"fields": ["shop_type", "size_of_shop"]}),
         ("Ratings", {"fields": ["ethical_rating","clarity_rating","they_have_made_it"], "classes": ["collapse"]}),
         ("Details", {"fields": ["group"], "classes": ["collapse"]}),
     ]

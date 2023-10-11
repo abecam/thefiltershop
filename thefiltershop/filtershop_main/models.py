@@ -256,19 +256,6 @@ class FiltersForAVideoGameRating(models.Model):
 # Sponsor too (like a studio, type+size of contribution? +url)
 ########################################
 class Sponsor(BaseModel):
-    class SizeInPersons(models.TextChoices):
-        ARTISAN = "AR", _("Artisan (5 persons or less)")
-        INDIE = "IN", _("Indie (>5 persons, less than 20)")
-        MEDIUM = "ME", _("Medium (>20, less than 50)")
-        BIG = "BI", _("Big (>50 less than 200)")
-        HUGE = "HU", _("Huge (>200)")
-        
-    size_of_shop = models.CharField(
-        max_length=2,
-        choices=SizeInPersons.choices,
-        default=SizeInPersons.ARTISAN,
-    )
-    
     url = models.URLField(null=True, blank=True)
     sponsor_logo = models.ImageField()
 
@@ -294,7 +281,6 @@ class Physical_shop(Entity):
     )
     
     shop_type = models.CharField(max_length=300)
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)])
     ethical_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
@@ -303,8 +289,20 @@ class Physical_shop(Entity):
     
 ########## Online Shop ##################
 class Online_Shop(Entity):
+    class SizeInPersons(models.TextChoices):
+        ARTISAN = "AR", _("Artisan (5 persons or less)")
+        INDIE = "IN", _("Indie (>5 persons, less than 20)")
+        MEDIUM = "ME", _("Medium (>20, less than 50)")
+        BIG = "BI", _("Big (>50 less than 200)")
+        HUGE = "HU", _("Huge (>200)")
+        
+    size_of_shop = models.CharField(
+        max_length=2,
+        choices=SizeInPersons.choices,
+        default=SizeInPersons.ARTISAN,
+    )
+    
     shop_type = models.CharField(max_length=300)
-    size_in_persons = models.IntegerField(default=0, validators=[MaxValueValidator(10000), MinValueValidator(0)])
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)

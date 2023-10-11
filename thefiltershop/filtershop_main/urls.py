@@ -24,5 +24,10 @@ urlpatterns = [
     path("our_mission", TemplateView.as_view(template_name="thefiltershop/our_mission.html"), name="our_mission"),
     path("who_are_we", TemplateView.as_view(template_name="thefiltershop/who_are_we.html"), name="who_are_we"),
     path("our_sponsors", views.get_sponsors, name="our_sponsors"),
+    path("online_artisans_shops", views.get_artisans_online_shops, name="online_artisans_shops"),
+    path("online_indies_shops", views.get_indies_online_shops, name="online_indies_shops"),
+    path("online_other_shops", views.get_others_online_shops, name="online_other_shops"),
+    path("they_made_it_online_shops", views.get_artisans_and_indies_shops_that_made_it, name="they_made_it_online_shops"),
+    path("online_shop_filters", views.get_all_filters_for_an_entity_type_online_shop, name="online_shop_filters"),
     #path('admin/', admin_site.urls),
 ]

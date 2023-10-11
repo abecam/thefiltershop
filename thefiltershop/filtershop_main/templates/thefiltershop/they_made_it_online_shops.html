@@ -1,0 +1,44 @@
+{% extends "thefiltershop/base_online_shops.html" %}
+
+{% block title %}They made it!{% endblock %}
+
+{% block content %}
+<h1>
+    Artisans and Indies online shops that got popular! Congrats!
+</h1>
+{% for shop in page_obj %}
+<div class="one_game">
+    <a href="{% url 'filtershop_games:online_shop' shop.id %}" class="image_link"><img src="{{shop.vignette.url}}"" alt="{{shop.name}}"></a>    {{ shop.description }}
+    {% if game.they_have_made_it == 2 %}
+        <!-- we contributed a bit -->
+        <div class="small-contribution">
+            - A bit thanks to us!
+        </div>
+    {% elif game.they_have_made_it == 3 %}
+        <!-- we contributed much :) -->
+        <div class="big-contribution">
+            - with our help :) !
+        </div>
+    {% endif %}
+<div>
+{% endfor %}
+<br/>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "thefiltershop/base_online_shops.html" %}
+
+{% block title %}All artisans' online shops{% endblock %}
+
+{% block content %}
+<div class="filter-section">
+  <h2>Filter By Type</h2>
+  <div class="categories-filter">
+    <a href="{% url 'filtershop_games:online_artisans_shops' %}" class="bagde">All</a>
+    {% for category in categories %}
+        <a class="badge" href="{% url 'filtershop_games:online_artisans_shops' %}?category_id={{ category.id }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+<div class="col-container">
+  {% include "thefiltershop/partials/list_of_online_shops.html" with page_obj=page_obj%}
+</div>
+
+{% endblock %}
