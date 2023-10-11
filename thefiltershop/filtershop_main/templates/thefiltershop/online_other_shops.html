@@ -7,8 +7,8 @@
   <h2>Filter By Type</h2>
   <div class="categories-filter">
     <a href="{% url 'filtershop_games:online_other_shops' %}" class="bagde">All</a>
-    {% for category in categories %}
-        <a class="badge" href="{% url 'filtershop_games:online_other_shops' %}?category_id={{ category.id }}">{{ category.name }}</a>
+    {% for type in types %}
+        <a class="badge" href="{% url 'filtershop_games:online_other_shops' %}?shop_type={{ type.0 }}">{{ type.0 }}</a>
     {% endfor %}
   </div>
 </div>

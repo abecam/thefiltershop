@@ -10,7 +10,7 @@
     </div>
     <div style="row-container">
     {% for type in shop.shop_type.all %}
-        <a class="badge" href="{% url 'filtershop_games:artisans_online_shop' %}?shop_type={{ type }}">{{type }}</a>
+        <a class="badge" href="{% url 'filtershop_games:online_artisans_shops' %}?shop_type={{ type }}">{{type }}</a>
     {% endfor %}
     </div>  
 </div>

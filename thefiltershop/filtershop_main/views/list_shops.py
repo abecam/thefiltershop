@@ -95,4 +95,4 @@ def get_all_shops_that_made_it():
     return all_for_size
 
 def get_all_types_of_online_shop():
-    return Online_Shop.objects.all().distinct("shop_type").values_list("shop_type")
+    return Online_Shop.objects.all().values_list("shop_type").distinct()
