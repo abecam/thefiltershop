@@ -1,6 +1,6 @@
 {% for a_rating_with_filters in ratings_with_filters %}
 
-    <h2>Present on {{ a_rating_with_filters.rating.for_platform.name }}</h2>
+    <h2>Present on {{ a_rating_with_filters.rating.for_platform.name }}{% if a_rating_with_filters.rating.same_platform_alternative_shop %}, sold on {{a_rating_with_filters.rating.same_platform_alternative_shop}}{% endif %}</h2>
 
     {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=True no_button=True %}
 
@@ -23,6 +23,7 @@
             <div class="grid-item">Uses  psychology tricks at {{  a_rating_with_filters.rating.use_psycho_tech }}%</div>
         {% endif %}
     </div>
+    {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_rating_with_filters.rating.crapometer %}
     <div class="info_would_be_good">{{ a_rating_with_filters.rating.would_be_good_if }}</div>
     <div class="info_could_be_good">{{ a_rating_with_filters.rating.could_be_good_if }}</div>
 

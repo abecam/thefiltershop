@@ -260,6 +260,9 @@ class Videogame_common(Entity):
 # Inline
 ########################################
 class Videogame_rating(BaseModel):
+    name = models.CharField(max_length=300, null=True, blank=True)
+    same_platform_alternative_shop = models.CharField(max_length=600, null=True, blank=True, verbose_name="If on the same platform but for a different shop with different conditions (i.e. F2P instead of premium), give the name of the shop")
+    
     ''' Rating for a Video Game on a platform. It could be the same device on another shop, for instance sold as premium in one, but free with ads on another. As such, they have their own filters.'''
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
@@ -273,7 +276,14 @@ class Videogame_rating(BaseModel):
     would_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
     could_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
     use_psycho_tech = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])  
+    crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)
+    
+    def __str__(self):
+        if self.name:
+            return self.name
+        else:
+            return "Not filled yet"
     
     class Meta:
         verbose_name = "Rating with filters for one platform"
@@ -392,9 +402,6 @@ class Software(Entity):
     
     software_type = models.CharField(max_length=300)
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
-    clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
-    heaviness = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
-    do_the_minimum = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
     spotlight_count = models.IntegerField(default=0)
     in_the_spotlight = models.BooleanField(default=False)

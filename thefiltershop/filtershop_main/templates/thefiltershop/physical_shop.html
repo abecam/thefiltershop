@@ -12,6 +12,8 @@
 </h1>
 <p>{{ a_shop.description }}</p>
 
+{% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_shop.crapometer %}
+
 <a class="badge" href="{% url 'filtershop_games:physical_artisans_shops' %}?shop_type={{ a_shop.shop_type }}">{{ a_shop.shop_type }}</a>  
 
 {% if a_shop.in_hall_of_shame %}

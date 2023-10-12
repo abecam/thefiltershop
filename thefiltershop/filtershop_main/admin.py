@@ -31,6 +31,7 @@ admin_site = MyAdminSite(name='customadmin')
 class ProfileAdmin(admin.ModelAdmin):
     pass   
 
+@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
     
@@ -41,10 +42,6 @@ class GeneralAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
       
     search_fields = ["name"]
-      
-@admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
-class GeneralAdmin(GeneralAdmin):
-    pass    
 
 @admin.register(models.Publisher, models.Sponsor,
                 models.Studio, site=admin_site) 
@@ -105,15 +102,36 @@ class Videogame_ratingInline(admin.StackedInline):
     verbose_name = "Rating for one platform"
     verbose_name_plural = "Ratings by platforms"
     
+    exclude = ['name']
+    
 @admin.register(models.Videogame_rating, site=admin_site)
-class Videogame_rating(DjangoObjectActions, GeneralAdmin):
+class Videogame_rating(GeneralAdmin):
 
     inlines = [FiltersForAVideoGameRating]
+    exclude = ['name']
+    
+    # Calculate the crapometer value when saving
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # form.instance stores the saved object
+         # Calculate the crapometer value
+        # Number of negative filters and their values
+        game_negative_filters = models.FiltersForAVideoGameRating.objects.filter(for_rating__pk = form.instance.id, filter__is_positive=False)
+
+        value_neg_filters = 0
+        for a_filter in game_negative_filters :
+            value_neg_filters+=a_filter.value
+
+        if (value_neg_filters > 300) :
+            value_neg_filters = 300
+        form.instance.crapometer = (100*value_neg_filters)/300
+        form.instance.save()
+        
  
 class EntityAdmin(GeneralAdmin):
     fieldsets = [
             ("General info", {"fields": ["name","description","headline"]}),
-            (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','crapometer','in_hall_of_shame','descriptionOfShame', 'tags']}),
+            (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','in_hall_of_shame','descriptionOfShame', 'tags']}),
     ]
     autocomplete_fields = ["tags"]
     
@@ -124,7 +142,7 @@ class FilterAdmin(GeneralAdmin):
     inlines = [RelatedFromFiltersInline, RelatedToFiltersInline]
     
 @admin.register(models.New_Entry_on_Steam, site=admin_site)
-class NewEntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+class NewEntryOnSteam(admin.ModelAdmin):
     pass
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
@@ -591,7 +609,40 @@ class VideoGameAdmin(EntityAdmin):
     inlines.insert(0, EntityAdmin.inlines[0])
     
     list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
+    
+    # Calculate the crapometer value when saving
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # form.instance stores the saved object
+         # Calculate the crapometer value
+        # Here strickly the number of negative filters and their values
+        game_negative_filters = models.ValueForFilter.objects.filter(for_entity__pk = form.instance.id, filter__is_positive=False)
+
+        value_neg_filters = 0
+        for a_filter in game_negative_filters :
+            value_neg_filters+=a_filter.value
+
+        if (value_neg_filters > 300) :
+            value_neg_filters = 300
+        form.instance.crapometer = (100*value_neg_filters)/300
+        form.instance.save()
         
+        # Now populate the name for the related ratings
+        game_ratings= models.Videogame_rating.objects.filter(Videogame_common__pk = form.instance.id)
+        
+        for a_game_rating in game_ratings:
+            # Name is name of the game + name of the platform
+            for_platform = a_game_rating.for_platform.name
+            if a_game_rating.same_platform_alternative_shop:
+                a_game_rating.name = f"{form.instance.name} for {for_platform} on {a_game_rating.same_platform_alternative_shop}"
+            else:
+                print(form.instance.name)
+                print(for_platform)
+                a_game_rating.name = f"{form.instance.name} for {for_platform}"
+                print(a_game_rating.name)
+                
+            a_game_rating.save()
+
 @admin.register(models.Company_group, site=admin_site)
 class Company_groupAdmin(EntityAdmin):
     fieldsets = [
@@ -617,6 +668,23 @@ class Physical_shopAdmin(EntityAdmin):
     
     list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
 
+    # Calculate the crapometer value when saving
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # form.instance stores the saved object
+         # Calculate the crapometer value
+        # Number of negative filters and their values
+        game_negative_filters = models.ValueForFilter.objects.filter(for_entity__pk = form.instance.id, filter__is_positive=False)
+
+        value_neg_filters = 0
+        for a_filter in game_negative_filters :
+            value_neg_filters+=a_filter.value
+
+        if (value_neg_filters > 300) :
+            value_neg_filters = 300
+        form.instance.crapometer = (100*value_neg_filters)/300
+        form.instance.save()
+        
 @admin.register(models.Online_Shop, site=admin_site)
 class Online_shopAdmin(EntityAdmin):
     fieldsets = [
@@ -633,12 +701,28 @@ class Online_shopAdmin(EntityAdmin):
     
     list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
     
+    # Calculate the crapometer value when saving
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # form.instance stores the saved object
+         # Calculate the crapometer value
+        # Number of negative filters and their values
+        game_negative_filters = models.ValueForFilter.objects.filter(for_entity__pk = form.instance.id, filter__is_positive=False)
+
+        value_neg_filters = 0
+        for a_filter in game_negative_filters :
+            value_neg_filters+=a_filter.value
+
+        if (value_neg_filters > 300) :
+            value_neg_filters = 300
+        form.instance.crapometer = (100*value_neg_filters)/300
+        form.instance.save()
     
 @admin.register(models.Software, site=admin_site)
 class SoftwareAdmin(EntityAdmin):
     fieldsets = [
         (None, {"fields": ["software_type"]}),
-        ("Ratings", {"fields": ["ethical_rating","clarity_rating","heaviness", "do_the_minimum", "they_have_made_it"], "classes": ["collapse"]}),
+        ("Ratings", {"fields": ["ethical_rating", "they_have_made_it"], "classes": ["collapse"]}),
         ("Made and published by", {"fields": ["studios","publishers","platforms"], "classes": ["collapse"]}),
     ]
     fieldsets.insert(0, EntityAdmin.fieldsets[0])
@@ -646,3 +730,20 @@ class SoftwareAdmin(EntityAdmin):
     inlines = [AliasInline]
     
     list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
+    
+    # Calculate the crapometer value when saving
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # form.instance stores the saved object
+         # Calculate the crapometer value
+        # Number of negative filters and their values
+        game_negative_filters = models.ValueForFilter.objects.filter(for_entity__pk = form.instance.id, filter__is_positive=False)
+
+        value_neg_filters = 0
+        for a_filter in game_negative_filters :
+            value_neg_filters+=a_filter.value
+
+        if (value_neg_filters > 300) :
+            value_neg_filters = 300
+        form.instance.crapometer = (100*value_neg_filters)/300
+        form.instance.save()

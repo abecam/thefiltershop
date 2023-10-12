@@ -11,6 +11,8 @@
 </h1>
 <p>{{ a_game.description }}</p>
 
+{% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
+
 <div style="row-container">
     {% for link_to_shop in links_to_shops %}
         <!-- TODO: Replace by shop icon (?) -->
