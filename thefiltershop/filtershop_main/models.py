@@ -162,10 +162,21 @@ class Studio(BaseModel):
         default=SizeInPersons.ARTISAN,
     )
 
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+    
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # 'They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us) 
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
@@ -186,10 +197,21 @@ class Publisher(BaseModel):
         default=SizeInPersons.ARTISAN,
     )
     
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+      
     url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     fully_rotten = models.BooleanField(default=False)
     in_hall_of_shame = models.BooleanField(default=False)
@@ -207,13 +229,25 @@ class Game_Category(BaseModel):
     
 ########################################
 class Videogame_common(Entity):
+        
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+    
     game_type = models.CharField(max_length=300)
     gameplay_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
     in_the_spotlight = models.BooleanField(default=False)
     in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)], verbose_name="They have made it! (1-> Yes - 2-> Partly thanks to us - 3-> Mostly thanks to us") # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
@@ -226,9 +260,10 @@ class Videogame_common(Entity):
 # Inline
 ########################################
 class Videogame_rating(BaseModel):
+    ''' Rating for a Video Game on a platform. It could be the same device on another shop, for instance sold as premium in one, but free with ads on another. As such, they have their own filters.'''
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
-    f2pay = models.BooleanField(default=False)
+    f2pay = models.BooleanField(default=False) # Should maybe move to a filter?
     gameplay_rating = models.IntegerField(default=50)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     good_wo_iap = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])
@@ -244,8 +279,8 @@ class Videogame_rating(BaseModel):
         verbose_name = "Rating with filters for one platform"
         verbose_name_plural = "Ratings with filters by platforms"
     
-# Many time the video games will be ok on a platform (generally PC, consoles and Mac) and not on another (mobiles). In that case the filters apply on the rating, which if for a specific platform
 class FiltersForAVideoGameRating(models.Model):
+    ''' Many time the video games will be ok on a platform (generally PC, consoles and Mac) and not on another (mobiles). In that case the filters apply on the rating, which if for a specific platform '''
     value = models.IntegerField(null=False, default=50, validators=[MaxValueValidator(100), MinValueValidator(0)]) # From 0 to 100
     filter = models.ForeignKey(Filter, on_delete=models.CASCADE, null=False)
     for_rating = models.ForeignKey(Videogame_rating, on_delete=models.CASCADE, null=False)   
@@ -280,11 +315,24 @@ class Physical_shop(Entity):
         default=SizeInPersons.ARTISAN,
     )
     
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+    
     shop_type = models.CharField(max_length=300)
     ethical_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    in_the_spotlight = models.BooleanField(default=False)
+    in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     group =  models.ManyToManyField(Company_group, blank=True)
     
 ########## Online Shop ##################
@@ -302,11 +350,24 @@ class Online_Shop(Entity):
         default=SizeInPersons.ARTISAN,
     )
     
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+    
     shop_type = models.CharField(max_length=300)
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    in_the_spotlight = models.BooleanField(default=False)
+    in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     group =  models.ManyToManyField(Company_group, blank=True)
       
 ########################################
@@ -317,6 +378,18 @@ class Links_to_shops(models.Model):
     for_Entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=True, blank=True)
     
 class Software(Entity):
+    class TheyHaveMadeIt(models.TextChoices):
+        NO = "NO", _("Not yet")
+        YES = "YE", _("Yes")
+        YES_WE_HELPED_A_BIT = "ME", _("Yes, and we helped a bit")
+        YES_THANKS_TO_US = "MA", _("Yes, mostly thanks to us! Great!")
+        
+    they_have_made_it = models.CharField(
+        max_length=2,
+        choices=TheyHaveMadeIt.choices,
+        default=TheyHaveMadeIt.NO,
+    )
+    
     software_type = models.CharField(max_length=300)
     ethical_rating = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     clarity_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
@@ -324,7 +397,8 @@ class Software(Entity):
     do_the_minimum = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
     spotlight_count = models.IntegerField(default=0)
-    they_have_made_it = models.IntegerField(default=0, validators=[MaxValueValidator(3), MinValueValidator(0)]) # They have made it! (1-> Yes, 2->Yes partly thanks to us, 3->Yes mostly thanks to us)
+    in_the_spotlight = models.BooleanField(default=False)
+    in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)

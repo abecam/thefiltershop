@@ -63,6 +63,7 @@ def get_all_games_for_size(max_size_of_studio) :
 
 def get_all_games_that_made_it() :
     # Here we don't care about the Publisher size
-    all_for_size = Videogame_common.objects.filter(Q(studios__size_of_studio =  Studio.SizeInPersons.ARTISAN) | Q(studios__size_of_studio =  Studio.SizeInPersons.INDIE), they_have_made_it__gt = 0)
+    all_for_size = Videogame_common.objects.filter(Q(studios__size_of_studio =  Studio.SizeInPersons.ARTISAN) | Q(studios__size_of_studio =  Studio.SizeInPersons.INDIE), ~Q(they_have_made_it = Videogame_common.TheyHaveMadeIt.NO))
+    print(all_for_size.query)
     
     return all_for_size

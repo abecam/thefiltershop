@@ -9,17 +9,9 @@
 {% for shop in page_obj %}
 <div class="one_game">
     <a href="{% url 'filtershop_games:physical_shop' shop.id %}" class="image_link"><img src="{{shop.vignette.url}}"" alt="{{shop.name}}"></a>    {{ shop.description }}
-    {% if game.they_have_made_it == 2 %}
-        <!-- we contributed a bit -->
-        <div class="small-contribution">
-            - A bit thanks to us!
-        </div>
-    {% elif game.they_have_made_it == 3 %}
-        <!-- we contributed much :) -->
-        <div class="big-contribution">
-            - with our help :) !
-        </div>
-    {% endif %}
+    <div class="contribution">
+        {{shop.get_they_have_made_it_display}}
+    </div>
 <div>
 {% endfor %}
 <br/>

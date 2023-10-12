@@ -115,6 +115,7 @@ class EntityAdmin(GeneralAdmin):
             ("General info", {"fields": ["name","description","headline"]}),
             (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','crapometer','in_hall_of_shame','descriptionOfShame', 'tags']}),
     ]
+    autocomplete_fields = ["tags"]
     
     inlines = [ValueForFilterAdmin, ImagesInline]
     
@@ -477,7 +478,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             steam_shop = models.Online_Shop.objects.all().get(name="Steam") 
         except models.Online_Shop.DoesNotExist: 
             steam_shop = models.Online_Shop(name="Steam", description="Steam, the biggest online store for Video Games", shop_type="Online Video Games for PC", ethical_rating=100, clarity_rating=100, 
-                        spotlight_count = 0, they_have_made_it=1)
+                        spotlight_count = 0, they_have_made_it=models.Online_Shop.TheyHaveMadeIt.YES)
             
              # If there is no video game online shop type yet, create it
             try: 
@@ -578,6 +579,8 @@ class VideoGameAdmin(EntityAdmin):
         ("Made and published by", {"fields": ["studios","publishers","platforms"]}),
     ]
     autocomplete_fields = ["studios","publishers","platforms","categories"]
+    autocomplete_fields.insert(0, EntityAdmin.autocomplete_fields[0])
+    
     search_fields = ["name"]
     
     fieldsets.insert(0, EntityAdmin.fieldsets[1])
@@ -612,7 +615,7 @@ class Physical_shopAdmin(EntityAdmin):
     inlines = [AliasInline]
     inlines.insert(0, EntityAdmin.inlines[0])
     
-    list_display = ["name", "in_hall_of_shame"]
+    list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
 
 @admin.register(models.Online_Shop, site=admin_site)
 class Online_shopAdmin(EntityAdmin):
@@ -628,7 +631,7 @@ class Online_shopAdmin(EntityAdmin):
     inlines = [AliasInline]
     inlines.insert(0, EntityAdmin.inlines[0])
     
-    list_display = ["name", "in_hall_of_shame"]
+    list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
     
     
 @admin.register(models.Software, site=admin_site)
@@ -642,4 +645,4 @@ class SoftwareAdmin(EntityAdmin):
     
     inlines = [AliasInline]
     
-    list_display = ["name", "in_hall_of_shame"]
+    list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]

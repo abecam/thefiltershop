@@ -90,7 +90,7 @@ def get_all_online_shop_for_artisans_or_others(max_size_of_shop) :
 
 def get_all_online_shops_that_made_it():
     # Here we don't care about the Publisher size
-    all_for_size = Online_Shop.objects.filter(Q(size_of_shop =  Online_Shop.SizeInPersons.ARTISAN) | Q(size_of_shop =  Online_Shop.SizeInPersons.INDIE), they_have_made_it__gt = 0)
+    all_for_size = Online_Shop.objects.filter(Q(size_of_shop =  Online_Shop.SizeInPersons.ARTISAN) | Q(size_of_shop =  Online_Shop.SizeInPersons.INDIE), ~Q(they_have_made_it = Online_Shop.TheyHaveMadeIt.NO))
     
     return all_for_size
 
@@ -184,7 +184,7 @@ def get_all_physical_shop_for_artisans_or_others(max_size_of_shop) :
 
 def get_all_physical_shops_that_made_it():
     # Here we don't care about the Publisher size
-    all_for_size = Physical_shop.objects.filter(Q(size_of_shop =  Physical_shop.SizeInPersons.ARTISAN) | Q(size_of_shop =  Physical_shop.SizeInPersons.INDIE), they_have_made_it__gt = 0)
+    all_for_size = Physical_shop.objects.filter(Q(size_of_shop =  Physical_shop.SizeInPersons.ARTISAN) | Q(size_of_shop =  Physical_shop.SizeInPersons.INDIE), ~Q(they_have_made_it = Physical_shop.TheyHaveMadeIt.NO))
     
     return all_for_size
 
