@@ -5,8 +5,10 @@ from django.core.paginator import Paginator
 from ..models import Profile
 
 def get_curators(request):
-    all_curators = Profile.objects.filter()
-
+    # Best contributors:
+    # number_of_contrib in auth_group Curator 
+    all_curators = Profile.objects.filter(user__groups__name ='Curator').order_by("-number_of_contrib")
+    
     context = {"all_curators": all_curators}
 
     return render(request, "thefiltershop/curators.html", context)

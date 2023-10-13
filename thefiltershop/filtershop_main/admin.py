@@ -3,6 +3,7 @@ import logging
 import tempfile
 
 from django.contrib import admin
+from django.db.models import F
 
 # Register your models here.
 
@@ -29,19 +30,25 @@ admin_site = MyAdminSite(name='customadmin')
 
 @admin.register(models.Profile, models.User, models.Group, site=admin_site)
 class ProfileAdmin(admin.ModelAdmin):
-    pass   
+    exclude= ['number_of_contrib', 'last_changed_by']
 
 @admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
     
     def save_model(self, request, obj, form, change):
+        print("Saving various info!")
         if not obj.pk:
-            obj.create_user = request.user #create_user should only be set once
-        obj.write_user = request.user #write_user can be set at all times
+            obj.created_by = request.user #create_user should only be set once
+        obj.last_changed_by.add(request.user)
+        profile_for_user = models.Profile.objects.filter(user__pk = request.user.id)
+        profile_for_user.number_of_contrib = F("number_of_contrib") + 1
+        profile_for_user.save()
+        
         super().save_model(request, obj, form, change)
       
     search_fields = ["name"]
+    exclude= ['last_changed_by']
 
 @admin.register(models.Publisher, models.Sponsor,
                 models.Studio, site=admin_site) 
@@ -102,13 +109,13 @@ class Videogame_ratingInline(admin.StackedInline):
     verbose_name = "Rating for one platform"
     verbose_name_plural = "Ratings by platforms"
     
-    exclude = ['name']
-    
+    exclude = ['name','last_changed_by']
+        
 @admin.register(models.Videogame_rating, site=admin_site)
 class Videogame_rating(GeneralAdmin):
 
     inlines = [FiltersForAVideoGameRating]
-    exclude = ['name']
+    exclude = ['name','last_changed_by']
     
     # Calculate the crapometer value when saving
     def save_related(self, request, form, formsets, change):
@@ -143,7 +150,10 @@ class FilterAdmin(GeneralAdmin):
     
 @admin.register(models.New_Entry_on_Steam, site=admin_site)
 class NewEntryOnSteam(admin.ModelAdmin):
-    pass
+    list_display = ["name", "appid"]
+    ordering = ["name"]
+    readonly_fields = ["name", "appid"]
+    search_fields = ["name", "appid"]
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
 class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
@@ -586,6 +596,7 @@ class Videogame_CategoryAdmin(admin.ModelAdmin):
     model = models.Game_Category
     extra = 0
     search_fields = ["name"]
+    exclude = ['last_changed_by']
     
 @admin.register(models.Videogame_common, site=admin_site)
 class VideoGameAdmin(EntityAdmin):
