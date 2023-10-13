@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=True %}
+{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=True is_filter=is_filter %}
 
 <h1>
     <img src="{{title_image.photo.url}}"" alt="{{a_game.name}}" class="game_title_image">
@@ -45,7 +45,7 @@
     {% endfor %}
 </div>
 
-{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False %}
+{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False is_filter=is_filter %}
 
 <!-- Ratings for the game, including filters as well -->
 

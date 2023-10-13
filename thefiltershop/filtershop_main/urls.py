@@ -18,6 +18,7 @@ urlpatterns = [
     path("game_filters", views.get_all_filters_for_an_entity_type_videogame, name="game_filters"),
     path("one_filter/<int:filter_id>/", views.get_one_filter_and_related_filters, name="one_filter"),
     path("they_made_it", views.get_artisans_and_indies_games_that_made_it, name="they_made_it"),
+    path("best_of_the_rest", views.get_best_of_the_rest, name="best_of_the_rest"),
     path("hall_of_shame", views.get_items_in_hall_of_shame, name="hall_of_shame"),
     path("physical_shop/<int:shop_id>/", views.physical_shop, name="physical_shop"),
     path("index_physical_shops", views.index_physical_shops, name="index_physical_shops"),

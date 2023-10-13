@@ -1,0 +1,11 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}Best of the rest{% endblock %}
+
+{% block content %}
+<br/>
+<h2>All these game could be good if...</h2>
+
+{% include "thefiltershop/partials/list_of_games.html" with page_obj=page_obj%}
+
+{% endblock %}

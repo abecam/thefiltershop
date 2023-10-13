@@ -5,6 +5,7 @@ from .view_an_online_shop import online_shop
 from .list_games import get_artisans_games
 from .list_games import get_indies_games
 from .list_games import get_artisans_and_indies_games_that_made_it
+from .list_games import get_best_of_the_rest
 from .show_curators import get_curators
 from .get_filters import get_all_filters
 from .get_filters import get_all_filters_for_an_entity_type_videogame

@@ -267,6 +267,7 @@ class Videogame_rating(BaseModel):
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
     f2pay = models.BooleanField(default=False) # Should maybe move to a filter?
+    # Ratings: higher is better.
     gameplay_rating = models.IntegerField(default=50)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     good_wo_iap = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])
@@ -275,6 +276,7 @@ class Videogame_rating(BaseModel):
     fully_rotten = models.BooleanField(default=False)
     would_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
     could_be_good_if = models.TextField(max_length=1000, null=True, blank=True)
+    # here, lower is better (-1 is none)
     use_psycho_tech = models.IntegerField(default=-1, validators=[MaxValueValidator(100), MinValueValidator(-1)])  
     crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     Videogame_common = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=True, blank=False)

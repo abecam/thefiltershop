@@ -2,7 +2,7 @@
 
     <h2>Present on {{ a_rating_with_filters.rating.for_platform.name }}{% if a_rating_with_filters.rating.same_platform_alternative_shop %}, sold on {{a_rating_with_filters.rating.same_platform_alternative_shop}}{% endif %}</h2>
 
-    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=True no_button=True %}
+    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=True no_button=True is_filter=a_rating_with_filters.is_filter %}
 
     <div class="grid-container">
         <div class="grid-item">{{ a_rating_with_filters.rating.f2play | yesno:"F2P,Premium"}}</div>
@@ -27,6 +27,6 @@
     <div class="info_would_be_good">{{ a_rating_with_filters.rating.would_be_good_if }}</div>
     <div class="info_could_be_good">{{ a_rating_with_filters.rating.could_be_good_if }}</div>
 
-    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=False no_button=True %}
+    {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=a_rating_with_filters.negative_filters positive_filters=a_rating_with_filters.positive_filters is_on_top=False no_button=True is_filter=a_rating_with_filters.is_filter %}
 
 {% endfor %}

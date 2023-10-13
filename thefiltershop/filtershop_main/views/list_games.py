@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.db.models import Count
 from django.core.paginator import Paginator
 
 from ..models import Videogame_common, Game_Category, Studio, Publisher
@@ -49,6 +50,18 @@ def get_artisans_and_indies_games_that_made_it(request):
     
     return render(request, "thefiltershop/they_made_it.html", context)
 
+def get_best_of_the_rest(request):
+    list_of_best_of_the_rest = get_all_best_of_the_rest()
+
+    paginator = Paginator(list_of_best_of_the_rest, 25)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
+
+    return render(request, "thefiltershop/best_of_the_rest.html", context)
+
 def get_all_games_for_size(max_size_of_studio) :
     if not isinstance(max_size_of_studio, Studio.SizeInPersons):
         raise TypeError('max_size_of_studio_or_publisher must be a Studio_and_Publisher_Size')
@@ -67,3 +80,31 @@ def get_all_games_that_made_it() :
     print(all_for_size.query)
     
     return all_for_size
+
+def get_all_best_of_the_rest() :
+    # On all filtered games, find which one would actually be good.
+    # Best of the rest: gameplay_rating > 80 & good_wo_iap > 80 & good_wo_ads > 80 & use_psycho_tech == 0
+    # ! -1 for good_wo_iap or good_wo_ads or use_psycho_tech means that they don't use it at all!
+    all_filtered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer")[:100]
+    # And exclude all that don't respect the rules
+    remaining_games = []
+    nb_of_remaing_games = 0
+    
+    for a_game in all_filtered_games :
+        all_rating = a_game.videogame_rating_set.all()
+        will_add = True
+        for a_rating in all_rating :
+            if a_rating.gameplay_rating < 80 or a_rating.good_wo_iap < 80 or a_rating.good_wo_ads < 80 or a_rating.use_psycho_tech > 0 :
+                will_add = False
+                print(f"Will exclude {a_game.name}")
+                break
+           
+        if will_add :     
+            remaining_games.append(a_game)      
+            
+        nb_of_remaing_games+=1
+        
+        if nb_of_remaing_games > 40 :
+            break
+        
+    return remaining_games

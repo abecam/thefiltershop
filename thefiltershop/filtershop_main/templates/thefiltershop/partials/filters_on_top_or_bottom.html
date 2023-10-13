@@ -31,7 +31,7 @@ function toggleVisibilityFilters(evt) {
     }
 }
 </script>
-{% if is_on_top and not no_button %}
+{% if is_on_top and is_filter and not no_button %}
 <button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show filters at the end</button>
 {% endif %}
 <div class="filters">
