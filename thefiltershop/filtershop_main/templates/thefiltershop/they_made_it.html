@@ -6,20 +6,38 @@
 <h1>
     The games from Artisans and Indies that got popular! Congrats!
 </h1>
-{% for game in page_obj %}
-<div class="one_game">
-    <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.description }}
-    <div class="contribution">
-        {{game.get_they_have_made_it_display}}
+<div class="filter-section">
+    <h2>Filter By Category</h2>
+    <div class="categories-filter">
+      <a href="{% url 'filtershop_games:they_made_it' %}" class="bagde">All</a>
+      {% for category in categories %}
+          <a class="badge" href="{% url 'filtershop_games:they_made_it' %}?category_id={{ category.id }}">{{ category.name }}</a>
+      {% endfor %}
     </div>
-<div>
+</div>
+<div class="grid-container">
+    {% for game in page_obj %}
+        <div class="game-card">
+            <div class='game-card-content'>
+                <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.description }}
+                <div class="contribution">
+                    {{game.get_they_have_made_it_display}}
+                </div>
+            </div>
+            <div style="row-container">
+                {% for category in game.categories.all %}
+                    <a class="badge" href="{% url 'filtershop_games:they_made_it' %}?category_id={{ category.id }}">{{ category.name }}</a>
+                {% endfor %}
+            </div>  
+        </div>
 {% endfor %}
 <br/>
+</div>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page=1">&laquo; first</a>
+            <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -27,8 +45,8 @@
         </span>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+            <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
 </div>

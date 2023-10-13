@@ -3,9 +3,18 @@
 {% block title %}Best of the rest{% endblock %}
 
 {% block content %}
-<br/>
-<h2>All these game could be good if...</h2>
-
-{% include "thefiltershop/partials/list_of_games.html" with page_obj=page_obj%}
+<h1>All these game could be good if...</h1>
+<div class="filter-section">
+    <h2>Filter By Category</h2>
+    <div class="categories-filter">
+        <a href="{% url 'filtershop_games:best_of_the_rest' %}" class="bagde">All</a>
+        {% for category in categories %}
+            <a class="badge" href="{% url 'filtershop_games:best_of_the_rest' %}?category_id={{ category.id }}">{{ category.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+<div class="col-container">
+{% include "thefiltershop/partials/list_of_best_of_the_rest_games.html" with page_obj=page_obj%}
+</div>
 
 {% endblock %}

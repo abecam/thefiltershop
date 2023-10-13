@@ -3,8 +3,17 @@
 {% block title %}All (bigger) indies' games{% endblock %}
 
 {% block content %}
-<br/>
-
-{% include "thefiltershop/partials/list_of_games.html" with page_obj=page_obj%}
+<div class="filter-section">
+  <h2>Filter By Category</h2>
+  <div class="categories-filter">
+    <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">All</a>
+    {% for category in categories %}
+        <a class="badge" href="{% url 'filtershop_games:indies_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+<div class="col-container">
+{% include "thefiltershop/partials/list_of_indies_games.html" with page_obj=page_obj%}
+</div>
 
 {% endblock %}

@@ -1,23 +1,22 @@
 <div class="grid-container">
 
-{% for game in page_obj %}
-<div class="game-card">
-    <div class='game-card-content'>
-        <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+    {% for game in page_obj %}
+        <div class="game-card">
+            <div class='game-card-content'>
+                <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
     
-        <p>{{ game.description }}</p>
-        <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">Read More</a>  
-    </div>
-    <div style="row-container">
-    {% for category in game.categories.all %}
-        <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+                <p>{{ game.description }}</p>
+                <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">Read More</a>  
+            </div>
+            <div style="row-container">
+            {% for category in game.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+
     {% endfor %}
-    </div>  
-</div>
-
-{% endfor %}
-<br/>
-
+    <br/>
 </div>
 <div class="pagination">
     <span class="step-links">
