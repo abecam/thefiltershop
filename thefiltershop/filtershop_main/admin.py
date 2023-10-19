@@ -138,7 +138,7 @@ class Videogame_rating(GeneralAdmin):
 class EntityAdmin(GeneralAdmin):
     fieldsets = [
             ("General info", {"fields": ["name","description","headline"]}),
-            (None, {'fields': ['url','for_type','general_rating','vignette','hidden_full_cost','in_hall_of_shame','descriptionOfShame', 'tags']}),
+            (None, {'fields': ['url', 'for_type', 'general_rating', 'vignette', 'hidden_full_cost', 'description_hidden_full_cost', 'in_hall_of_shame', 'descriptionOfShame', 'tags']}),
     ]
     autocomplete_fields = ["tags"]
     
