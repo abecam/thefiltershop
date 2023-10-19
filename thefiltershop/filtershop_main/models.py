@@ -29,6 +29,9 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['date_creation', 'name']
+        indexes = [
+            models.Index(fields=["name"])
+        ]
 
 class Filter(BaseModel):
     is_positive = models.BooleanField(default=False) # Fiters are mostly for bad things (too many IAPS, false Ads,... ) but could be positive too (educative, relaxing, ...)
@@ -92,7 +95,7 @@ class Entity(BaseModel):
     
     vignette = models.ImageField(upload_to='images', null=True, blank=False)
     
-    hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
+    hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Hidden full cost: 0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)")
     crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
@@ -258,6 +261,8 @@ class Videogame_common(Entity):
     class Meta:
         verbose_name = "A Video Game"
         verbose_name_plural = "Video Games"
+        # The indexes are for the parent class Entity
+        indexes = []
     
 # Inline
 ########################################
@@ -314,6 +319,10 @@ class Sponsor(BaseModel):
 class Company_group(Entity):
     company_logo = models.ImageField()
     
+    class Meta:
+        # The indexes are for the parent class Entity
+        indexes = []
+    
 ########################################
 class Physical_shop(Entity):
     class SizeInPersons(models.TextChoices):
@@ -349,6 +358,10 @@ class Physical_shop(Entity):
     in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     group =  models.ManyToManyField(Company_group, blank=True)
     
+    class Meta:
+        # The indexes are for the parent class Entity
+        indexes = []
+    
 ########## Online Shop ##################
 class Online_Shop(Entity):
     class SizeInPersons(models.TextChoices):
@@ -383,6 +396,10 @@ class Online_Shop(Entity):
     in_the_spotlight = models.BooleanField(default=False)
     in_the_spotlight_since = models.DateTimeField(null=True, blank=True, editable=False)
     group =  models.ManyToManyField(Company_group, blank=True)
+    
+    class Meta:
+        # The indexes are for the parent class Entity
+        indexes = []
       
 ########################################
 class Links_to_shops(models.Model):
@@ -414,6 +431,10 @@ class Software(Entity):
     publishers =  models.ManyToManyField(Publisher)
     studios = models.ManyToManyField(Studio)
     platforms = models.ManyToManyField(Platform)
+    
+    class Meta:
+        # The indexes are for the parent class Entity
+        indexes = []
     
 #### Prefilled from Steam API, used to fetch a game ###############
 class Entry_on_Steam(models.Model):
