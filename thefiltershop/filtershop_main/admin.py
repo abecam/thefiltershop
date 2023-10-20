@@ -12,6 +12,8 @@ from . import models
 from django_object_actions import DjangoObjectActions, action
 
 from django.core import files
+from datetime import timedelta
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -599,7 +601,7 @@ class Videogame_CategoryAdmin(admin.ModelAdmin):
     exclude = ['last_changed_by']
     
 @admin.register(models.Videogame_common, site=admin_site)
-class VideoGameAdmin(EntityAdmin):
+class VideoGameAdmin(DjangoObjectActions, EntityAdmin):
     list_filter = ["game_type", "platforms"]
 
     fieldsets = [
@@ -621,6 +623,31 @@ class VideoGameAdmin(EntityAdmin):
     
     list_display = ["name", "they_have_made_it", "in_the_spotlight", "in_hall_of_shame"]
     
+    @action(
+        label="Check the spotlight count and reset it to 0 for all if needed."
+    )
+    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
+    def check_spotlight_count(modeladmin, request, queryset):
+        logger.info("Getting all game that hasn't been in the spotlight for more than 1 year");
+        
+        time_threshold = timezone.now() - timedelta(days=365)
+        last_in_spotlight = models.Videogame_common.objects.filter(in_the_spotlight=False, in_the_spotlight_since__lte=time_threshold)
+        
+        # Now check if we got something and how many we got
+        if last_in_spotlight.count() == 0 :
+            logger.info(f"No games to reset yet");
+            modeladmin.message_user(request, "No games to reset yet.")
+            return
+
+        logger.info(f"Will reset {last_in_spotlight.count()} games");
+        
+        for aGame in last_in_spotlight:
+            #aGame.spotlight_count = 0
+            logger.info(f"Would have resetted {aGame.name}")
+        modeladmin.message_user(request, f"Finished, for {last_in_spotlight.count()} games.")
+                
+    changelist_actions = ('check_spotlight_count',)
+   
     # Calculate the crapometer value when saving
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
