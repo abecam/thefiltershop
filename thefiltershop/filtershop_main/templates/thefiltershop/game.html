@@ -11,6 +11,8 @@
 </h1>
 <p>{{ a_game.description }}</p>
 
+{% include "thefiltershop/partials/gauge_hidden_full_cost.html" with hidden_full_cost_value=a_game.hidden_full_cost desc_hidden_full_cost=desc_hidden_full_cost %}
+
 {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
 
 <div style="row-container">

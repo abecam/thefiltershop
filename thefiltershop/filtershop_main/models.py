@@ -95,8 +95,9 @@ class Entity(BaseModel):
     
     vignette = models.ImageField(upload_to='images', null=True, blank=False)
     
-    hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Hidden full cost: 0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)")
-    description_hidden_full_cost = models.CharField(max_length=300, null=True, blank=True, verbose_name="You can give a custom description for the hidden full cost of this product") 
+    hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Hidden full cost: 0 to 100",help_text="0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)")
+    description_hidden_full_cost = models.CharField(max_length=300, null=True, blank=True, verbose_name="You can give a custom description for the hidden full cost of this product",
+                                                    help_text="A default text will be displayed otherwise, from 0 (none) to 100 (infinite: the product cannot be bought fully while it's possible to spend an infinite amoount of money.)") 
     crapometer = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)

@@ -41,7 +41,7 @@ class GeneralAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.created_by = request.user #create_user should only be set once
         obj.last_changed_by.add(request.user)
-        profile_for_user = models.Profile.objects.filter(user__pk = request.user.id)
+        profile_for_user = models.Profile.objects.get(user__pk = request.user.id)
         profile_for_user.number_of_contrib = F("number_of_contrib") + 1
         profile_for_user.save()
         

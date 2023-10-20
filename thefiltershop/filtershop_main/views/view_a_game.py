@@ -34,7 +34,27 @@ def game(request, videogame_id):
     
     print(ratings_with_filters)
     
+    # Check if we have a description for the hidden full cost, otherwise show the default
+    if a_game.description_hidden_full_cost and a_game.description_hidden_full_cost.__len__ > 0 :
+        desc_hidden_full_cost = a_game.description_hidden_full_cost
+    else :
+        # 0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)
+        if a_game.hidden_full_cost == 0 :
+            desc_hidden_full_cost = "None"
+        elif a_game.hidden_full_cost < 20 :
+            desc_hidden_full_cost = "Slightly more than described"
+        elif a_game.hidden_full_cost < 40 :
+            desc_hidden_full_cost = "Significantly more than described"
+        elif a_game.hidden_full_cost < 60 :
+            desc_hidden_full_cost = "Much more than described"
+        elif a_game.hidden_full_cost < 80 :
+            desc_hidden_full_cost = "A lot more than described, please check before buying!"
+        elif a_game.hidden_full_cost < 100 :
+            desc_hidden_full_cost = "Extremely high!"
+        else :
+            desc_hidden_full_cost = "Infinite, you cannot finish the game whatever you spend!"
+            
     return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
                                                        "negative_filters": negative_filters, "positive_filters": positive_filters, "is_filter": is_filter, 
-                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters})
+                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters, "desc_hidden_full_cost": desc_hidden_full_cost})
     
