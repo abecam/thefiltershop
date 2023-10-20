@@ -35,7 +35,7 @@ def game(request, videogame_id):
     print(ratings_with_filters)
     
     # Check if we have a description for the hidden full cost, otherwise show the default
-    if a_game.description_hidden_full_cost and a_game.description_hidden_full_cost.__len__ > 0 :
+    if a_game.description_hidden_full_cost and len(a_game.description_hidden_full_cost) > 0 :
         desc_hidden_full_cost = a_game.description_hidden_full_cost
     else :
         # 0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)
