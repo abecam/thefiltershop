@@ -613,18 +613,18 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         if app_id:
             with urlopen(f"https://store.steampowered.com/app/{app_id}") as response:
                 soup = BeautifulSoup(response, 'html.parser')
-                with open(f"{one_entry.name}.txt".replace(' ', '_'), "w", encoding= "utf-8") as text_file:
-                    text_file.write(str(soup))
                 if soup:
                     reviewCount = soup.find(itemprop="reviewCount")
                     if reviewCount :
-                        reviewCountContent = reviewCount.get("content")
+                        reviewCountContent = int(reviewCount.get("content"))
                
                         print(reviewCountContent)
                 
                         try:
                             video_game = models.Videogame_common.objects.all().get(name=one_entry.name) 
-                            video_game.known_popularity = reviewCountContent
+                            if reviewCountContent > 200 :
+                                reviewCountContent = 200
+                            video_game.known_popularity = reviewCountContent / 2
                             video_game.save()
                             return True
                         except models.Videogame_common.DoesNotExist:
