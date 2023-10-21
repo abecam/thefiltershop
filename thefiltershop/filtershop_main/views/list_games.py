@@ -86,9 +86,9 @@ def get_all_games_for_size(max_size_of_studio) :
     
     if max_size_of_studio != Studio.SizeInPersons.ARTISAN :
         # No filter on publisher size for non-artisan
-        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = max_size_of_studio)
+        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = max_size_of_studio).order_by("known_popularity")
     else :
-        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN)
+        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN).order_by("known_popularity")
     
     return all_for_size
 
@@ -105,9 +105,9 @@ def get_all_best_of_the_rest(for_category) :
     if for_category is not None :
         # Apply category filtering if a category is selected
         pre_filterd_games = Videogame_common.objects.filter (categories__id=for_category)
-        all_filtered_games = pre_filterd_games.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer")[:100]
+        all_filtered_games = pre_filterd_games.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
     else :
-        all_filtered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer")[:100]
+        all_filtered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
         
     # And exclude all that don't respect the rules
     remaining_games = []

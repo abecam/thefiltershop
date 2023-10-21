@@ -2,12 +2,13 @@
 
 {% for shop in page_obj %}
 <div class="game-card">
+<a href="{% url 'filtershop_games:physical_shop' shop.id %}" class="image_link">
     <div class='game-card-content'>
         <img src="{{shop.vignette.url}}" alt="{{shop.name}}"/>
     
         <p>{{ shop.description }}</p>
-        <a href="{% url 'filtershop_games:physical_shop' shop.id %}" class="image_link">Read More</a>  
-    </div>
+            </div>
+</a>
     <div style="row-container">
     {% for type in shop.shop_type.all %}
         <a class="badge" href="{% url 'filtershop_games:physical_artisans_shops' %}?shop_type={{ type }}">{{type }}</a>

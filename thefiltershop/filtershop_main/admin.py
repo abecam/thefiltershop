@@ -624,6 +624,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                             video_game = models.Videogame_common.objects.all().get(name=one_entry.name) 
                             if reviewCountContent > 200 :
                                 reviewCountContent = 200
+                            if reviewCountContent < 11 :
+                                reviewCountContent = 0
                             video_game.known_popularity = reviewCountContent / 2
                             video_game.save()
                             return True

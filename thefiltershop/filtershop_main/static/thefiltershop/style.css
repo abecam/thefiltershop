@@ -22,10 +22,10 @@ body {
 }
 
 a {
-        border: 2px solid #bbd6d8;
-        border-radius: 5px;
-        background: #bbd6d8;
-        text-decoration: none;
+    border: 2px solid #bbd6d8;
+    border-radius: 5px;
+    background: #bbd6d8;
+    text-decoration: none;
 }
 
 /* visited link */
@@ -46,11 +46,12 @@ a:visited {
     background: #c6e8eb;
   }
 
-  .image_link a {
-    border: 2px solid #cfcfcf;
+  .image_link {
+    border: 0px solid #cfcfcf;
     border-radius: 0px;
     background: none;
     text-decoration: none;
+    text-align: center;
   }
 
   img {
@@ -122,4 +123,130 @@ a:visited {
     gap: 1rem;
     align-items: center;
     justify-content: center;
+  }
+
+  .positive_filter {
+    display: inline-block;
+    position: relative;
+	  width: 100%;
+    height: 70px;
+    background: none;
+    border: none;
+    border-radius: 0%;
+    font-weight: normal;
+    font-size: 24px;
+    margin: 0px;
+    color:rgb(23, 127, 218);
+    text-shadow:  1px 1px#cfcfcf;
+    padding: 0%;
+    vertical-align: middle;
+  }
+
+  .positive_filter img {
+    position: absolute;
+    max-width: 100%;
+	  height: 100%;
+    top: 0%;
+    left: 0%;
+    padding: 0%;
+  }
+
+  .positive_filter .filter_name {
+    display: table-cell;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 30%;
+    left: 20%;
+    padding: 0%;
+  }
+
+  .positive_filter .filter_name a {
+    border: none;
+    border-radius: none;
+    background: none;
+    text-decoration: none;
+    color:rgb(23, 127, 218);
+  }
+  
+  .positive_filter details {
+    display: table-cell;
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    padding: 0%;
+    vertical-align: middle;
+  }
+
+.positive_filter details span {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 15%;
+    left: 0%;
+    padding: 0%;
+    color:rgb(17, 85, 131);
+  }
+
+  .negative_filter {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 70px;
+    background: none;
+    border: none;
+    border-radius: 0%;
+    font-weight: normal;
+    font-size: 24px;
+    margin: 0px;
+    color:#e9e9e9;
+    text-shadow: 1px 1px #7c7c7c;
+    padding: 0%;
+    vertical-align: middle;
+  }
+
+  .negative_filter img {
+    position: absolute;
+    max-width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    padding: 0%;
+  }
+
+  .negative_filter .filter_name {
+    display: table-cell;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 30%;
+    left: 20%;
+    padding: 0%;
+  }
+
+  .negative_filter .filter_name a {
+    border: none;
+    border-radius: none;
+    background: none;
+    text-decoration: none;
+    color:#e9e9e9;
+  }
+
+  .negative_filter details {
+    display: table-cell;
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    padding: 0%;
+    vertical-align: middle;
+  }
+
+.negative_filter details span {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 15%;
+    left: 0%;
+    padding: 0%;
+    color:rgb(122, 33, 33);
   }

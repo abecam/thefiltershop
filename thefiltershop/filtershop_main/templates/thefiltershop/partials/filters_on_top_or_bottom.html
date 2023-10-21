@@ -1,3 +1,5 @@
+{% load static %}
+{% if not no_button %}
 <!-- A Button will switch between the filters up or down -->
 <script>
 <!-- Small logic to toggle visibility-->
@@ -31,61 +33,40 @@ function toggleVisibilityFilters(evt) {
     }
 }
 </script>
+{% endif %}
 {% if is_on_top and is_filter and not no_button %}
 <button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show filters at the end</button>
 {% endif %}
 <div class="filters">
     {% if is_on_top %}
-        <div class="negative_filters">
+        <div class="negative_filters" style="display: block;">
     {% else %}
-        <div class="positive_filters">
+        <div class="positive_filters" style="display: block;" >
     {% endif %}
     {% for filter in positive_filters %}
-    <div class="positive_filter">{{ filter.name }}
-        <div class="filter_description">
+        <div class="positive_filter">
+            <img src="{% static 'images/FilterGreen.png' %}" alt="Green Filter" class="positive_filter_img">
+            <div class="filter_name">
+                <a href={% url 'filtershop_games:one_filter' filter.id %}>{{ filter.name }}</a>
+            </div>
             <details>
                 <summary>More details</summary>
                 <span>{{ filter.description }}</span>
             </details>
         </div>
-    </div>
     {% endfor %}
     {% for filter in negative_filters %}
-        <div class="negative_filter">{{ filter.name }}
-            <div class="filter_description">
-                <details>
-                    <summary>More details</summary>
-                    <span>{{ filter.description }}</span>
-                </details>
+        <div class="negative_filter">
+            <img src="{% static 'images/FilterRed.png' %}" alt="Red Filter" class="negative_filter_img">
+            <div class="filter_name">
+                <a href={% url 'filtershop_games:one_filter' filter.id %}>{{ filter.name }}</a>
             </div>
+            <details>
+                <summary>More details</summary>
+                <span>{{ filter.description }}</span>
+            </details>
         </div>
     {% endfor %}
-    </div>
-    {% if is_on_top %}
-    <div class="positive_filters">
-    {% else %}
-    <div class="negative_filters">
-    {% endif %}
-        {% for filter in positive_filters %}
-            <div class="positive_filter">{{ filter.name }}
-                <div class="filter_description">
-                    <details>
-                        <summary>More details</summary>
-                        <span>{{ filter.description }}</span>
-                    </details>
-                </div>
-            </div>
-        {% endfor %}
-        {% for filter in positive_filters %}
-            <div class="positive_filter">{{ filter.name }}
-                <div class="filter_description">
-                    <details>
-                        <summary>More details</summary>
-                        <span>{{ filter.description }}</span>
-                    </details>
-                </div>
-            </div>
-        {% endfor %}
     </div>
 </div>
 {% if not no_button %}
