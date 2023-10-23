@@ -13,12 +13,116 @@ li a {
     color: green;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
     font: 140% Glametrix;
     background: #d6f5f7;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar */
+.Top-Menu {
+  overflow: hidden;
+  background-color: rgb(192, 240, 248);
+}
+
+.Top-Menu a {
+  border: 2px solid #bbd6d8;
+  border-radius: 3px;
+  background: #bbd6d8;
+  float: left;
+  display: block;
+  color: #bbd6d8;
+  text-align: center;
+  padding: 4px 4px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.Top-Menu a:hover {
+  background-color: #b7e2e6;
+  color: rgb(55, 134, 115)k;
+}
+
+.Sub-Menu {
+  overflow: hidden;
+  background-color: rgb(192, 240, 248);
+}
+
+.Sub-Menu a {
+  border: 2px solid #bbd6d8;
+  border-radius: 3px;
+  background: #bbd6d8;
+  float: left;
+  display: block;
+  color: #bbd6d8;
+  text-align: center;
+  padding: 4px 4px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.Sub-Menu a:hover {
+  background-color: #b7e2e6;
+  color: rgb(55, 134, 115)k;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {   
+  float: left;
+  width: 15%;
+  background-color: #c4fbff;
+  padding-left: 20px;
+}
+
+/* Right column */
+.centercolumn {
+  float: left;
+  width: 60%;
+  background-color: #d6f5f7;
+  padding-left: 20px;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  background-color: #c4fbff;
+  padding-left: 20px;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
 }
 
 a {
