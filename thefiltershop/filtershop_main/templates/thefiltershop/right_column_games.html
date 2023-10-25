@@ -1,9 +1,5 @@
-<div class="filter-section">
-  <h2>Filter By Category</h2>
-  <div class="categories-filter">
-    <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">All</a>
-    {% for category in categories %}
-        <a class="badge" href="{% url 'filtershop_games:indies_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
-    {% endfor %}
-  </div>
+<div class="right-side">
+  <!-- TBD -->
+  <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">Something</a>
+  <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">Something else</a>
 </div>
