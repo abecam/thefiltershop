@@ -36,12 +36,12 @@ body {
 }
 
 .Top-Menu a {
-  border: 2px solid #bbd6d8;
-  border-radius: 3px;
+  border: 2px solid #707e80;
+  border-radius: 1px;
   background: #bbd6d8;
   float: left;
   display: block;
-  color: #bbd6d8;
+  color: #1c1e1f;
   text-align: center;
   padding: 4px 4px;
   text-decoration: none;
@@ -59,12 +59,12 @@ body {
 }
 
 .Sub-Menu a {
-  border: 2px solid #bbd6d8;
+  border: 2px solid #707e80;
   border-radius: 3px;
   background: #bbd6d8;
   float: left;
   display: block;
-  color: #bbd6d8;
+  color: #1c1e1f;
   text-align: center;
   padding: 4px 4px;
   text-decoration: none;
@@ -126,16 +126,17 @@ body {
 }
 
 a {
-    border: 2px solid #bbd6d8;
-    border-radius: 5px;
-    background: #bbd6d8;
-    text-decoration: none;
+  color: #1c1e1f;
+  border: 2px solid #707e80;
+  border-radius: 5px;
+  background: #bbd6d8;
+  text-decoration: none;
 }
 
 /* visited link */
 a:visited {
-    color: green;
-    background: #a8c0c2;
+    color: #1c1e1f;
+    background: #bbd6d8;
   }
   
   /* mouse over link */
