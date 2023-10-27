@@ -1,6 +1,11 @@
 <div class="left-side">
     <!-- Pick a random non-filtered game -->
-    <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">Pick an artisan game!</a>
-    <a href="{% url 'filtershop_games:indies_games' %}" class="bagde">Pick an indie game!</a>
+    <h2>Random non-filtered games!</h2>
+    <div class="link-left-side">
+    <a href="{% url 'filtershop_games:indies_games' %}" class="a_link-left-side">Pick an artisan game!</a>
+    </div>
+    <div class="link-left-side">
+    <a href="{% url 'filtershop_games:indies_games' %}" class="a_link-left-side">Pick an indie game!</a>
+    </div>
     <!-- with categories ? -->
 </div>

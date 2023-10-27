@@ -80,9 +80,15 @@ body {
 /* Left column */
 .leftcolumn {   
   float: left;
-  width: 15%;
+  width: 20%;
   background-color: #c4fbff;
   padding-left: 20px;
+  display: block;
+}
+
+.leftcolumn .left-side .link-left-side {
+  padding: 5px;
+  text-align: center;
 }
 
 /* Right column */
@@ -96,11 +102,16 @@ body {
 /* Right column */
 .rightcolumn {
   float: left;
-  width: 25%;
+  width: 20%;
   background-color: #c4fbff;
   padding-left: 20px;
+  display: block;
 }
 
+.rightcolumn .right-side .link-right-side {
+  padding: 5px;
+  text-align: center;
+}
 /* Footer */
 .footer {
   padding: 20px;
