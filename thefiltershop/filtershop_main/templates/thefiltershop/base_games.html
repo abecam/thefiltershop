@@ -7,13 +7,13 @@
         <a href="{% url 'filtershop_games:best_of_the_rest' %}">Best of the rest...</a>
     </div>
     <div class="leftcolumn">
-        {% include "thefiltershop/left_column_games.html" with page_obj=page_obj%}
+        {% include "thefiltershop/left_column_games.html"%}
     </div>
     <div class="centercolumn">
         {% block content %}
         {% endblock %}
     </div>
     <div class="rightcolumn">
-        {% include "thefiltershop/right_column_games.html" with page_obj=page_obj%}
+        {% include "thefiltershop/right_column_games.html"%}
     </div>
 {% endblock %}

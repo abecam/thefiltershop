@@ -35,5 +35,6 @@ urlpatterns = [
     path("physical_other_shops", views.get_others_physical_shops, name="physical_other_shops"),
     path("they_made_it_physical_shops", views.get_artisans_and_indies_physical_shops_that_made_it, name="they_made_it_physical_shops"),
     path("physical_shop_filters", views.get_all_filters_for_an_entity_type_physical_shop, name="physical_shop_filters"),
+    path("four_o_four", TemplateView.as_view(template_name="404.html"), name="404"),
     #path('admin/', admin_site.urls),
 ]

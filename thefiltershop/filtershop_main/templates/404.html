@@ -1,0 +1,18 @@
+
+{% extends "thefiltershop/base_others.html" %}
+
+{% load static %}
+
+{% block title %}404! Nothing to see there{% endblock %}
+
+{% block content %}
+<h2>Sorry, no content at this url. If you think it is an issue, please contact us.</h2>
+<br/>
+<h3>URL requested : {{request_path}}</h3>
+<h3>Exception: {{exception}}<h3>
+
+<script src={% static 'thefiltershop/p5.min.js' %}></script>
+<script src={% static 'thefiltershop/sketch-morphing.js' %}></script>
+<main>
+</main>
+{% endblock %}

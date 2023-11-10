@@ -13,10 +13,6 @@ li a {
     color: green;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 body {
     font: 140% Glametrix;
     background: #d6f5f7;
@@ -84,6 +80,7 @@ body {
   background-color: #c4fbff;
   padding-left: 20px;
   display: block;
+  box-sizing: border-box;
 }
 
 .leftcolumn .left-side .link-left-side {
@@ -97,6 +94,7 @@ body {
   width: 60%;
   background-color: #d6f5f7;
   padding-left: 20px;
+  box-sizing: border-box;
 }
 
 /* Right column */
@@ -106,6 +104,7 @@ body {
   background-color: #c4fbff;
   padding-left: 20px;
   display: block;
+  box-sizing: border-box;
 }
 
 .rightcolumn .right-side .link-right-side {
