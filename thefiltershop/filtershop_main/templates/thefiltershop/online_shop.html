@@ -4,6 +4,8 @@
 
 {% block title %}{{ a_shop.name }}{% endblock %}
 
+{% block title_content %}{{ a_shop.name }}{% endblock %}
+
 {% block content %}
 
 {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=True is_filter=is_filter %}
