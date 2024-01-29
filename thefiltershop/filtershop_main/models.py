@@ -53,6 +53,17 @@ class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter, blank=True)
 
 class Profile(BaseModel):
+    class ContributorLevel(models.TextChoices):
+        REGULAR = "RE", _("Regular user")
+        SUPPORTER = "SU", _("Supporter")
+        SUPER_SUPPORTER = "SSU", _("Super Supporter")
+        
+    contribution_level = models.CharField(
+        max_length=3,
+        choices=ContributorLevel.choices,
+        default=ContributorLevel.REGULAR,
+    )
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     number_of_contrib = models.IntegerField(default=0) # Incremented when something is updated by the user.
     full_name = models.CharField(max_length=300)
@@ -317,6 +328,16 @@ class Sponsor(BaseModel):
 
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
+    
+## Sponsors and contributors can suggest games
+class Recommended_Games_By_Sponsor(models.Model):
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, null=False)
+    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
+    
+## Sponsors and contributors can suggest games
+class Recommended_Games_By_Contributor(models.Model):
+    sponsor = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
+    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
     
 class Company_group(Entity):
     company_logo = models.ImageField()
