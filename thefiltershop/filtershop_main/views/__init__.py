@@ -24,3 +24,5 @@ from .list_shops import get_artisans_physical_shops
 from .list_shops import get_indies_physical_shops
 from .list_shops import get_others_physical_shops
 from .list_shops import get_artisans_and_indies_physical_shops_that_made_it
+from .list_games import get_a_random_unfiltered_artisan_game
+from .list_games import get_a_random_unfiltered_indie_game

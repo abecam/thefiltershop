@@ -1,7 +1,10 @@
+import random
 from django.shortcuts import render
 from django.db.models import Q
 from django.db.models import Count
 from django.core.paginator import Paginator
+
+from .view_a_game import game
 
 from ..models import Videogame_common, Game_Category, Studio, Publisher
 
@@ -131,3 +134,36 @@ def get_all_best_of_the_rest(for_category) :
             break
         
     return remaining_games
+
+def get_a_random_unfiltered_artisan_game(request) :
+    found_game = get_a_random_game_for_size(Studio.SizeInPersons.ARTISAN)
+    return game(request, found_game.id)
+
+def get_a_random_unfiltered_indie_game(request) :
+    found_game = get_a_random_game_for_size(Studio.SizeInPersons.INDIE)
+    return game(request, found_game.id)
+
+def get_a_random_game_for_size(max_size_of_studio) :
+    ''' Find the max ID, get a limited number of entries (after filtering) at a random position from there '''
+    if not isinstance(max_size_of_studio, Studio.SizeInPersons):
+        raise TypeError('max_size_of_studio_or_publisher must be a Studio_and_Publisher_Size')
+    
+    if max_size_of_studio != Studio.SizeInPersons.ARTISAN :
+        unfiltered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter( studios__size_of_studio = max_size_of_studio, number_of_filters = 0)
+    else :
+        unfiltered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN, number_of_filters = 0)
+        
+    if len(unfiltered_games) >= 1 :
+        max_games = unfiltered_games.count()
+        
+        print(str(unfiltered_games.query))
+        
+        random_pos = random.randint(0,max_games-1)
+        
+        print(f'Fetching at {random_pos} on {max_games}')
+        
+        game_to_show = unfiltered_games[random_pos]
+    else :
+        raise Warning(f'No unfiltered games in the {max_size_of_studio} category.')
+            
+    return game_to_show
