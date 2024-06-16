@@ -1,0 +1,131 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}Search results{% endblock %}
+
+{% block title_content %}Search results{% endblock %}
+
+{% block content %}
+
+<h2>Artisans' Games</h2>
+<div class="grid-container">
+  
+  {% for game in artisan_games %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+              <div class='game-card-content'>
+                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+  
+                  <p>{{ game.description }}</p>
+              </div>
+          </a>
+          <div style="row-container">
+          {% for category in game.categories.all %}
+              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+          {% endfor %}
+          </div>  
+      </div>
+  {% endfor %}
+  <br/>
+</div>
+
+<h2>Indies' Games</h2>
+<div class="grid-container">
+
+  {% for game in indie_games %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+              <div class='game-card-content'>
+                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+   
+                  <p>{{ game.description }}</p>
+              </div>
+          </a>
+          <div style="row-container">
+          {% for category in game.categories.all %}
+              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+          {% endfor %}
+          </div>  
+      </div>
+  {% endfor %}
+  <br/>
+</div>
+
+<h2>Other Games</h2>
+<div class="grid-container">
+
+  {% for game in other_games %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+              <div class='game-card-content'>
+                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+   
+                  <p>{{ game.description }}</p>
+              </div>
+          </a>
+          <div style="row-container">
+          {% for category in game.categories.all %}
+              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+          {% endfor %}
+          </div>  
+      </div>
+  {% endfor %}
+  <br/>
+</div> 
+
+<h2>Studios</h2>
+<div class="grid-container">
+
+  {% for game in studios %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+              <div class='game-card-content'>
+                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+   
+                  <p>{{ game.description }}</p>
+              </div>
+          </a>
+          <div style="row-container">
+          {% for category in game.categories.all %}
+              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+          {% endfor %}
+          </div>  
+      </div>
+  {% endfor %}
+  <br/>
+</div> 
+
+<h2>Publishers</h2>
+<div class="grid-container">
+
+  {% for game in publishers %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+              <div class='game-card-content'>
+                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+   
+                  <p>{{ game.description }}</p>
+              </div>
+          </a>
+      </div>
+  {% endfor %}
+  <br/>
+</div> 
+
+<h2>Filters</h2>
+<div class="grid-container">
+
+  {% for one_filter in filters %}
+      <div class="game-card">
+          <a href="{% url 'filtershop_games:one_filter' one_filter.id %}" class="image_link">
+              <div class='game-card-content'>
+                  {{one_filter.name}}
+   
+                  <p>{{ one_filter.description }}</p>
+              </div>
+          </a>
+      </div>
+  {% endfor %}
+  <br/>
+</div> 
+
+{% endblock %}
