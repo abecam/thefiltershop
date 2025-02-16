@@ -104,7 +104,7 @@ class Entity(BaseModel):
     for_type = models.ForeignKey(TypeOfEntity, on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_related_type")
     general_rating = models.IntegerField(default=50, validators=[MaxValueValidator(100), MinValueValidator(0)])
     
-    vignette = models.ImageField(upload_to='images', null=True, blank=False)
+    vignette = models.ImageField(default='none.jpg', upload_to='images', null=True, blank=False)
     
     hidden_full_cost = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Hidden full cost: 0 to 100",help_text="0 (none) to 50 (full price again (if not f2p)) to 80 (a lot more) to 100 (infinite, i.e. cannot be won whatever you spend)")
     description_hidden_full_cost = models.CharField(max_length=300, null=True, blank=True, verbose_name="You can give a custom description for the hidden full cost of this product",
@@ -166,7 +166,7 @@ class ImageForFilterValue(models.Model):
         return mark_safe('<img src="/../../media/%s" width="150" height="150" />' % (self.photo))
     
 ########################################
-class Studio(BaseModel):
+class Studio(Entity):
     class SizeInPersons(models.TextChoices):
         ARTISAN = "AR", _("Artisan (5 persons or less)")
         INDIE = "IN", _("Indie (>5 persons, less than 20)")
@@ -192,16 +192,19 @@ class Studio(BaseModel):
         default=TheyHaveMadeIt.NO,
     )
     
-    url = models.URLField(null=True, blank=True)
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) 
     fully_rotten = models.BooleanField(default=False)
-    in_hall_of_shame = models.BooleanField(default=False)
-    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "A Studio"
+        verbose_name_plural = "Studios"
+        # The indexes are for the parent class Entity
+        indexes = []
 
 ########################################
-class Publisher(BaseModel):
+class Publisher(Entity):
     class SizeInPersons(models.TextChoices):
         ARTISAN = "AR", _("Artisan (5 persons or less)")
         INDIE = "IN", _("Indie (>5 persons, less than 20)")
@@ -226,14 +229,17 @@ class Publisher(BaseModel):
         choices=TheyHaveMadeIt.choices,
         default=TheyHaveMadeIt.NO,
     )
-      
-    url = models.URLField(null=True, blank=True)
+    
     known_popularity = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)]) # Not used yet
     spotlight_count = models.IntegerField(default=0)
     money_rating = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)])
     fully_rotten = models.BooleanField(default=False)
-    in_hall_of_shame = models.BooleanField(default=False)
-    descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "A Publisher"
+        verbose_name_plural = "Publishers"
+        # The indexes are for the parent class Entity
+        indexes = []
 
 ########################################
 class Platform(BaseModel):

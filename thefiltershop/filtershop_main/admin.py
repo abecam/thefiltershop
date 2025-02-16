@@ -474,7 +474,15 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 studio = models.Studio.objects.all().get(name=one_entry) 
             except models.Studio.DoesNotExist: 
                 studio = models.Studio(name=one_entry, description="")
-                
+                # We migh need to create the studio type first
+                try: 
+                    studio_type = models.TypeOfEntity.objects.all().get(name="Studio") 
+                except models.TypeOfEntity.DoesNotExist: 
+                    studio_type = models.TypeOfEntity(name="Studio", description="A Studio creating Video Games or Applications.")
+                    studio_type.save()
+                studio.for_type = studio_type
+
+                ### Need a vignette too
                 studio.save()
                 
             # And add it
@@ -488,6 +496,15 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 publisher = models.Publisher.objects.all().get(name=one_entry) 
             except models.Publisher.DoesNotExist: 
                 publisher = models.Publisher(name=one_entry, description="")
+                # We migh need to create the studio type first
+                try: 
+                    publisher_type = models.TypeOfEntity.objects.all().get(name="Publisher") 
+                except models.TypeOfEntity.DoesNotExist: 
+                    publisher_type = models.TypeOfEntity(name="Publisher", description="A Publisher publishing Video Games or Applications.")
+                    publisher_type.save()
+                publisher.for_type = publisher_type
+
+                ### Need a vignette too
                 publisher.save()
     
              # And add it

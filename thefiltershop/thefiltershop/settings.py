@@ -75,14 +75,28 @@ WSGI_APPLICATION = 'thefiltershop.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3_thefiltershop',
     }
 }
-
+'''
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "thefiltershop",
+        "USER": "postgres",
+        "PASSWORD": "totolebo",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+        #"OPTIONS": {
+        #    "service": "pg_service",
+        #    "passfile": ".my_pgpass",
+        #},
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -108,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'CET'
 
 USE_I18N = True
 
