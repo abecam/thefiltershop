@@ -47,10 +47,10 @@ def get_game_for_spotlight(max_size_of_studio) :
     # See if we already have a game to show
     if max_size_of_studio != Studio.SizeInPersons.ARTISAN :
         # No filter on publisher size for non-artisan
-        last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_of_studio = max_size_of_studio)
+        last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_of_studio = max_size_of_studio).distinct()
     else :
-        last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN)
-        
+        last_in_spotlight = Videogame_common.objects.filter(in_the_spotlight=True, studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN).distinct()
+
     if len(last_in_spotlight) > 1 :
         # We did something wrong somewhere
         logger.warning("Got more than one game in the spotlight for Artisan, that should not happen!")
@@ -69,9 +69,9 @@ def get_game_for_spotlight(max_size_of_studio) :
         # None yet, so we filter again    
         # no negative filter!
         if max_size_of_studio != Studio.SizeInPersons.ARTISAN :
-            new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter( studios__size_of_studio = max_size_of_studio, number_of_filters = 0)
+            new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter( studios__size_of_studio = max_size_of_studio, number_of_filters = 0).distinct()
         else :
-            new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN, number_of_filters = 0)
+            new_game_for_the_spotlight = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN, number_of_filters = 0).distinct()
         
         if len(new_game_for_the_spotlight) >= 1 :
             latest_games = new_game_for_the_spotlight.order_by("known_popularity").order_by("spotlight_count")[:1]

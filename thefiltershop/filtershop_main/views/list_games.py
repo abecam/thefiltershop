@@ -89,9 +89,9 @@ def get_all_games_for_size(max_size_of_studio) :
     
     if max_size_of_studio != Studio.SizeInPersons.ARTISAN :
         # No filter on publisher size for non-artisan
-        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = max_size_of_studio).order_by("known_popularity")
+        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = max_size_of_studio).order_by("known_popularity").distinct()
     else :
-        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN).order_by("known_popularity")
+        all_for_size = Videogame_common.objects.filter(studios__size_of_studio = Studio.SizeInPersons.ARTISAN, publishers__size_of_publisher = Publisher.SizeInPersons.ARTISAN).order_by("known_popularity").distinct()
     
     return all_for_size
 
