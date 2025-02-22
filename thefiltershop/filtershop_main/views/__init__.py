@@ -27,3 +27,5 @@ from .list_shops import get_artisans_and_indies_physical_shops_that_made_it
 from .list_games import get_a_random_unfiltered_artisan_game
 from .list_games import get_a_random_unfiltered_indie_game
 from .videogames_search import get_search_results
+from .view_a_studio import studio
+from .view_a_publisher import publisher

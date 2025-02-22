@@ -32,11 +32,11 @@
 
 <div class="grid-container">
     {% for studio in a_game.studios.all %}
-        <div class="grid-item">Developed by {{ studio.name }}</div>
+        <div class="grid-item">Developed by <a href="{% url 'filtershop_games:studio' studio.id %}" class="image_link">{{ studio.name }}</a></div>
         <!-- TODO: Add link to studio page -->
     {% endfor %}
     {% for publisher in a_game.publishers.all %}
-        <div class="grid-item">Published by {{ publisher.name }}</div>
+        <div class="grid-item">Published by <a href="{% url 'filtershop_games:publisher' publisher.id %}" class="image_link">{{ publisher.name }}</a></div>
         <!-- TODO: Add link to publisher page -->
     {% endfor %}
 </div>

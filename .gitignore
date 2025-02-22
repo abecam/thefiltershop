@@ -64,3 +64,4 @@ thefiltershop/db.sqlite3_thefiltershop
 # Python cache
 thefiltershop/thefiltershop/__pycache__/
 thefiltershop/filtershop_main/__pycache__/
+.vscode/settings.json

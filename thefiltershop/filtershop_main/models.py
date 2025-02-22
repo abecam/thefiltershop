@@ -290,6 +290,7 @@ class Videogame_rating(BaseModel):
     same_platform_alternative_shop = models.CharField(max_length=600, null=True, blank=True, verbose_name="If on the same platform but for a different shop with different conditions (i.e. F2P instead of premium), give the name of the shop")
     
     ''' Rating for a Video Game on a platform. It could be the same device on another shop, for instance sold as premium in one, but free with ads on another. As such, they have their own filters.'''
+    # Should that be several platforms?
     for_platform = models.ForeignKey(Platform, on_delete=models.PROTECT)
     f2play = models.BooleanField(default=False)
     f2pay = models.BooleanField(default=False) # Should maybe move to a filter?

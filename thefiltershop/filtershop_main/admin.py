@@ -66,6 +66,7 @@ class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
     
     def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
         print("Saving various info!")
         if not obj.pk:
             obj.created_by = request.user #create_user should only be set once
@@ -74,7 +75,7 @@ class GeneralAdmin(admin.ModelAdmin):
         profile_for_user.number_of_contrib = F("number_of_contrib") + 1
         profile_for_user.save()
         
-        super().save_model(request, obj, form, change)
+        #super().save_model(request, obj, form, change)
       
     search_fields = ["name"]
     exclude= ['last_changed_by']
@@ -212,7 +213,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 subdata = data[f"{id}"]
                 success = subdata['success']
                 if not success:
-                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                    modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
                     return
                 
                 content = subdata['data']
@@ -227,7 +228,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     # Update the known popularity (nb of reviews in Steam)
                     EntryOnSteam.get_review_count(modeladmin, request, queryset)
             else:
-                modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
         else:
             modeladmin.message_user(request, "Please provide an ID.")
     
@@ -250,7 +251,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 subdata = data[f"{id}"]
                 success = subdata['success']
                 if not success:
-                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                    modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
                     return
                 
                 content = subdata['data']
@@ -281,7 +282,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 except models.Videogame_common.DoesNotExist:               
                     EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
             else:
-                modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
         else:
             modeladmin.message_user(request, "Please provide an ID.")
             
@@ -308,7 +309,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 
                     success = subdata['success']
                     if not success:
-                        modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                        modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
                         return
                     
                     content = subdata['data']
@@ -323,7 +324,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     # Update the known popularity (nb of reviews in Steam)
                     EntryOnSteam.get_review_count(modeladmin, request, one_entry)
                 else:
-                    modeladmin.message_user(request, "Failed to fetch data from Steam, check the ID.")
+                    modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
             else:
                 modeladmin.message_user(request, "Please select an item first.")
                 
@@ -358,6 +359,10 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
         EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
         # studio(s) and publisher(s)
+
+        if not "publishers" in content :
+            publishers = content['developers']
+
         EntryOnSteam.setStudioAndPublisher(content['developers'],content['publishers'],video_game)
 
         # 
