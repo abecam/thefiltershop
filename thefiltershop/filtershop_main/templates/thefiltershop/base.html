@@ -21,8 +21,9 @@
         <img src="{% static 'images/FilterWhite.png' %}" alt="FilterHeader">
         
     <div class="Top-Menu">
-        <a href="/">Games</a><a href="{% url 'filtershop_games:index_online_shops' %}">Online Shops</a><a href="{% url 'filtershop_games:index_physical_shops' %}">Physical Shops</a><a href="{% url 'filtershop_games:all_filters' %}">All filters</a>
-        <a href="{% url 'filtershop_games:hall_of_shame' %}">Hall of shame!</a><a href="{% url 'filtershop_games:curators' %}">Our curators</a><a href="{% url 'filtershop_games:who_are_we' %}">Who are we</a><a href="{% url 'filtershop_games:our_mission' %}">Our mission</a>  <a href="{% url 'filtershop_games:our_sponsors' %}">Sponsors</a>
+        <a href="/">Under the spotlight!</a>  <a href="{% url 'filtershop_games:artisans_games' %}">Artisan's games</a>  <a href="{% url 'filtershop_games:indies_games' %}">Indie's games</a>  
+        <a href="{% url 'filtershop_games:game_filters' %}">Filters</a>  <a href="{% url 'filtershop_games:they_made_it' %}">They made it!</a>
+        <a href="{% url 'filtershop_games:best_of_the_rest' %}">Best of the rest...</a><a href="{% url 'filtershop_games:hall_of_shame' %}">Hall of shame!</a><a href="{% url 'filtershop_games:curators' %}">Our curators</a><a href="{% url 'filtershop_games:who_are_we' %}">Who are we</a><a href="{% url 'filtershop_games:our_mission' %}">Our mission</a><!--<a href="{% url 'filtershop_games:our_sponsors' %}">Sponsors</a>-->
     </div>
     <div class="row">
         {% block main_content %}{% endblock %}
