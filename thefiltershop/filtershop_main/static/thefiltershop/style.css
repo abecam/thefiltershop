@@ -9,6 +9,46 @@
     font-weight: bold;
   }
 
+  @font-face {
+    font-family: BroshK;
+    src: url(BroshK.otf);
+    font-weight: bold;
+  }
+
+  .paint-order {
+    paint-order: stroke fill;
+    font: 200% Glametrix;
+
+    /* https://caniuse.com/mdn-css_properties_paint-order */
+    /* default is paint-order: fill stroke */
+    /* mdn: https://developer.mozilla.org/en-US/docs/Web/CSS/paint-order */
+    display: flex;
+      flex-direction: column;
+      align-items: left;
+  
+      text-transform: uppercase;
+      font-size: calc(1rem + min(90px, 15vw));
+      font-weight: 900;
+      letter-spacing: -.175ch;
+      line-height: 0.9;
+      color: white;
+      -webkit-text-stroke: 5px black;
+      text-shadow: 8px 8px black;
+      
+      > span:first-of-type {
+        font-size: .75em;
+      }
+      
+      > div {
+        display: flex;
+        gap: .5ch;
+      }
+  }
+  
+  
+  
+  
+
 li a {
     color: green;
 }
