@@ -1,6 +1,7 @@
-<div class="grid-container">
+<div class="col-container">
 
     {% for game in page_obj %}
+    <div class="game-card-wrapper">
         <div class="game-card">
             <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
                 <div class='game-card-content'>
@@ -15,6 +16,7 @@
             {% endfor %}
             </div>  
         </div>
+    </div>
 
     {% endfor %}
     <br/>

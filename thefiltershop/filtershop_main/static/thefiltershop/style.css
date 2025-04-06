@@ -148,6 +148,9 @@ body {
 
 /* Right column */
 .rightcolumn {
+  display: flex;
+  align-items: stretch;
+  align-content: space-around;
   float: left;
   width: 20%;
   height: 100vh;
@@ -188,34 +191,38 @@ body {
 }
 
 a {
-  color: #1c1e1f;
-  border: 2px solid #707e80;
-  border-radius: 5px;
-  background: #bbd6d8;
+  color: black;
+  background-color: #30d388;
   text-decoration: none;
+  padding: 10px 15px;
+  display: inline-block;
+  font-weight: 400;
+  border-radius: 10px;
+  border: none;
+  transition: background 0.3s ease-in-out;
 }
 
 /* visited link */
 a:visited {
-    color: #1c1e1f;
-    background: #bbd6d8;
-  }
+  color: black;
+  background-color: #30d388;
+}
   
   /* mouse over link */
   a:hover {
-    color: rgb(55, 134, 115);
-    background: #b7e2e6;
+    color: black;
+    background: #40E29E;
   }
   
   /* selected link */
   a:active {
-    color: rgb(79, 148, 100);
-    background: #c6e8eb;
+    color: black;
+    background: #40E29E;
   }
 
   .image_link {
     border: 0px solid #cfcfcf;
-    border-radius: 0px;
+    border-radius: 10px;
     background: none;
     text-decoration: none;
     text-align: center;
@@ -232,6 +239,7 @@ a:visited {
     padding: 5px;
     gap: 10px
   }
+
   .grid-item {
     background: none;
     border: none;
@@ -247,22 +255,37 @@ a:visited {
 
   .col-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: space-around;
   }
 
-  .game-card {
+  .game-card-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-    background-color: azure;
-    border-radius: 10px;
+    flex: 1 1 0px;
+    flex-basis: 0;
+    border: none;
+    padding: 0.2rem;
+    border-radius: 2px;
     max-width: 300px;
     gap: 1rem;
   }
   
-  .game-card-content p{
+  .game-card-wrapper .game-card {
+    border: 1px solid black;
+    padding: 2rem;
+    background-color: azure;
+    border-radius: 10px;
+    max-width: 280px;
+    flex-grow: inherit;
+  }
+  
+  .game-card .game-card-content p{
     word-wrap: break-word;
+    word-break: break-word;
    }
 
   .row-container {

@@ -14,8 +14,6 @@
     {% endfor %}
   </div>
 </div>
-<div class="col-container">
-  {% include "thefiltershop/partials/list_of_artisans_games.html" with page_obj=page_obj%}
-</div>
+{% include "thefiltershop/partials/list_of_artisans_games.html" with page_obj=page_obj%}
 
 {% endblock %}
