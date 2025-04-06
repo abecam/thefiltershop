@@ -10,7 +10,7 @@
                     <p>{{ game.description }}</p>
                 </div>
             </a>
-            <div style="row-container">
+            <div class="row-container">
             {% for category in game.categories.all %}
                 <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
             {% endfor %}

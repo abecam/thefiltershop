@@ -270,7 +270,7 @@ a:visited {
     border: none;
     padding: 0.2rem;
     border-radius: 2px;
-    max-width: 300px;
+    max-width: 350px;
     gap: 1rem;
   }
   
@@ -279,8 +279,11 @@ a:visited {
     padding: 2rem;
     background-color: azure;
     border-radius: 10px;
-    max-width: 280px;
+    max-width: 330px;
     flex-grow: inherit;
+    display: flex;
+    flex: 1 1 0px;
+    flex-direction: column;
   }
   
   .game-card .game-card-content p{
@@ -288,11 +291,11 @@ a:visited {
     word-break: break-word;
    }
 
-  .row-container {
+   .game-card .row-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    gap: 1rem;
+    align-items: flex-end;
+    gap: 0.3rem;
   }
 
   .badge {
