@@ -11,7 +11,7 @@
     <div class="filter-section">
         <h2>Filter By Category</h2>
         <div class="categories-filter">
-        <a href="{% url 'filtershop_games:they_made_it' %}" class="bagde">All</a>
+        <a href="{% url 'filtershop_games:they_made_it' %}" class="badge">All</a>
         {% for category in categories %}
             <a class="badge" href="{% url 'filtershop_games:they_made_it' %}?category_id={{ category.id }}">{{ category.name }}</a>
         {% endfor %}

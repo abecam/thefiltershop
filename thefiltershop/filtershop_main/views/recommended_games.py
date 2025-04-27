@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.db.models import Count
 from django.core.paginator import Paginator
 
-from ..models import Videogame_common, Game_Category, Studio, Publisher
+from ..models import Videogame_common, Game_Category, Studio, Publisher, Recommended_Games_By_Contributor
 
 def get_recommended_games(request):
     game_categories = Game_Category.objects.all()
@@ -12,7 +12,7 @@ def get_recommended_games(request):
     page_number = request.GET.get("page")
 
     # Get all artisan games
-    list_of_games_artisan = get_all_games_for_size(Studio.SizeInPersons.ARTISAN)
+    list_of_games_artisan = get_all_games_for_size(Studio.SizeInPersons.ARTISAN, recommender)
 
     # Apply category filtering if a category is selected
     if category_id:
@@ -26,7 +26,7 @@ def get_recommended_games(request):
 
     return render(request, "thefiltershop/artisans_games.html", context)
 
-def get_all_games_for_size(max_size_of_studio) :
+def get_all_games_for_size(max_size_of_studio, recommender) :
     if not isinstance(max_size_of_studio, Studio.SizeInPersons):
         raise TypeError('max_size_of_studio_or_publisher must be a Studio_and_Publisher_Size')
     
