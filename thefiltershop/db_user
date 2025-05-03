@@ -1,0 +1,2 @@
+CREATE USER django_shop WITH PASSWORD 'test_password';
+GRANT ALL PRIVILEGES ON DATABASE "thefiltershop" to django_shop;

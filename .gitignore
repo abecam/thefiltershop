@@ -65,3 +65,5 @@ thefiltershop/db.sqlite3_thefiltershop
 thefiltershop/thefiltershop/__pycache__/
 thefiltershop/filtershop_main/__pycache__/
 .vscode/settings.json
+thefiltershop/log/debug.log
+thefiltershop/pyvenv.cfg

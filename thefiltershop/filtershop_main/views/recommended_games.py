@@ -5,6 +5,12 @@ from django.core.paginator import Paginator
 
 from ..models import Videogame_common, Game_Category, Studio, Publisher, Recommended_Games_By_Contributor
 
+def select_a_recommender(request):
+
+    context = {"recommender": a_recommender, "page_obj": page_obj,"categories": game_categories, "selected_category": category_id}
+
+    return render(request, "thefiltershop/recommended.html", context)
+
 def get_recommended_games(request):
     game_categories = Game_Category.objects.all()
     recommender = request.GET.get('from')

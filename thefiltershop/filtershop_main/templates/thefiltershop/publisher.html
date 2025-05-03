@@ -1,0 +1,40 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}{{ a_publisher.name }}{% endblock %}
+
+{% block title_content %}{{a_publisher.name}}{% endblock %}
+
+{% block content %}
+
+{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=True is_filter=is_filter %}
+
+<h1>
+    <img src="{{a_publisher.vignette.url}}"" alt="{{a_publisher.name}}" class="game_title_image">
+</h1>
+<p>{{ a_publisher.description }}</p>
+
+{% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_publisher.crapometer %}
+
+<div style="row-container">
+    {% for game in games %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+    
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+            {% for category in game.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+    {% endfor %}
+</div>
+<!-- Include the size as well? -->
+
+{% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False is_filter=is_filter %}
+
+{% endblock %}
