@@ -32,8 +32,6 @@ def game(request, videogame_id):
             
         ratings_with_filters.append({"rating" :one_rating, "negative_filters": negative_filters_this_rating, "positive_filters": positive_filters_this_rating, "is_filter": is_filter_rating})
     
-    print(ratings_with_filters)
-    
     # Check if we have a description for the hidden full cost, otherwise show the default
     if a_game.description_hidden_full_cost and len(a_game.description_hidden_full_cost) > 0 :
         desc_hidden_full_cost = a_game.description_hidden_full_cost
