@@ -343,7 +343,7 @@ class Recommended_Games_By_Sponsor(models.Model):
     
 ## Sponsors and contributors can suggest games
 class Recommended_Games_By_Contributor(models.Model):
-    sponsor = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
+    contributor = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
     
 class Company_group(Entity):

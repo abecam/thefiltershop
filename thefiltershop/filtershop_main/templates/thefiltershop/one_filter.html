@@ -59,6 +59,7 @@
             {{ related_filter.with_type.reverse_name }} <a href="{% url 'filtershop_games:one_filter' related_filter.from_filter.id %}" class="filter_link">{{related_filter.from_filter.name}}</a>    {{ related_filter.from_filter.description }}
         </div>
     {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
