@@ -17,5 +17,5 @@ from .list_games import get_a_random_unfiltered_indie_game
 from .videogames_search import get_search_results
 from .view_a_studio import studio
 from .view_a_publisher import publisher
-from .recommended_games import get_a_random_contributor
+from .recommended_games import select_a_recommender
 from .recommended_games import get_recommended_games

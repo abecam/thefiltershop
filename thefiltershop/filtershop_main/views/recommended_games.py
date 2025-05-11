@@ -1,4 +1,6 @@
 import random
+import logging
+
 from django.shortcuts import render
 from django.db.models import Q
 from django.db.models import Count
@@ -6,10 +8,12 @@ from django.core.paginator import Paginator
 
 from ..models import Videogame_common, Game_Category, Studio, Publisher, Recommended_Games_By_Contributor, Profile
 
+logger = logging.getLogger(__name__)
+
 def select_a_recommender(request):
     a_contributor = get_a_random_contributor(request.GET.get("level_of_contribution"))
 
-    all_recommended_games = get_all_games_for_size()
+    all_recommended_games = get_all_games_for_size(a_contributor)
 
     categories_in_recommended = set
 
@@ -18,7 +22,7 @@ def select_a_recommender(request):
 
     game_categories = sorted(categories_in_recommended)
 
-    context = {"recommender": a_contributor, "page_obj": all_recommended_games,"categories": game_categories, "selected_category": ""}
+    context = {"from": a_contributor, "page_obj": all_recommended_games,"categories": game_categories, "selected_category": ""}
 
     return render(request, "thefiltershop/recommended.html", context)
 
@@ -28,8 +32,13 @@ def get_recommended_games(request):
     category_id = request.GET.get('category_id')  # Get the selected category ID from the query parameters
     page_number = request.GET.get("page")
 
+    print(game_categories)
+    print(recommender)
+    print(category_id)
+    print(page_number)
+
     # Get all artisan games
-    list_of_games_artisan = get_all_games_for_size(Studio.SizeInPersons.ARTISAN, recommender)
+    list_of_games_artisan = get_all_games_for_size(recommender)
 
     # Apply category filtering if a category is selected
     if category_id:
@@ -48,11 +57,11 @@ def get_a_random_contributor(kind_of_contributor) :
     
     ## TODO: check if there is a difference here of replace the elif by an or
     if kind_of_contributor == "SU" :
-        contributors = Profile.objects.annotate(filter( contribution_level = Profile.ContributorLevel.SUPER_SUPPORTER))
+        contributors = Profile.objects.filter( contribution_level = Profile.ContributorLevel.SUPER_SUPPORTER)
     elif kind_of_contributor == "SSU" :
-        contributors = Profile.objects.annotate(filter( contribution_level = Profile.ContributorLevel.SUPPORTER))
+        contributors = Profile.objects.filter( contribution_level = Profile.ContributorLevel.SUPPORTER)
     else :
-        raise Warning(f'No contributors in the {kind_of_contributor} category.')
+        raise Warning(f'The {kind_of_contributor} category cannot recommend.')
                 
     if len(contributors) >= 1 :
         max_contributors = contributors.count()
@@ -65,7 +74,11 @@ def get_a_random_contributor(kind_of_contributor) :
         
         contributor_to_show = contributors[random_pos]
     else :
-        raise Warning(f'No contributors in the {kind_of_contributor} category.')
+        contributors = Profile.objects.filter()[:1]
+
+        contributor_to_show = contributors[0]
+
+        logger.warning(f'No contributors in the {kind_of_contributor} category.')
             
     return contributor_to_show
 
