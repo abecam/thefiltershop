@@ -16,13 +16,13 @@
 </div>
 
 
-<div class="Recommend-title"> Recommending </div>
+<div class="recommend-title"> Recommending </div>
 <div class="filter-section">
   <h2>Filter By Category</h2>
   <div class="categories-filter">
-    <a href="{% url 'filtershop_games:indies_games' %}" class="badge">All</a>
+    <a href="?from={{ profile.id }}" class="badge">All</a>
     {% for category in categories %}
-        <a class="badge" href="?category_id={{ category.id }}">{{ category.name }}</a>
+        <a class="badge" href="?from={{ profile.id }}&category_id={{ category.id }}">{{ category.name }}</a>
     {% endfor %}
   </div>
 </div>
@@ -53,8 +53,8 @@
 <div class="pagination">
   <span class="step-links">
       {% if page_obj.has_previous %}
-          <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page=1">&laquo; first</a>
-          <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
+          <a href="?from={{ profile.id }}&{% if selected_category %}category_id={{ selected_category }}&{% endif %}page=1">&laquo; first</a>
+          <a href="?from={{ profile.id }}&{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
       {% endif %}
       
       <span class="current-page">
@@ -62,8 +62,8 @@
       </span>
       
       {% if page_obj.has_next %}
-          <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
-          <a href="?{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          <a href="?from={{ profile.id }}&{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+          <a href="?from={{ profile.id }}&{% if selected_category %}category_id={{ selected_category }}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
       {% endif %}
   </span>
 </div>

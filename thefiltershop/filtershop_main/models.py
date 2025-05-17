@@ -51,46 +51,6 @@ class RelatedFilters(models.Model):
     
 class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter, blank=True)
-
-class Profile(BaseModel):
-    class ContributorLevel(models.TextChoices):
-        REGULAR = "RE", _("Regular user")
-        SUPPORTER = "SU", _("Supporter")
-        SUPER_SUPPORTER = "SSU", _("Super Supporter")
-        
-    contribution_level = models.CharField(
-        max_length=3,
-        choices=ContributorLevel.choices,
-        default=ContributorLevel.REGULAR,
-    )
-    
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    number_of_contrib = models.IntegerField(default=0) # Incremented when something is updated by the user.
-    full_name = models.CharField(max_length=300)
-    biography = models.TextField(max_length=3000)
-    curating_fields = models.ManyToManyField(TypeOfEntity, blank=True)
-    nb_of_articles = models.IntegerField(editable=False, default=0)
-    
-    avatar = models.ImageField(
-        default='avatar.jpg', # default avatar
-        upload_to='profile_avatars' # dir to store the image
-    )
-
-    def __str__(self):
-        return f'{self.full_name} Profile'
-    
-    def save(self, *args, **kwargs):
-        # save the profile first
-        super().save(*args, **kwargs)
-
-        # resize the image
-        img = PIL.Image.open(self.avatar.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            # create a thumbnail
-            img.thumbnail(output_size)
-            # overwrite the larger image
-            img.save(self.avatar.path)
             
 class Tag(BaseModel):
     good_or_bad = models.IntegerField()
@@ -336,16 +296,6 @@ class Sponsor(BaseModel):
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
     
-## Sponsors and contributors can suggest games
-class Recommended_Games_By_Sponsor(models.Model):
-    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, null=False)
-    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
-    
-## Sponsors and contributors can suggest games
-class Recommended_Games_By_Contributor(models.Model):
-    contributor = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
-    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
-    
 class Company_group(Entity):
     company_logo = models.ImageField()
     
@@ -431,6 +381,48 @@ class Online_Shop(Entity):
         # The indexes are for the parent class Entity
         indexes = []
       
+class Profile(BaseModel):
+    class ContributorLevel(models.TextChoices):
+        REGULAR = "RE", _("Regular user")
+        SUPPORTER = "SU", _("Supporter")
+        SUPER_SUPPORTER = "SSU", _("Super Supporter")
+        
+    contribution_level = models.CharField(
+        max_length=3,
+        choices=ContributorLevel.choices,
+        default=ContributorLevel.REGULAR,
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    number_of_contrib = models.IntegerField(default=0) # Incremented when something is updated by the user.
+    full_name = models.CharField(max_length=300)
+    biography = models.TextField(max_length=3000)
+    curating_fields = models.ManyToManyField(TypeOfEntity, blank=True)
+    nb_of_articles = models.IntegerField(editable=False, default=0)
+    
+    avatar = models.ImageField(
+        default='avatar.jpg', # default avatar
+        upload_to='profile_avatars' # dir to store the image
+    )
+
+    recommended_games = models.ManyToManyField(Videogame_common)
+
+    def __str__(self):
+        return f'{self.full_name} Profile'
+    
+    def save(self, *args, **kwargs):
+        # save the profile first
+        super().save(*args, **kwargs)
+
+        # resize the image
+        img = PIL.Image.open(self.avatar.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            # create a thumbnail
+            img.thumbnail(output_size)
+            # overwrite the larger image
+            img.save(self.avatar.path)
+
 ########################################
 class Links_to_shops(models.Model):
     link = models.URLField()

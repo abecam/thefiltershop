@@ -27,7 +27,6 @@ urlpatterns = [
     path("a_random_indie_game", views.get_a_random_unfiltered_indie_game, name="a_random_indie_game"),
     path("videogames_search/", views.get_search_results, name="videogames_search"),
     path("four_o_four", TemplateView.as_view(template_name="404.html"), name="404"),
-    path("a_random_recommender", views.select_a_recommender, name="a_random_recommender"),
     path("a_recommender", views.get_recommended_games, name="a_recommender")
     #path('admin/', admin_site.urls),
 ]

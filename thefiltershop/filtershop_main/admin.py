@@ -32,29 +32,9 @@ class MyAdminSite(admin.AdminSite):
         
 
 admin_site = MyAdminSite(name='customadmin')
-
-class Recommended_Games_By_Sponsor(admin.TabularInline):
-    model = models.Recommended_Games_By_Sponsor
-    autocomplete_fields = (
-        'game',
-    )
-    xtra = 2
-    verbose_name = "Recommended game"
-    verbose_name_plural = "Recommended games"
-    
-class Recommended_Games_By_Contributor(admin.TabularInline):
-    model = models.Recommended_Games_By_Contributor
-    autocomplete_fields = (
-        'game',
-    )
-    xtra = 2
-    verbose_name = "Recommended game"
-    verbose_name_plural = "Recommended games"
     
 @admin.register(models.Profile, site=admin_site)
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = [Recommended_Games_By_Contributor]
-    
     exclude= ['number_of_contrib', 'last_changed_by']
     
 @admin.register(models.User, models.Group, site=admin_site)
@@ -82,10 +62,8 @@ class GeneralAdmin(admin.ModelAdmin):
 
 @admin.register(models.Sponsor, site=admin_site) 
 class Sponsor(GeneralAdmin):
-    inlines = [Recommended_Games_By_Sponsor]
     list_display = ["name", "in_hall_of_shame"]
-    
-inlines = [Recommended_Games_By_Contributor]
+
 @admin.register(models.Publisher,
                 models.Studio, site=admin_site) 
 class ElementWithHallOfShame(GeneralAdmin):

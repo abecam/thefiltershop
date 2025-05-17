@@ -6,49 +6,49 @@ from django.db.models import Q
 from django.db.models import Count
 from django.core.paginator import Paginator
 
-from ..models import Videogame_common, Game_Category, Studio, Publisher, Recommended_Games_By_Contributor, Profile
+from django.shortcuts import get_object_or_404
+
+from ..models import Videogame_common, Game_Category, Studio, Publisher, Profile
 
 logger = logging.getLogger(__name__)
 
-def select_a_recommender(request):
-    a_contributor = get_a_random_contributor(request.GET.get("level_of_contribution"))
-
-    all_recommended_games = get_all_games_for_size(a_contributor)
-
-    categories_in_recommended = set
-
-    for a_game in all_recommended_games.all:
-        categories_in_recommended.update(a_game.categories.all)
-
-    game_categories = sorted(categories_in_recommended)
-
-    context = {"from": a_contributor, "page_obj": all_recommended_games,"categories": game_categories, "selected_category": ""}
-
-    return render(request, "thefiltershop/recommended.html", context)
-
 def get_recommended_games(request):
     game_categories = request.GET.get('categories')
-    recommender = request.GET.get('from')
+    recommender_id = request.GET.get('from')
     category_id = request.GET.get('category_id')  # Get the selected category ID from the query parameters
     page_number = request.GET.get("page")
 
     print(game_categories)
-    print(recommender)
+    print(recommender_id)
     print(category_id)
     print(page_number)
+    if recommender_id:
+        a_recommender = get_object_or_404(Profile, pk=recommender_id)
+    else:
+        a_recommender = get_a_random_contributor(request.GET.get("level_of_contribution"))
 
     # Get all artisan games
-    list_of_games_artisan = get_all_games_for_size(recommender)
+    all_recommended_games = get_all_games_for_size(a_recommender)
+
+    print(all_recommended_games)
+    categories_in_recommended = all_recommended_games.first().categories.all()
+
+    for a_game in all_recommended_games.all():
+        categories_in_recommended= categories_in_recommended | a_game.categories.all()
+    
+    categories_in_recommended = categories_in_recommended.distinct().order_by("name")
+
+    print(categories_in_recommended.query)
 
     # Apply category filtering if a category is selected
     if category_id:
-        list_of_games_artisan = list_of_games_artisan.filter(categories__id=category_id)
+        all_recommended_games = all_recommended_games.filter(categories__id=category_id)
 
-    paginator = Paginator(list_of_games_artisan, 8)  
+    paginator = Paginator(all_recommended_games, 8)  
 
     page_obj = paginator.get_page(page_number)
 
-    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
+    context = {"recommender": a_recommender,"page_obj": page_obj, "categories": categories_in_recommended, "selected_category": category_id}
 
     return render(request, "thefiltershop/recommended.html", context)
 
@@ -84,6 +84,6 @@ def get_a_random_contributor(kind_of_contributor) :
 
 def get_all_games_for_size(recommender) :
     
-    all_games = Recommended_Games_By_Contributor.game.order_by("known_popularity")
-
+    all_games = recommender.recommended_games.all().order_by("known_popularity")
+                                                                                                                                             
     return all_games

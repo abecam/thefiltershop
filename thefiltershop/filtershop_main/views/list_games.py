@@ -107,8 +107,8 @@ def get_all_best_of_the_rest(for_category) :
     # ! -1 for good_wo_iap or good_wo_ads or use_psycho_tech means that they don't use it at all!
     if for_category is not None :
         # Apply category filtering if a category is selected
-        pre_filterd_games = Videogame_common.objects.filter (categories__id=for_category)
-        all_filtered_games = pre_filterd_games.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
+        pre_filtered_games = Videogame_common.objects.filter (categories__id=for_category)
+        all_filtered_games = pre_filtered_games.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
     else :
         all_filtered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
         
