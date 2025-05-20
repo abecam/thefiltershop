@@ -303,6 +303,14 @@ class Company_group(Entity):
         # The indexes are for the parent class Entity
         indexes = []
     
+## Sponsors and contributors can suggest games
+class Recommended_Games_By_Sponsor(models.Model):
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, null=False)
+    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
+    review__txt = models.TextField(max_length=10000, null=True, blank=True)
+    note = models.IntegerField(null=False, default=5, validators=[MaxValueValidator(5), MinValueValidator(0)]) # From 0 to 5 stars
+    
+
 ########################################
 class Physical_shop(Entity):
     class SizeInPersons(models.TextChoices):
@@ -423,6 +431,14 @@ class Profile(BaseModel):
             # overwrite the larger image
             img.save(self.avatar.path)
 
+## Contributors review are in the profile, but they can also review
+## TODO: In the admin interface, make it as easy as possible to propagate the review to Steam.
+class Reviews(BaseModel):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
+    game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
+    review__txt = models.TextField(max_length=10000, null=True, blank=True)
+    note = models.IntegerField(null=False, default=5, validators=[MaxValueValidator(5), MinValueValidator(-5)]) # From -5 to 5 stars
+    
 ########################################
 class Links_to_shops(models.Model):
     link = models.URLField()
