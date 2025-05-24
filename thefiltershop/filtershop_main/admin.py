@@ -32,7 +32,15 @@ class MyAdminSite(admin.AdminSite):
         
 
 admin_site = MyAdminSite(name='customadmin')
-    
+
+class Recommended_Games_By_Sponsor(admin.TabularInline):
+    model = models.Recommended_Games_By_Sponsor
+    autocomplete_fields = (
+        'game',
+    )
+    xtra = 2
+    verbose_name = "Recommended game"
+    verbose_name_plural = "Recommended games"    
 @admin.register(models.Profile, site=admin_site)
 class ProfileAdmin(admin.ModelAdmin):
     exclude= ['number_of_contrib', 'last_changed_by']
@@ -60,8 +68,14 @@ class GeneralAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     exclude= ['last_changed_by']
 
+@admin.register(models.Review, site=admin_site) 
+class Review(GeneralAdmin):
+    exclude= ['description', 'last_changed_by']
+    list_display = ["name", "profile", "game", "note"]
+
 @admin.register(models.Sponsor, site=admin_site) 
 class Sponsor(GeneralAdmin):
+    inlines = [Recommended_Games_By_Sponsor]
     list_display = ["name", "in_hall_of_shame"]
 
 @admin.register(models.Publisher,

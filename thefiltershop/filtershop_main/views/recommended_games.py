@@ -60,6 +60,8 @@ def get_a_random_contributor(kind_of_contributor) :
         contributors = Profile.objects.filter( contribution_level = Profile.ContributorLevel.SUPER_SUPPORTER)
     elif kind_of_contributor == "SSU" :
         contributors = Profile.objects.filter( contribution_level = Profile.ContributorLevel.SUPPORTER)
+    elif kind_of_contributor == "CUR" :
+        contributors = Profile.objects.filter( contribution_level = Profile.ContributorLevel.CURATOR)
     else :
         raise Warning(f'The {kind_of_contributor} category cannot recommend.')
                 
