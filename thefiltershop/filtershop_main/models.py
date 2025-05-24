@@ -295,6 +295,19 @@ class Sponsor(BaseModel):
 
     in_hall_of_shame = models.BooleanField(default=False)
     descriptionOfShame = models.TextField(max_length=1000, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # save the profile first
+        super().save(*args, **kwargs)
+
+        # resize the image
+        img = PIL.Image.open(self.sponsor_logo.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            # create a thumbnail
+            img.thumbnail(output_size)
+            # overwrite the larger image
+            img.save(self.sponsor_logo.path)
     
 class Company_group(Entity):
     company_logo = models.ImageField()

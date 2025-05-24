@@ -23,18 +23,22 @@
 </div>
 <div class="col-container">
 
-  {% for game in page_obj %}
+  {% for game_review in page_obj %}
   <div class="game-card-wrapper">
       <div class="game-card">
-          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+          <a href="{% url 'filtershop_games:game' game_review.game.id %}" class="image_link">
               <div class='game-card-content'>
-                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+                  <img src="{{game_review.game.vignette.url}}" alt="{{game_review.game.name}}"/>
   
-                  <p>{{ game.description }}</p>
+                  <p>{{ game_review.game.description }}</p>
+
+                  <p>{{ game_review.review_txt }}</p>
+
+                  <p>{{ game_review.note }}</p>
               </div>
           </a>
           <div class="row-container">
-          {% for category in game.categories.all %}
+          {% for category in game_review.game.categories.all %}
               <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
           {% endfor %}
           </div>  

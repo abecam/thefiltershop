@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 
 from django.shortcuts import get_object_or_404
 
-from ..models import Profile, Sponsor
+from ..models import Profile, Sponsor, Recommended_Games_By_Sponsor
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ def get_recommended_games(request):
         a_recommender = get_a_random_contributor(request.GET.get("level_of_contribution"))
 
     # Get all artisan games
-    all_recommended_games = get_all_games_for_size(a_recommender)
+    all_recommended_games = get_all_games_for_recommender(a_recommender)
 
     print(all_recommended_games)
     categories_in_recommended = all_recommended_games.first().categories.all()
@@ -56,13 +56,14 @@ def get_recommended_games_by_sponsor(request):
         a_recommender = get_a_random_sponsor()
 
     # Get all artisan games
-    all_recommended_games = get_all_games_for_size_sponsor(a_recommender)
+    all_recommended_games = get_all_recommended_games_for_sponsor(a_recommender)
 
     print(all_recommended_games)
-    categories_in_recommended = all_recommended_games.first().categories.all()
+    # Here we got the recommended games with the reviews.
+    categories_in_recommended = all_recommended_games.first().game.categories.all()
 
-    for a_game in all_recommended_games.all():
-        categories_in_recommended= categories_in_recommended | a_game.categories.all()
+    for a_game_recommended in all_recommended_games.all():
+        categories_in_recommended= categories_in_recommended | a_game_recommended.game.categories.all()
     
     categories_in_recommended = categories_in_recommended.distinct().order_by("name")
 
@@ -70,7 +71,7 @@ def get_recommended_games_by_sponsor(request):
 
     # Apply category filtering if a category is selected
     if category_id:
-        all_recommended_games = all_recommended_games.filter(categories__id=category_id)
+        all_recommended_games = all_recommended_games.filter(game__categories__id=category_id)
 
     paginator = Paginator(all_recommended_games, 8)  
 
@@ -112,7 +113,7 @@ def get_a_random_contributor(kind_of_contributor) :
             
     return contributor_to_show
 
-def get_all_games_for_size(recommender) :
+def get_all_games_for_recommender(recommender) :
     
     all_games = recommender.recommended_games.all().order_by("known_popularity")
                                                                                                                                              
@@ -142,8 +143,8 @@ def get_a_random_sponsor() :
             
     return sponsor_to_show
 
-def get_all_games_for_size_sponsor(recommender) :
+def get_all_recommended_games_for_sponsor(recommender) :
     
-    all_games = recommender.recommended_games.all().order_by("known_popularity")
+    all_recommended_games = Recommended_Games_By_Sponsor.objects.filter( sponsor = recommender).order_by("game__known_popularity")
                                                                                                                                              
-    return all_games
+    return all_recommended_games
