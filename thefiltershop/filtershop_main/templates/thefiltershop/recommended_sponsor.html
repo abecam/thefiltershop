@@ -1,0 +1,12 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}Recommended games by our generous sponsor {{recommender.name}}{% endblock %}
+
+{% block title_content %}Recommended games by our generous sponsor {{recommender.name}}{% endblock %}
+
+{% block content %}
+
+<!-- Pick up a supporter then show his page -->
+{% include "thefiltershop/partials/sponsor.html" with sponsor=recommender %}
+
+{% endblock %}
