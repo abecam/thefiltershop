@@ -489,7 +489,7 @@ a:visited {
 .review_stars_wrapper {
   display: grid;
   place-content: center;
-  font-size: clamp(1.5rem, 1rem + 5vw, 15rem);
+  font-size: clamp(1.5rem, 1rem + 2vw, 15rem);
   font-weight: 700;
 }
 
@@ -498,12 +498,12 @@ a:visited {
 }
 
 .review_stars_clip {
-  clip-path: polygon(0 0%, calc(var(--review_end_perc) * var(--u,1%)) 0%, calc(var(--review_end_perc) * var(--u,1%)) 100%, 0% 100%);
+  clip-path: polygon(0 0%, calc((20*var(--review_end_perc)) * var(--u,1%)) 0%, calc((20*var(--review_end_perc)) * var(--u,1%)) 100%, 0% 100%);
   -webkit-text-stroke: 2px rgb(219, 255, 59);
 }
 
 .review_stars_clip_bottom {
-	clip-path: polygon(calc(var(--review_end_perc) * var(--u,1%)) 0%, 100% 0%, 100% 100%, calc(var(--review_end_perc) * var(--u,1%)) 100%);
+	clip-path: polygon(calc((20*var(--review_end_perc)) * var(--u,1%)) 0%, 100% 0%, 100% 100%, calc((20*var(--review_end_perc)) * var(--u,1%)) 100%);
 	/* color: transparent; */
 	/* background: -webkit-linear-gradient(177deg, black 53%, var(--text-color) 65%); */
 	/* background: linear-gradient(177deg, black 53%, var(--text-color) 65%); */

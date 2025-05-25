@@ -35,6 +35,8 @@
                   <p>{{ game_review.review_txt }}</p>
 
                   <p>{{ game_review.note }}</p>
+
+                  {% include "thefiltershop/partials/stars.html" with avg_note=game_review.note %}
               </div>
           </a>
           <div class="row-container">
