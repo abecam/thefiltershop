@@ -485,3 +485,42 @@ a:visited {
   display: flex;
   align-items: center;
 }
+
+.review_stars_wrapper {
+  display: grid;
+  place-content: center;
+  font-size: clamp(1.5rem, 1rem + 5vw, 15rem);
+  font-weight: 700;
+}
+
+.review_stars_wrapper > div {
+  grid-area: 1/1/-1/-1;
+}
+
+.review_stars_clip {
+  clip-path: polygon(0 0%, calc(var(--review_end_perc) * var(--u,1%)) 0%, calc(var(--review_end_perc) * var(--u,1%)) 100%, 0% 100%);
+  -webkit-text-stroke: 2px rgb(219, 255, 59);
+}
+
+.review_stars_clip_bottom {
+	clip-path: polygon(calc(var(--review_end_perc) * var(--u,1%)) 0%, 100% 0%, 100% 100%, calc(var(--review_end_perc) * var(--u,1%)) 100%);
+	/* color: transparent; */
+	/* background: -webkit-linear-gradient(177deg, black 53%, var(--text-color) 65%); */
+	/* background: linear-gradient(177deg, black 53%, var(--text-color) 65%); */
+	/* background-clip: text; */
+	-webkit-background-clip: text;
+	/*  transform: translateX(-0.02em); +/
+	paint-order: stroke fill;
+	/* font: 100% BroshK; */
+	display: flex;
+	/* flex-direction: row; */
+	/* align-items: left; */
+	/* text-transform: uppercase; */
+	/* font-size: calc(1rem + min(90px, 15vw)); */
+	/* font-weight: 800; */
+	/* letter-spacing: -.1ch; */
+	/* line-height: 0.4; */
+	color: transparent;
+	-webkit-text-stroke: 1px black;
+	text-shadow: 1px 1px rgba(128, 128, 128, 0.384);
+}

@@ -65,10 +65,12 @@ def game(request, videogame_id):
 
     if nb_note > 0:
         avg_note = note / nb_note
+        avg_not_prc = avg_note * 20
     else:
         avg_note = -1
+        avg_not_prc = avg_note * 20
             
     return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
                                                        "negative_filters": negative_filters, "positive_filters": positive_filters, "is_filter": is_filter, 
-                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters, "desc_hidden_full_cost": desc_hidden_full_cost, "reviews": reviews, "avg_note": avg_note})
+                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters, "desc_hidden_full_cost": desc_hidden_full_cost, "reviews": reviews, "avg_note": avg_note, "avg_note_prc": avg_not_prc})
     

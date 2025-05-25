@@ -13,11 +13,7 @@
 </h1>
 <p>{{ a_game.description }}</p>
 
-{% if avg_note > -1 %}
-<div class="avg_note">{{ avg_note }} stars</div>
-{% else %}
-<div class="avg_note">Not rated yet</div>
-{% endif %}
+{% include "thefiltershop/partials/stars.html" with avg_note=avg_note avg_note_prc=avg_note_prc %}
 
 {% include "thefiltershop/partials/gauge_hidden_full_cost.html" with hidden_full_cost_value=a_game.hidden_full_cost desc_hidden_full_cost=desc_hidden_full_cost %}
 

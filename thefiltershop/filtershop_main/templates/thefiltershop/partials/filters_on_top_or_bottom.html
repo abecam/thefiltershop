@@ -1,5 +1,5 @@
 {% load static %}
-{% if not no_button %}
+{% if not no_button and is_filter %}
 <!-- A Button will switch between the filters up or down -->
 <script>
 <!-- Small logic to toggle visibility-->
@@ -69,7 +69,7 @@ function toggleVisibilityFilters(evt) {
     {% endfor %}
     </div>
 </div>
-{% if not no_button %}
+{% if not no_button and is_filter %}
     <script>
         // Working as it is called twice (top & bottom)
         document.getElementById("button_toggle_filters_pos").click();
