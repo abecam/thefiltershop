@@ -12,13 +12,16 @@
     </p>
     <p>{{ game.description }}</p>
     <p>{{ game.spotlight_count }} - {{ game.in_the_spotlight_since }}
+    <div class="grid-container">
     {% for studio in game.studios.all %}
-        <p>Developed by {{ studio.name }}</p>
+        <div class="grid-item">Developed by <a href="{% url 'filtershop_games:studio' studio.id %}" class="image_link">{{ studio.name }}</a></div>
         <!-- TODO: Add link to studio page -->
     {% endfor %}
     {% for publisher in game.publishers.all %}
-        <p>Published by {{ publisher.name }}</p>
+        <div class="grid-item">Published by <a href="{% url 'filtershop_games:publisher' publisher.id %}" class="image_link">{{ publisher.name }}</a></div>
+        <!-- TODO: Add link to publisher page -->
     {% endfor %}
+</div>
     {% if screenshots  is not None %}
         {% for image in screenshots.all %}
             <img src="{{image.photo.url}}"" alt="{{image.name}}" width="200px" class="game_thumbnail"> 

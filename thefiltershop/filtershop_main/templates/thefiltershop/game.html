@@ -13,6 +13,12 @@
 </h1>
 <p>{{ a_game.description }}</p>
 
+{% if avg_note > -1 %}
+<div class="avg_note">{{ avg_note }} stars</div>
+{% else %}
+<div class="avg_note">Not rated yet</div>
+{% endif %}
+
 {% include "thefiltershop/partials/gauge_hidden_full_cost.html" with hidden_full_cost_value=a_game.hidden_full_cost desc_hidden_full_cost=desc_hidden_full_cost %}
 
 {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
@@ -50,6 +56,8 @@
 </div>
 
 {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=False is_filter=is_filter %}
+
+{% include "thefiltershop/partials/reviews.html" with reviews=reviews %}
 
 <!-- Ratings for the game, including filters as well -->
 

@@ -1,0 +1,9 @@
+{% if reviews is not None %}
+    {% for review in reviews.all %}
+        <p>Review by {{ review.profile.full_name }}</p>
+        <p>{{ review.note }} stars</p>
+        <p>{{ review.review_txt }}</p>
+    {% endfor %}
+{% else %}
+    <p> No reviews yet! </p>
+{% endif %}

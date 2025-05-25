@@ -5,6 +5,7 @@ from ..models import Videogame_common
 from ..models import Filter
 from ..models import Links_to_shops
 from ..models import Videogame_rating
+from ..models import Review
  
 def game(request, videogame_id):
     a_game = get_object_or_404(Videogame_common, pk=videogame_id)
@@ -51,8 +52,23 @@ def game(request, videogame_id):
             desc_hidden_full_cost = "Extremely high!"
         else :
             desc_hidden_full_cost = "Infinite, you cannot finish the game whatever you spend!"
+
+    reviews = Review.objects.filter(game=a_game)
+
+    note = 0
+    nb_note = 0
+
+    # And calculate the average rating
+    for one_review in reviews.all():
+        note += one_review.note
+        nb_note += 1
+
+    if nb_note > 0:
+        avg_note = note / nb_note
+    else:
+        avg_note = -1
             
     return render(request, "thefiltershop/game.html", {"a_game": a_game, "title_image": a_game.image_set.first(), "screenshots": a_game.image_set.all()[2:],
                                                        "negative_filters": negative_filters, "positive_filters": positive_filters, "is_filter": is_filter, 
-                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters, "desc_hidden_full_cost": desc_hidden_full_cost})
+                                                       "links_to_shops": links_to_shops.all(), "ratings_with_filters": ratings_with_filters, "desc_hidden_full_cost": desc_hidden_full_cost, "reviews": reviews, "avg_note": avg_note})
     
