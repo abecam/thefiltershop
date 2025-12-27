@@ -44,6 +44,55 @@
       }
   }
   
+.buy_from_dev {
+    paint-order: stroke fill;
+    font: 120% BroshK;
+
+    /* https://caniuse.com/mdn-css_properties_paint-order */
+    /* default is paint-order: fill stroke */
+    /* mdn: https://developer.mozilla.org/en-US/docs/Web/CSS/paint-order */
+      align-items: left;
+  
+      /*text-transform: uppercase;*/
+      font-weight: 200;
+      color: red;
+      /*-webkit-text-stroke: 2px rgb(235, 129, 129);*/
+      /*text-shadow: 6px 6px rgba(128, 128, 128, 0.384);*/
+      
+      > span:first-of-type {
+        font-size: 1.01em;
+      }
+      
+      /*> span {
+        display: flex;
+        gap: .5ch;
+      }*/
+  }
+
+.buy_from_dev a {
+  border: 2px solid #707e80;
+  border-radius: 10px;
+  background: #bbd6d8;
+  float: left;
+  display: block;
+  color: #1c1e1f;
+  text-align: center;
+  padding: 4px 4px;
+  text-decoration: none;
+}
+
+.buy_from_dev-Menu a:visited {
+  color: 1c1e1f;
+  background: #bbd6d8;
+  background-color: #bbd6d8;
+}
+
+/* Change color on hover */
+.buy_from_dev a:hover {
+  background-color: #b7e2e6;
+  color: rgb(55, 134, 115)k;
+}
+
 
 li a {
     color: green;
@@ -486,10 +535,58 @@ a:visited {
   align-items: center;
 }
 
+/* Outer container holding all reviews */
+.reviews_block {
+    display: flex;
+    flex-direction: row;          /* horizontal layout */
+    gap: 1rem;
+    padding: 1rem;
+    /*background-color: #f0f0f0;*/
+    border-radius: 8px;
+    overflow-x: auto;              /* allows scrolling if many reviews */
+}
+
+/* Individual review card */
+.review_block {
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;              /* keeps cards readable */
+    padding: 1rem;
+    background-color: #88bcf8;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Review text container */
+.review_txt {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: #c2e7ff;
+    border-radius: 6px;
+}
+
+/* Optional text polish */
+.review_block p {
+    margin: 0.25rem 0;
+}
+
+.review_txt p {
+    margin: 0;
+    color: #444;
+    line-height: 1.4;
+}
+
 .review_stars_wrapper {
   display: grid;
   place-content: center;
   font-size: clamp(1.5rem, 1rem + 2vw, 15rem);
+  font-weight: 700;
+}
+
+.review_stars_wrapper_user {
+  display: grid;
+  place-content: left;
+  font-size: clamp(1.5rem, 1rem + 1vw, 5rem);
   font-weight: 700;
 }
 

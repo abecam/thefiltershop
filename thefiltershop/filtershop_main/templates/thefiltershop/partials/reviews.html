@@ -1,9 +1,23 @@
+<div class="reviews_block">
 {% if reviews is not None %}
     {% for review in reviews.all %}
-        <p>Review by {{ review.profile.full_name }}</p>
-        <p>{{ review.note }} stars</p>
-        <p>{{ review.review_txt }}</p>
+        <div class="review_block">
+            <p>Review by {{ review.profile.full_name }}</p>
+            <p>{{ review.note }} stars</p>
+            <section class="review_stars_wrapper_user">
+                <div class="review_stars_clip" style=" --review_end_perc:{{review.note}};">
+                    ★★★★★
+                </div>
+                <div class="review_stars_clip_bottom" style=" --review_end_perc:{{review.note}};" aria-hidden="true">
+                   ★★★★★
+                </div>
+            </section>
+            <div class="review_txt">
+                <p>{{ review.review_txt }}</p>
+            </div>
+        </div>
     {% endfor %}
 {% else %}
     <p> No reviews yet! </p>
 {% endif %}
+</div>

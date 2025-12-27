@@ -707,7 +707,7 @@ class VideoGameAdmin(DjangoObjectActions, EntityAdmin):
     list_filter = ["game_type", "platforms"]
 
     fieldsets = [
-        (None, {"fields": ["game_type","categories"]}),
+        (None, {"fields": ["game_type","categories","link_sold_from_dev","special_sale","special_bonuses","are_special_bonuses_global","general_sale"]}),
         ("Ratings", {"fields": ["gameplay_rating","known_popularity","they_have_made_it"], "classes": ["collapse"]}),
         ("Made and published by", {"fields": ["studios","publishers","platforms"]}),
     ]

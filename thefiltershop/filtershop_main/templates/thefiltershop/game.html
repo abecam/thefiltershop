@@ -20,9 +20,31 @@
 {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
 
 <div style="row-container">
+    Platforms
+    <span style="row-container">
+        {% for platform in a_game.platforms.all %}
+            {{ platform.name }}
+        {% endfor %}
+    </span>
+</div>
+
+<div style="row-container">
+    {% if a_game.link_sold_from_dev %}
+        <span class="buy_from_dev">
+            <a href={{a_game.link_sold_from_dev}}>Buy from dev
+            {% if a_game.special_sale > 0 %}
+                - {{a_game.special_sale}}% Off
+            {% endif %}
+            </a>
+        </span>
+    {% endif %}
     {% for link_to_shop in links_to_shops %}
         <!-- TODO: Replace by shop icon (?) -->
-        <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}</a>
+        <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}
+        {% if a_game.general_sale > 0 %}
+            - {{a_game.general_sale}}% Off
+        {% endif %}
+        </a>
     {% endfor %}
 </div>
 
