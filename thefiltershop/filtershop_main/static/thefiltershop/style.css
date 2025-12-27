@@ -585,12 +585,16 @@ a:visited {
 
 .review_stars_wrapper_user {
   display: grid;
-  place-content: left;
+  place-content: center;
   font-size: clamp(1.5rem, 1rem + 1vw, 5rem);
   font-weight: 700;
 }
 
 .review_stars_wrapper > div {
+  grid-area: 1/1/-1/-1;
+}
+
+.review_stars_wrapper_user > div {
   grid-area: 1/1/-1/-1;
 }
 
