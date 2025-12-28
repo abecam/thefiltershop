@@ -13,7 +13,7 @@
     {% for sponsor in sponsors %}
     <div class="one_item_in_hall_of_shame">
         <img src="{{sponsor.sponsor_logo.url}}" alt="{{sponsor.name}}" width="200px"> {{ sponsor.descriptionOfShame }}
-    <div>
+    </div>
     {% endfor %}
 {% endif %}
 {% if studios.count > 0 %}
@@ -21,7 +21,7 @@
     {% for studio in studios %}
     <div class="one_item_in_hall_of_shame">
         {{studio.name}} - {{ studio.descriptionOfShame }}
-    <div>
+    </div>
     {% endfor %}
 {% endif %}
 {% if publishers.count > 0 %}
@@ -29,31 +29,31 @@
     {% for publisher in publishers %}
     <div class="one_item_in_hall_of_shame">
         {{publisher.name}} - {{ publisher.descriptionOfShame }}
-    <div>
+    </div>
     {% endfor %}
 {% endif %}
 {% if games.count > 0 %}
     <h2>Games</h2>
     {% for game in games %}
     <div class="one_item_in_hall_of_shame">
-        <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.descriptionOfShame }}
-    <div>
+        <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}" alt="{{game.name}}"></a>    {{ game.descriptionOfShame }}
+    </div>
     {% endfor %}
 {% endif %}
 {% if physical_shops.count > 0 %}
     <h2>Physical shops</h2>
     {% for physical_shop in physical_shops %}
     <div class="one_item_in_hall_of_shame">
-        <a href="{% url 'filtershop_games:physical_shop' physical_shop.id %}" class="image_link"><img src="{{physical_shop.vignette.url}}"" alt="{{physical_shop.name}}"></a>    {{ physical_shop.descriptionOfShame }}
-    <div>
+        <a href="{% url 'filtershop_games:physical_shop' physical_shop.id %}" class="image_link"><img src="{{physical_shop.vignette.url}}" alt="{{physical_shop.name}}"></a>    {{ physical_shop.descriptionOfShame }}
+    </div>
     {% endfor %}
 {% endif %}
 {% if online_shops.count > 0 %}
     <h2>Online shops</h2>
     {% for online_shop in online_shops %}
     <div class="one_item_in_hall_of_shame">
-        <a href="{% url 'filtershop_games:online_shop' online_shop.id %}" class="image_link"><img src="{{online_shop.vignette.url}}"" alt="{{online_shop.name}}"></a>    {{ online_shop.descriptionOfShame }}
-    <div>
+        <a href="{% url 'filtershop_games:online_shop' online_shop.id %}" class="image_link"><img src="{{online_shop.vignette.url}}" alt="{{online_shop.name}}"></a>    {{ online_shop.descriptionOfShame }}
+    </div>
     {% endfor %}
 {% endif %}
 {% if nobody %}

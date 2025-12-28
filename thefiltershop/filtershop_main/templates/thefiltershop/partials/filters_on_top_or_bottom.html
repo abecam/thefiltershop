@@ -37,12 +37,9 @@ function toggleVisibilityFilters(evt) {
 {% if is_on_top and is_filter and not no_button %}
 <button class="button_toggle_filters_pos" onclick="toggleVisibilityFilters('event')" id="button_toggle_filters_pos">Show filters at the end</button>
 {% endif %}
+{% if is_filter %}
 <div class="filters">
-    {% if is_on_top %}
-        <div class="negative_filters" style="display: block;">
-    {% else %}
-        <div class="positive_filters" style="display: block;" >
-    {% endif %}
+    <div class="{% if is_on_top %}negative_filters{% else %}positive_filters{% endif %}" style="display: block;">
     {% for filter in positive_filters %}
         <div class="positive_filter">
             <img src="{% static 'images/FilterGreen.png' %}" alt="Green Filter" class="positive_filter_img">
@@ -69,6 +66,7 @@ function toggleVisibilityFilters(evt) {
     {% endfor %}
     </div>
 </div>
+{% endif %}
 {% if not no_button and is_filter %}
     <script>
         // Working as it is called twice (top & bottom)
