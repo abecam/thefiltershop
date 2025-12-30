@@ -4,3 +4,4 @@ django_object_actions==4.2.0
 requests==2.19.0
 beautifulsoup4==4.12.2
 urllib3
+psycopg-binary>=3.1
