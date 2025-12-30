@@ -73,6 +73,27 @@ The goal is to get a win-win situation where good and honest developers have bet
 
 The main goal is to get something working ASAP, and raise awareness quite quickly.
 
+## Quick setup for contributors ✅
+
+If you want to try the project locally quickly, there are two easy options:
+
+- Fast SQLite setup (recommended for quick testing):
+  1. Open `thefiltershop/thefiltershop/settings.py` and **uncomment** the provided SQLite `DATABASES` snippet (it's commented out by default for CI/Postgres).
+  2. Create and activate a virtual environment:
+     - Windows PowerShell: `python -m venv .venv` then `.\.venv\Scripts\Activate.ps1`
+     - macOS/Linux: `python3 -m venv .venv` then `source .venv/bin/activate`
+  3. Install deps: `pip install -r requirements.txt`
+  4. Run migrations and the dev server:
+     - `cd thefiltershop`
+     - `python manage.py migrate`
+     - `python manage.py runserver`
+
+- Postgres (closer to CI/production): set these env vars before running (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`). CI runs tests using Postgres and the workflow installs `psycopg-binary` so tests will pass on GitHub Actions.
+
+Run tests locally: `cd thefiltershop && python manage.py test`
+
+
+
 # How can you help
 
 The Filter Shop will mostly need motivated curators, persons that like the products (so video games at first) and want to help put the good ones, the small ones. There might be "super"-curators, that have some administrative right. That is something fully open to discussion! But the need for curation will probably ask for a semi-open model: i.e. if we open the edition to everyone, like for Wikipedia, the "cheaters" will probably come in full force if the shop becomes a success, negating its goal!
