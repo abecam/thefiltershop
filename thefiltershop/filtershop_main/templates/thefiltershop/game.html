@@ -19,9 +19,11 @@
 
         {% include "thefiltershop/partials/stars.html" with avg_note=avg_note %}
 
-        {% include "thefiltershop/partials/gauge_hidden_full_cost.html" with hidden_full_cost_value=a_game.hidden_full_cost desc_hidden_full_cost=desc_hidden_full_cost %}
+        <div class="gauges-box">
+            {% include "thefiltershop/partials/gauge_hidden_full_cost.html" with hidden_full_cost_value=a_game.hidden_full_cost desc_hidden_full_cost=desc_hidden_full_cost %}
 
-        {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
+            {% include "thefiltershop/partials/gauge_crapometer.html" with crapometer_value=a_game.crapometer %}
+        </div>
 
         <div style="row-container">
             Platforms

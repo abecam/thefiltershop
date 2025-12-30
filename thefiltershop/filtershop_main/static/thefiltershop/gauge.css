@@ -176,3 +176,85 @@
     width: 100%;
     height: 1px;
 }
+
+/* New layout for combined gauges */
+.gauges-box {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.gauge-with-thumbs {
+    display: flex;
+    flex-direction: column; /* label sits below the inner gauge row */
+    align-items: center;
+    gap: 8px;
+}
+
+.gauge-with-thumbs .gauge-inner {
+    display: flex;
+    align-items: center; /* center thumbs with the gauge itself */
+    gap: 6px; /* nudged closer to the gauge */
+}
+
+.gauge-with-thumbs .thumb {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    transition: transform 0.12s ease, opacity 0.12s ease; /* smooth hover */
+}
+
+.gauge-with-thumbs .thumb:hover,
+.gauge-with-thumbs .thumb:focus {
+    transform: scale(1.08);
+    opacity: 0.98;
+    outline: none;
+}
+
+.gauge-with-thumbs .thumb {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+}
+
+.gauge-with-thumbs .thumb-up {
+    transform: translateY(0); /* center on gauge */
+}
+
+.gauge-with-thumbs .thumb-down {
+    transform: translateY(0); /* center on gauge */
+}
+
+/* Keep label centered and separate from the gauge row */
+.gauge_label {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* Slightly separate label for the hidden value so both gauges look aligned */
+.gauge_with_label {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Per-gauge transparent boxes to blend with content */
+.gauge-box {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.55);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.gauge-box--teal {
+    background: rgba(48,190,167,0.06);
+    border-color: rgba(48,190,167,0.12);
+}
+
+.gauge-box--red {
+    background: rgba(240,39,39,0.04);
+    border-color: rgba(240,39,39,0.10);
+}
