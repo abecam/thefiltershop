@@ -75,28 +75,43 @@ WSGI_APPLICATION = 'thefiltershop.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3_thefiltershop',
+import os
+
+# Use PostgreSQL in CI and for local development by default. Credentials can come from env vars.
+# For quick local development or external contributors, a simple SQLite configuration is available (uncomment to use):
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3_thefiltershop',
+#     }
+# }
+
+if os.getenv('GITHUB_ACTIONS') == 'true' or os.getenv('CI') == 'true':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv('POSTGRES_DB', 'thefiltershop'),
+            "USER": os.getenv('POSTGRES_USER', 'postgres'),
+            "PASSWORD": os.getenv('POSTGRES_PASSWORD', 'totolebo'),
+            "HOST": os.getenv('POSTGRES_HOST', '127.0.0.1'),
+            "PORT": os.getenv('POSTGRES_PORT', '5432'),
+        }
     }
-}
-'''
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "thefiltershop",
-        "USER": "postgres",
-        "PASSWORD": "totolebo",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-        #"OPTIONS": {
-        #    "service": "pg_service",
-        #    "passfile": ".my_pgpass",
-        #},
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv('POSTGRES_DB', 'thefiltershop'),
+            "USER": os.getenv('POSTGRES_USER', 'postgres'),
+            "PASSWORD": os.getenv('POSTGRES_PASSWORD', 'totolebo'),
+            "HOST": os.getenv('POSTGRES_HOST', '127.0.0.1'),
+            "PORT": os.getenv('POSTGRES_PORT', '5432'),
+            #"OPTIONS": {
+            #    "service": "pg_service",
+            #    "passfile": ".my_pgpass",
+            #},
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

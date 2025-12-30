@@ -244,17 +244,17 @@
 .gauge-box {
     padding: 10px 14px;
     border-radius: 8px;
-    background: rgba(255,255,255,0.55);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
-    border: 1px solid rgba(0,0,0,0.04);
+    background: rgba(182, 205, 247, 0.55);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.349) inset;
+    border: 1px solid rgba(0, 0, 0, 0.247);
 }
 
 .gauge-box--teal {
-    background: rgba(48,190,167,0.06);
-    border-color: rgba(48,190,167,0.12);
+    background: rgba(48, 190, 166, 0.616);
+    border-color: rgba(48, 190, 166, 0.459);
 }
 
 .gauge-box--red {
-    background: rgba(240,39,39,0.04);
-    border-color: rgba(240,39,39,0.10);
+    background: rgba(240,39,39,0.616);
+    border-color: rgba(240,39,39,0.459);
 }
