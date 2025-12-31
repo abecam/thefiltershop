@@ -23,7 +23,18 @@
                 {% for game in page_obj %}
                     <div class="game-card">
                         <div class='game-card-content'>
-                            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}"" alt="{{game.name}}"></a>    {{ game.description }}
+                            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                                <div class="game-title-wrapper">
+                                    <img src="{{game.vignette.url}}" alt="{{game.name}}" class="game_thumbnail"/>
+                                    {% if game.general_sale and game.general_sale > 0 %}
+                                        <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
+                                    {% endif %}
+                                    {% if game.special_sale and game.special_sale > 0 %}
+                                        <div class="sale-badge sale-badge-special sale-badge-inline">- {{ game.special_sale }}% Off</div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            {{ game.description }}
                             <div class="contribution">
                                 {{game.get_they_have_made_it_display}}
                             </div>

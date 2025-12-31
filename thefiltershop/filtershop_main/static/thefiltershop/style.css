@@ -277,6 +277,60 @@ a:visited {
     border-radius: 8px;
   }
 
+  /* Game title image wrapper and sale badges */
+  .game-title-wrapper {
+    position: relative;
+    display: inline-block;
+    line-height: 0; /* remove extra gap under img */
+  }
+
+  .game_title_image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .sale-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 9px 15px; /* halved */
+    border-radius: 9px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+    font-size: 1.425rem; /* halved from 2.85rem */
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  /* General sale: green-ish */
+  .sale-badge-general {
+    background: linear-gradient(180deg,#28a745,#1e7e34);
+  }
+
+  /* Special sale: red-ish and placed just below if both badges are present */
+  .sale-badge-special {
+    background: linear-gradient(180deg,#dc3545,#b02a37);
+    top: calc(8px + 54px); /* reduced offset for the smaller badge */
+  }
+
+  /* Compact inline variant for thumbnails and small cards */
+  .sale-badge-inline {
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    top: 6px;
+    right: 6px;
+  }
+
+  .sale-badge-inline.sale-badge-special {
+    top: calc(6px + 26px);
+  }
+
   .grid-container {
     display: flex;
     flex-direction: row;

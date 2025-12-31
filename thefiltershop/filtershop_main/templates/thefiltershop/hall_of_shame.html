@@ -36,7 +36,17 @@
     <h2>Games</h2>
     {% for game in games %}
     <div class="one_item_in_hall_of_shame">
-        <a href="{% url 'filtershop_games:game' game.id %}" class="image_link"><img src="{{game.vignette.url}}" alt="{{game.name}}"></a>    {{ game.descriptionOfShame }}
+        <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+            <div class="game-title-wrapper">
+                <img src="{{game.vignette.url}}" alt="{{game.name}}" class="game_thumbnail"/>
+                {% if game.general_sale and game.general_sale > 0 %}
+                    <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
+                {% endif %}
+                {% if game.special_sale and game.special_sale > 0 %}
+                    <div class="sale-badge sale-badge-special sale-badge-inline">- {{ game.special_sale }}% Off</div>
+                {% endif %}
+            </div>
+        </a>    {{ game.descriptionOfShame }}
     </div>
     {% endfor %}
 {% endif %}

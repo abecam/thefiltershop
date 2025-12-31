@@ -13,7 +13,15 @@
         {% include "thefiltershop/partials/filters_on_top_or_bottom.html" with negative_filters=negative_filters positive_filters=positive_filters is_on_top=True is_filter=is_filter %}
 
         <h1>
-            <img src="{{title_image.photo.url}}" alt="{{a_game.name}}" class="game_title_image">
+            <div class="game-title-wrapper">
+                <img src="{{title_image.photo.url}}" alt="{{a_game.name}}" class="game_title_image">
+                {% if a_game.general_sale and a_game.general_sale > 0 %}
+                    <div class="sale-badge sale-badge-general">- {{ a_game.general_sale }}% Off</div>
+                {% endif %}
+                {% if a_game.special_sale and a_game.special_sale > 0 %}
+                    <div class="sale-badge sale-badge-special">- {{ a_game.special_sale }}% Off</div>
+                {% endif %}
+            </div>
         </h1>
         <p>{{ a_game.description }}</p>
 
