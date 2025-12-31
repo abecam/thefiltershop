@@ -1,84 +1,84 @@
-{% extends "thefiltershop/base_games.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Our mission{% endblock %}
 
 {% block title_content %}Our mission{% endblock %}
 
-{% block content %}
-<h1 id="thefiltershop">The Buoy: let the hidden gems become visible</h1>
-<p>The Buoy is the place where the "non-popular" games on Steam can find their place. </p>
+{% block centersimplecolumn %}
+  <h1 id="thefiltershop">The Buoy: let the hidden gems become visible</h1>
+  <p>The Buoy is the place where the "non-popular" games on Steam can find their place. </p>
 
-<!-- Rewrite the following text-->
+  <!-- Rewrite the following text-->
 
-<p>We live in a time of overflowing products, physical or not, and it&#39;s not always the best product that ends up being bought. The filter-shop is an attempt to help changing that! Keep reading for much more information, and see how you can help!</p>
-<p>Haven&#39;t you play games that, instead of giving you some fun, an experience, or some relaxing time, let you feel bad for playing them: game mechanics fully centred around addiction using all kind of psychological tricks, numerous ads or in-app purchases, actually needed to progress in-game, progression that ask you to come back every day, at the time the game decide for you. These times it&#39;s the &quot;game&quot; that is playing you, not the other way around. Unfortunately, on some platforms (Android probably being the worst), these practices are encouraged... Good games exist everywhere, but they are not necessarily the one you find!</p>
-<p>On some other platforms (like Steam), it&#39;s easy to find many good games, but... But for smaller studios that do not master marketing, the chances of being visible are also incredibly low, not matter how good their game is. They can get lucky, but not many can go through.</p>
-<p>What we want to do here is to push the good products in front, and less known they are, the more we will show them! You can see that as floating items: if they are popular they get heavier, if they use bad practice they get an extra-weight. But for these that do not respect you, we go further, we filter them! They might be presented, but they will always be below this filter, even in their own page!</p>
-<p>The Filter Shop is actually 2 combined things:</p>
-<ul>
-<li>a filter to the shops,</li>
-<li>and what I would call progressive marketing.</li>
-</ul>
-<p>The filter-shop is not a shop: it is a filter for other shops.</p>
-<h1 id="why">Why</h1>
-<ul>
-<li><p>more and more products</p>
-</li>
-<li><p>the visibility of products is not related to quality anymore on many platforms,</p>
-</li>
-<li><p>on some other platforms (i.e. Steam), products that don&#39;t get momentum are hidden. On Steam, when you are not one of the popular games, you are basically hidden. Small games from small studios, without publisher, need to raise awareness a lot before being here.</p>
-</li>
-</ul>
-<h1 id="what">What</h1>
-<ul>
-<li><p>A curation effort for the &quot;shop&quot;,</p>
-</li>
-<li><p>Free marketing for the smallest,</p>
-</li>
-<li><p>Token-Based exchanges between good games to raise awareness.</p>
-</li>
-</ul>
-<h1 id="who">Who</h1>
-<ul>
-<li><p>At first a &quot;friendly dictator&quot; to ensure the start of the Filter Shop: me, also currently the main (and sole :( ) developer. With time I should become yet another curator.</p>
-</li>
-<li><p>As soon as possible some other developers.</p>
-</li>
-<li><p>the most important persons are the curators. Enthusiast content creators, journalist, ... , that like good content and want to ensure a win-win situation by ensuring the quality of the content.</p>
-</li>
-<li><p>product creators or publishers, to create and edit their own entries.</p>
-</li>
-</ul>
-<h1 id="how">How</h1>
-<p>But these 2 elements work on the same principle: as opposite to most shops, the less known, less popular products are pushed at the top. The first product on the shop will be video games, but the shop is done to support more products: it could be online services, but also physical products (where the filtering would mostly be on fake and paid reviews).</p>
-<p>Once you are successful, you will be a &quot;They made it&quot; member and not be promoted (but still present in the filter-shop). But we also filter: games that abuse monetization, ads, use for their promotion lying or insulting ads (as many studios do on mobile) will be pushed down, and the filter will be graphically represented. Ethical Games (mostly on the monetisation aspect) will also benefit from the EthicalGame badges (see <a href="https://www.ethical-game.org/">https://www.ethical-game.org/</a>).</p>
-<p>Furthermore, small indie studios (less than 5 persons without publisher) will be called &quot;artisans&quot; and will be further push on top (if not filtered on other criterion). On the other side of the spectrum, a &quot;crapometer&quot; will warn about the worst offenders (with several scores).</p>
-<p>The progressive marketing will follow the same idea: small studio that don&#39;t earn much from their game will be advertised for free. Once they are successful they can pay us.</p>
-<p>Filtered games will have a chance to redeem themselves -&gt; Each filter will be presented by an horizontal bar, with a description of the filter to the left (&quot;Abusing In-App Purchases&quot; for instance) , a short explanation to the right (&quot;Cost can be infinite, very expensive items&quot;) and further to the right a link called &quot;How can I pass this filter&quot; that will bring at the bottom of the page for a description of what is wrong and what need to be changed. Some abusive games would be good otherwise, let encourage them to go back being a game!</p>
-<p>The filter-shop should remain free for all, and the technical stack open-source. It should be maintained by curators and studios: studios are free to register their game, but should be honest about its negative aspect. Curators are one level above, and can register any game, and modify, or ask a studio to modify another game. When a studio insist on having false information, its affected entries, including the studio itself, will enter the &quot;Hall of Shame&quot;, where it will need to make amends to get out.</p>
-<p>But we should aim as being self-sufficient and sustainable: the approach for that will be on sponsoring - bigger studios that want a nicer environment for all - and selling our own products or dedicated/derived products made from studios that became successful thanks to our help : helping the smallest and getting paid by the one that became bigger.</p>
-<p>As one game can be sold differently depending on the store, the filtering can change for the same game depending on the store. Similarly the filtering and the presentation will depend on the platform: a game might be a regular premium game on one platform, but an abusive freemium on another.</p>
-<p>Games might still have a review (or several, but it is not planned yet), but it is not the main purpose of the filter-shop and these will be kept short and mostly prioritized - if done by curators - for the smallest studio and yet-unknown games. Popular games don&#39;t need yet another help!</p>
-<p>Finally, as part of progressive marketing, I am thinking about recycling one experimental game - Days of The Tokens - to have exchange token for indies. By adding payload to the token and an APIs, we will allow developer to use them for in-game bonuses, with the strength of the token to change the reward. A fun way to promote a game. The promotion will be fully free and hopefully paid by the premium version of the game: by paying a small fee the small banner ads disappear (but we might fully remove it anyway) and a premium token is added that gives a constant benefit. Currently watching full screen ads give a temporary premium token (for a long time, there is no benefit watching many ads). </p>
-<p>We will also actively advertise for the filter shop on regular advertisement circuits by insisting on the quality of the games listed, showcasing selected one (only from artisans), and contrasting with others games, offering an island of good games.</p>
-<p>The goal is to get a win-win situation where good and honest developers have better chances to sell, and the players get better games 🙂</p>
-<h1 id="current-work">Current work</h1>
-<p>The main goal is to get something working ASAP, and raise awareness quite quickly.</p>
-<h1 id="how-can-you-help">How can you help</h1>
-<p>The Filter Shop will mostly need motivated curators, persons that like the products (so video games at first) and want to help put the good ones, the small ones. There might be &quot;super&quot;-curators, that have some administrative right. That is something fully open to discussion! But the need for curation will probably ask for a semi-open model: i.e. if we open the edition to everyone, like for Wikipedia, the &quot;cheaters&quot; will probably come in full force if the shop becomes a success, negating its goal!</p>
-<p>And it desperately needs more developer. If you are a developer and would like to help, you are fully welcome. Some points to consider:</p>
-<ul>
-<li>It is mostly web-development :). I myself don&#39;t really like doing that, but that cannot be otherwise,</li>
-<li>All level of experience is welcomed!</li>
-<li>And there is no expectation on how many hours you will work on it (and it&#39;s valid for curators as well). I am myself working on it when I can.</li>
-<li>I am still quite advanced for full stack development, also not bad with databases, so will be able to review pretty much everything. So if you are a full beginner, feel still free to join. You will probably bring a lot that I miss, but I can make sure this thing works :) (security is another matter though... :| ),
-  All the code will be Open-source, with a MIT licence, and shared on GitHub,
-  I will rent a server. If anybody would like to do some sysadmin, it&#39;s an opportunity, otherwise I will do it.</li>
-</ul>
-<h1 id="the-future-of-collaboration">The future of collaboration</h1>
-<p>I believe that the Filter-Shop need to be financially independent to function. I am planning on using sponsoring (from big publisher that want their names associated, from small publisher and studios that succeeded thanks to us), maybe donations, and maybe as well some paid parts (but probably linked to the revenue of the studios-&gt; small ones get all for free).</p>
-<p>So ideally a core team - a couple of developers/admin, several super-curators - will be paid, and we can work full time on it. I intend to consult with a startup incubator as soon as it is mature enough.</p>
-<p>And I want it to become BIG.</p>
-<h1 id="beyond-the-games">Beyond the games</h1>
-<p>Once the filter-shop is in place and running, it will ideally be extended to other domains: services, webpages, physical goods... Many things are competing for our time and our money and it would be great to push all the honest initiatives, those that respect our time, our money and at the end us.</p>
+  <p>We live in a time of overflowing products, physical or not, and it&#39;s not always the best product that ends up being bought. The filter-shop is an attempt to help changing that! Keep reading for much more information, and see how you can help!</p>
+  <p>Haven&#39;t you play games that, instead of giving you some fun, an experience, or some relaxing time, let you feel bad for playing them: game mechanics fully centred around addiction using all kind of psychological tricks, numerous ads or in-app purchases, actually needed to progress in-game, progression that ask you to come back every day, at the time the game decide for you. These times it&#39;s the &quot;game&quot; that is playing you, not the other way around. Unfortunately, on some platforms (Android probably being the worst), these practices are encouraged... Good games exist everywhere, but they are not necessarily the one you find!</p>
+  <p>On some other platforms (like Steam), it&#39;s easy to find many good games, but... But for smaller studios that do not master marketing, the chances of being visible are also incredibly low, not matter how good their game is. They can get lucky, but not many can go through.</p>
+  <p>What we want to do here is to push the good products in front, and less known they are, the more we will show them! You can see that as floating items: if they are popular they get heavier, if they use bad practice they get an extra-weight. But for these that do not respect you, we go further, we filter them! They might be presented, but they will always be below this filter, even in their own page!</p>
+  <p>The Filter Shop is actually 2 combined things:</p>
+  <ul>
+  <li>a filter to the shops,</li>
+  <li>and what I would call progressive marketing.</li>
+  </ul>
+  <p>The filter-shop is not a shop: it is a filter for other shops.</p>
+  <h1 id="why">Why</h1>
+  <ul>
+  <li><p>more and more products</p>
+  </li>
+  <li><p>the visibility of products is not related to quality anymore on many platforms,</p>
+  </li>
+  <li><p>on some other platforms (i.e. Steam), products that don&#39;t get momentum are hidden. On Steam, when you are not one of the popular games, you are basically hidden. Small games from small studios, without publisher, need to raise awareness a lot before being here.</p>
+  </li>
+  </ul>
+  <h1 id="what">What</h1>
+  <ul>
+  <li><p>A curation effort for the &quot;shop&quot;,</p>
+  </li>
+  <li><p>Free marketing for the smallest,</p>
+  </li>
+  <li><p>Token-Based exchanges between good games to raise awareness.</p>
+  </li>
+  </ul>
+  <h1 id="who">Who</h1>
+  <ul>
+  <li><p>At first a &quot;friendly dictator&quot; to ensure the start of the Filter Shop: me, also currently the main (and sole :( ) developer. With time I should become yet another curator.</p>
+  </li>
+  <li><p>As soon as possible some other developers.</p>
+  </li>
+  <li><p>the most important persons are the curators. Enthusiast content creators, journalist, ... , that like good content and want to ensure a win-win situation by ensuring the quality of the content.</p>
+  </li>
+  <li><p>product creators or publishers, to create and edit their own entries.</p>
+  </li>
+  </ul>
+  <h1 id="how">How</h1>
+  <p>But these 2 elements work on the same principle: as opposite to most shops, the less known, less popular products are pushed at the top. The first product on the shop will be video games, but the shop is done to support more products: it could be online services, but also physical products (where the filtering would mostly be on fake and paid reviews).</p>
+  <p>Once you are successful, you will be a &quot;They made it&quot; member and not be promoted (but still present in the filter-shop). But we also filter: games that abuse monetization, ads, use for their promotion lying or insulting ads (as many studios do on mobile) will be pushed down, and the filter will be graphically represented. Ethical Games (mostly on the monetisation aspect) will also benefit from the EthicalGame badges (see <a href="https://www.ethical-game.org/">https://www.ethical-game.org/</a>).</p>
+  <p>Furthermore, small indie studios (less than 5 persons without publisher) will be called &quot;artisans&quot; and will be further push on top (if not filtered on other criterion). On the other side of the spectrum, a &quot;crapometer&quot; will warn about the worst offenders (with several scores).</p>
+  <p>The progressive marketing will follow the same idea: small studio that don&#39;t earn much from their game will be advertised for free. Once they are successful they can pay us.</p>
+  <p>Filtered games will have a chance to redeem themselves -&gt; Each filter will be presented by an horizontal bar, with a description of the filter to the left (&quot;Abusing In-App Purchases&quot; for instance) , a short explanation to the right (&quot;Cost can be infinite, very expensive items&quot;) and further to the right a link called &quot;How can I pass this filter&quot; that will bring at the bottom of the page for a description of what is wrong and what need to be changed. Some abusive games would be good otherwise, let encourage them to go back being a game!</p>
+  <p>The filter-shop should remain free for all, and the technical stack open-source. It should be maintained by curators and studios: studios are free to register their game, but should be honest about its negative aspect. Curators are one level above, and can register any game, and modify, or ask a studio to modify another game. When a studio insist on having false information, its affected entries, including the studio itself, will enter the &quot;Hall of Shame&quot;, where it will need to make amends to get out.</p>
+  <p>But we should aim as being self-sufficient and sustainable: the approach for that will be on sponsoring - bigger studios that want a nicer environment for all - and selling our own products or dedicated/derived products made from studios that became successful thanks to our help : helping the smallest and getting paid by the one that became bigger.</p>
+  <p>As one game can be sold differently depending on the store, the filtering can change for the same game depending on the store. Similarly the filtering and the presentation will depend on the platform: a game might be a regular premium game on one platform, but an abusive freemium on another.</p>
+  <p>Games might still have a review (or several, but it is not planned yet), but it is not the main purpose of the filter-shop and these will be kept short and mostly prioritized - if done by curators - for the smallest studio and yet-unknown games. Popular games don&#39;t need yet another help!</p>
+  <p>Finally, as part of progressive marketing, I am thinking about recycling one experimental game - Days of The Tokens - to have exchange token for indies. By adding payload to the token and an APIs, we will allow developer to use them for in-game bonuses, with the strength of the token to change the reward. A fun way to promote a game. The promotion will be fully free and hopefully paid by the premium version of the game: by paying a small fee the small banner ads disappear (but we might fully remove it anyway) and a premium token is added that gives a constant benefit. Currently watching full screen ads give a temporary premium token (for a long time, there is no benefit watching many ads). </p>
+  <p>We will also actively advertise for the filter shop on regular advertisement circuits by insisting on the quality of the games listed, showcasing selected one (only from artisans), and contrasting with others games, offering an island of good games.</p>
+  <p>The goal is to get a win-win situation where good and honest developers have better chances to sell, and the players get better games 🙂</p>
+  <h1 id="current-work">Current work</h1>
+  <p>The main goal is to get something working ASAP, and raise awareness quite quickly.</p>
+  <h1 id="how-can-you-help">How can you help</h1>
+  <p>The Filter Shop will mostly need motivated curators, persons that like the products (so video games at first) and want to help put the good ones, the small ones. There might be &quot;super&quot;-curators, that have some administrative right. That is something fully open to discussion! But the need for curation will probably ask for a semi-open model: i.e. if we open the edition to everyone, like for Wikipedia, the &quot;cheaters&quot; will probably come in full force if the shop becomes a success, negating its goal!</p>
+  <p>And it desperately needs more developer. If you are a developer and would like to help, you are fully welcome. Some points to consider:</p>
+  <ul>
+  <li>It is mostly web-development :). I myself don&#39;t really like doing that, but that cannot be otherwise,</li>
+  <li>All level of experience is welcomed!</li>
+  <li>And there is no expectation on how many hours you will work on it (and it&#39;s valid for curators as well). I am myself working on it when I can.</li>
+  <li>I am still quite advanced for full stack development, also not bad with databases, so will be able to review pretty much everything. So if you are a full beginner, feel still free to join. You will probably bring a lot that I miss, but I can make sure this thing works :) (security is another matter though... :| ),
+    All the code will be Open-source, with a MIT licence, and shared on GitHub,
+    I will rent a server. If anybody would like to do some sysadmin, it&#39;s an opportunity, otherwise I will do it.</li>
+  </ul>
+  <h1 id="the-future-of-collaboration">The future of collaboration</h1>
+  <p>I believe that the Filter-Shop need to be financially independent to function. I am planning on using sponsoring (from big publisher that want their names associated, from small publisher and studios that succeeded thanks to us), maybe donations, and maybe as well some paid parts (but probably linked to the revenue of the studios-&gt; small ones get all for free).</p>
+  <p>So ideally a core team - a couple of developers/admin, several super-curators - will be paid, and we can work full time on it. I intend to consult with a startup incubator as soon as it is mature enough.</p>
+  <p>And I want it to become BIG.</p>
+  <h1 id="beyond-the-games">Beyond the games</h1>
+  <p>Once the filter-shop is in place and running, it will ideally be extended to other domains: services, webpages, physical goods... Many things are competing for our time and our money and it would be great to push all the honest initiatives, those that respect our time, our money and at the end us.</p>
 {% endblock %}

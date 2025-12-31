@@ -1,13 +1,12 @@
-{% extends "thefiltershop/base.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Our curators{% endblock %}
 
 {% block title_content %}Our curators{% endblock %}
 
-{% block main_content %}
+{% block centersimplecolumn %}
 <br/>
-
-{% for curator in all_curators %}
+    {% for curator in all_curators %}
     <div class="one_curator">
         <div class="one_curator_name">
             {{curator.full_name}}
@@ -24,6 +23,5 @@
             </div>
         {% endif %}
     </div>
-{% endfor %}
-
+    {% endfor %}
 {% endblock %}

@@ -1,12 +1,10 @@
-{% extends "thefiltershop/base_games.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Recommended games by {{recommender.name}}{% endblock %}
 
 {% block title_content %}Recommended games by {{recommender.name}}{% endblock %}
 
-{% block content %}
-
-<!-- Pick up a supporter then show his page -->
-{% include "thefiltershop/partials/profile.html" with profile=recommender %}
-
+{% block centersimplecolumn %}
+    <!-- Pick up a supporter then show his page -->
+    {% include "thefiltershop/partials/profile.html" with profile=recommender %}
 {% endblock %}

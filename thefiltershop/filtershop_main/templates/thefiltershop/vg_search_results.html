@@ -1,145 +1,145 @@
-{% extends "thefiltershop/base_games.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Search results{% endblock %}
 
 {% block title_content %}Search results{% endblock %}
 
-{% block content %}
-
-<h2>Artisans' Games</h2>
-<div class="grid-container">
-  
-  {% for game in artisan_games %}
-      <div class="game-card">
-          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
-              <div class='game-card-content'>
-                  <div class="game-title-wrapper">
-                      <img src="{{game.vignette.url}}" alt="{{game.name}}" class="game_thumbnail"/>
-                      {% if game.general_sale and game.general_sale > 0 %}
-                          <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
-                      {% endif %}
-                      {% if game.special_sale and game.special_sale > 0 %}
-                          <div class="sale-badge sale-badge-special sale-badge-inline">- {{ game.special_sale }}% Off</div>
-                      {% endif %}
-                  </div>
-  
-                  <p>{{ game.description }}</p>
-              </div>
-          </a>
-          <div style="row-container">
-          {% for category in game.categories.all %}
-              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
-          {% endfor %}
-          </div>  
-      </div>
-  {% endfor %}
-  <br/>
-</div>
-
-<h2>Indies' Games</h2>
-<div class="grid-container">
-
-  {% for game in indie_games %}
-      <div class="game-card">
-          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
-              <div class='game-card-content'>
-                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
-   
-                  <p>{{ game.description }}</p>
-              </div>
-          </a>
-          <div style="row-container">
-          {% for category in game.categories.all %}
-              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
-          {% endfor %}
-          </div>  
-      </div>
-  {% endfor %}
-  <br/>
-</div>
-
-<h2>Other Games</h2>
-<div class="grid-container">
-
-  {% for game in other_games %}
-      <div class="game-card">
-          <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
-              <div class='game-card-content'>
-                  <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
-   
-                  <p>{{ game.description }}</p>
-              </div>
-          </a>
-          <div style="row-container">
-          {% for category in game.categories.all %}
-              <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
-          {% endfor %}
-          </div>  
-      </div>
-  {% endfor %}
-  <br/>
-</div> 
-
-<!-- Currently the CSS class for studios and publishers are the same as for games -->
-<h2>Studios</h2>
-<div class="grid-container">
-
-  {% for studio in studios %}
-      <div class="game-card">
-          <a href="{% url 'filtershop_games:studio' studio.id %}" class="image_link">
-              <div class='game-card-content'>
-                {{ studio.name }}
-   
-                  <p>{{ studio.description }}</p>
-              </div>
-          </a>
-          <div style="row-container">
-          {% for category in studio.categories.all %}
-              <a class="badge" href="{% url 'filtershop_games:studio' %}?category_id={{ category.id }}">{{ category.name }}</a>
-          {% endfor %}
-          </div>  
-      </div>
-  {% endfor %}
-  <br/>
-</div> 
-
-<h2>Publishers</h2>
-<div class="grid-container">
-
-  {% for publisher in publishers %}
-      <div class="game-card">
-        <a href="{% url 'filtershop_games:publisher' publisher.id %}" class="image_link">
-           <div class='game-card-content'>
-                <p>{{ publisher.name }}</p>
-   
-                <p>{{ publisher.description }}</p>
-            </div>
-        </a>
-        <div style="row-container">
-            {% for category in studio.categories.all %}
-            <a class="badge" href="{% url 'filtershop_games:studio' %}?category_id={{ category.id }}">{{ category.name }}</a>
-        {% endfor %}
-      </div> 
+{% block centersimplecolumn %}
+    <h2>Artisans' Games</h2>
+    <div class="grid-container">
+    
+    {% for game in artisan_games %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <div class="game-title-wrapper">
+                        <img src="{{game.vignette.url}}" alt="{{game.name}}" class="game_thumbnail"/>
+                        {% if game.general_sale and game.general_sale > 0 %}
+                            <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
+                        {% endif %}
+                        {% if game.special_sale and game.special_sale > 0 %}
+                            <div class="sale-badge sale-badge-special sale-badge-inline">- {{ game.special_sale }}% Off</div>
+                        {% endif %}
+                    </div>
+    
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+            {% for category in game.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+    {% endfor %}
+    <br/>
     </div>
-  {% endfor %}
-  <br/>
-</div> 
 
-<h2>Filters</h2>
-<div class="grid-container">
+    <h2>Indies' Games</h2>
+    <div class="grid-container">
 
-  {% for one_filter in filters %}
-      <div class="game-card">
-          <a href="{% url 'filtershop_games:one_filter' one_filter.id %}" class="image_link">
-              <div class='game-card-content'>
-                  {{one_filter.name}}
-   
-                  <p>{{ one_filter.description }}</p>
-              </div>
-          </a>
-      </div>
-  {% endfor %}
-  <br/>
-</div> 
+    {% for game in indie_games %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+    
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+            {% for category in game.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+    {% endfor %}
+    <br/>
+    </div>
+
+    <h2>Other Games</h2>
+    <div class="grid-container">
+
+    {% for game in other_games %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <img src="{{game.vignette.url}}" alt="{{game.name}}"/>
+    
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+            {% for category in game.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:artisans_games' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+    {% endfor %}
+    <br/>
+    </div> 
+
+    <!-- Currently the CSS class for studios and publishers are the same as for games -->
+    <h2>Studios</h2>
+    <div class="grid-container">
+
+    {% for studio in studios %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:studio' studio.id %}" class="image_link">
+                <div class='game-card-content'>
+                    {{ studio.name }}
+    
+                    <p>{{ studio.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+            {% for category in studio.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:studio' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+            </div>  
+        </div>
+    {% endfor %}
+    <br/>
+    </div> 
+
+    <h2>Publishers</h2>
+    <div class="grid-container">
+
+    {% for publisher in publishers %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:publisher' publisher.id %}" class="image_link">
+            <div class='game-card-content'>
+                    <p>{{ publisher.name }}</p>
+    
+                    <p>{{ publisher.description }}</p>
+                </div>
+            </a>
+            <div style="row-container">
+                {% for category in studio.categories.all %}
+                <a class="badge" href="{% url 'filtershop_games:studio' %}?category_id={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+        </div> 
+        </div>
+    {% endfor %}
+    <br/>
+    </div> 
+
+    <h2>Filters</h2>
+    <div class="grid-container">
+
+    {% for one_filter in filters %}
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:one_filter' one_filter.id %}" class="image_link">
+                <div class='game-card-content'>
+                    {{one_filter.name}}
+    
+                    <p>{{ one_filter.description }}</p>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    <br/>
+    </div>
+</div>
 
 {% endblock %}

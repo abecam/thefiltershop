@@ -1,11 +1,14 @@
-{% extends "thefiltershop/base_games.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Best of the rest...{% endblock %}
 
 {% block title_content %}Best of the rest...{% endblock %}
 
-{% block content %}
+{% block centersimplecolumn %}
 <h1>All these game could be good if...</h1>
+{% if page_obj.paginator.count == 0 %}
+    <h2>None yet!</h2>
+{% endif %}
 <div class="filter-section">
     <h2>Filter By Category</h2>
     <div class="categories-filter">
@@ -16,7 +19,7 @@
     </div>
 </div>
 <div class="col-container">
-{% include "thefiltershop/partials/list_of_best_of_the_rest_games.html" with page_obj=page_obj%}
+    {% include "thefiltershop/partials/list_of_best_of_the_rest_games.html" with page_obj=page_obj%}
 </div>
 
 {% endblock %}

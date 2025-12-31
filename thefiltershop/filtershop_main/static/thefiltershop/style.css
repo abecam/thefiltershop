@@ -193,6 +193,13 @@ body {
   box-sizing: border-box;
 }
 
+/* Padding for text-only pages */
+.centersimplecolumn {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
 /* Right column */
 .rightcolumn {
   display: flex;
@@ -579,6 +586,13 @@ a:visited {
     top: 25px;
     left: 40%;
     padding: 0%;
+  }
+
+  .header-image-block {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    overflow: hidden;
   }
 
 .a_link-left-side,.a_link-right-side {
