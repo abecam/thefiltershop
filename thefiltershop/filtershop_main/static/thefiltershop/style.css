@@ -307,12 +307,12 @@ a:visited {
   }
 
   /* General sale: green-ish */
-  .sale-badge-general {
+  .sale-badge-special {
     background: linear-gradient(180deg,#28a745,#1e7e34);
   }
 
   /* Special sale: red-ish and placed just below if both badges are present */
-  .sale-badge-special {
+  .sale-badge-general {
     background: linear-gradient(180deg,#dc3545,#b02a37);
     top: calc(8px + 54px); /* reduced offset for the smaller badge */
   }
@@ -327,7 +327,7 @@ a:visited {
     right: 6px;
   }
 
-  .sale-badge-inline.sale-badge-special {
+  .sale-badge-inline.sale-badge-general {
     top: calc(6px + 26px);
   }
 

@@ -15,11 +15,11 @@
         <h1>
             <div class="game-title-wrapper">
                 <img src="{{title_image.photo.url}}" alt="{{a_game.name}}" class="game_title_image">
-                {% if a_game.general_sale and a_game.general_sale > 0 %}
-                    <div class="sale-badge sale-badge-general">- {{ a_game.general_sale }}% Off</div>
-                {% endif %}
                 {% if a_game.special_sale and a_game.special_sale > 0 %}
                     <div class="sale-badge sale-badge-special">- {{ a_game.special_sale }}% Off</div>
+                {% endif %}
+                {% if a_game.general_sale and a_game.general_sale > 0 %}
+                    <div class="sale-badge sale-badge-general">- {{ a_game.general_sale }}% Off</div>
                 {% endif %}
             </div>
         </h1>

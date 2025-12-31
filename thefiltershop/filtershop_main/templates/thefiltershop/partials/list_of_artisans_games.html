@@ -7,11 +7,11 @@
                 <div class='game-card-content'>
                     <div class="game-title-wrapper">
                         <img src="{{game.vignette.url}}" alt="{{game.name}}" class="game_thumbnail"/>
-                        {% if game.general_sale and game.general_sale > 0 %}
-                            <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
-                        {% endif %}
                         {% if game.special_sale and game.special_sale > 0 %}
                             <div class="sale-badge sale-badge-special sale-badge-inline">- {{ game.special_sale }}% Off</div>
+                        {% endif %}
+                        {% if game.general_sale and game.general_sale > 0 %}
+                            <div class="sale-badge sale-badge-general sale-badge-inline">- {{ game.general_sale }}% Off</div>
                         {% endif %}
                     </div>
     
