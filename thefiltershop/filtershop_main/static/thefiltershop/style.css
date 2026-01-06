@@ -785,3 +785,28 @@ a:visited {
 .recommendations h2 {
   padding-top: 2px;
 }
+
+.help_us {
+  font-size: 1.3rem;
+  border-radius: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  background-color: #f7d794;
+}
+
+.help_us h2 {
+  padding-top: 2px;
+}
+
+.help_us .kofi_support {
+  text-align: center;
+}
+
+/* ensure ko-fi widget is treated as an inline-block and centered */
+.help_us .kofi_support iframe,
+.help_us .kofi_support a,
+.help_us .kofi_support div {
+  display: inline-block;
+  margin: 0 auto;
+}
