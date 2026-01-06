@@ -1,11 +1,28 @@
 <div class="left-side">
     <!-- Pick a random non-filtered game -->
-    <h2>Random non-filtered games!</h2>
-    <div class="link-left-side">
-    <a href="{% url 'filtershop_games:a_random_artisan_game' %}" class="a_link-left-side">Pick an artisan game!</a>
+    <div class="random-non-filtered-games">  
+        <h2>Random non-filtered games!</h2>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_random_artisan_game' %}" class="a_link-left-side">Pick an artisan game!</a>
+        </div>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_random_indie_game' %}" class="a_link-left-side">Pick an indie game!</a>
+        </div>
     </div>
-    <div class="link-left-side">
-    <a href="{% url 'filtershop_games:a_random_indie_game' %}" class="a_link-left-side">Pick an indie game!</a>
+    <div class="recommendations">
+        <h2>See recommendations from</h2>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_recommender' %}?level_of_contribution=CUR" class="a_link-left-side">Our curators</a>
+        </div>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_recommender_sponsor' %}" class="a_link-left-side">Our sponsors</a>
+        </div>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_recommender' %}?level_of_contribution=SSU" class="a_link-left-side">Our super-supporters</a>
+        </div>
+        <div class="link-left-side">
+            <a href="{% url 'filtershop_games:a_recommender' %}?level_of_contribution=SU" class="a_link-left-side">Our supporters</a>
+        </div>
     </div>
     <!-- with categories ? -->
 </div>

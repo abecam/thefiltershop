@@ -137,10 +137,14 @@ def get_all_best_of_the_rest(for_category) :
 
 def get_a_random_unfiltered_artisan_game(request) :
     found_game = get_a_random_game_for_size(Studio.SizeInPersons.ARTISAN)
+    if found_game is None :
+        return render(request, "thefiltershop/artisans_games.html", {"error_message": "No unfiltered artisans game found."})
     return game(request, found_game.id)
 
 def get_a_random_unfiltered_indie_game(request) :
     found_game = get_a_random_game_for_size(Studio.SizeInPersons.INDIE)
+    if found_game is None :
+        return render(request, "thefiltershop/indies_games.html", {"error_message": "No unfiltered indie game found."})
     return game(request, found_game.id)
 
 def get_a_random_game_for_size(max_size_of_studio) :
@@ -164,6 +168,6 @@ def get_a_random_game_for_size(max_size_of_studio) :
         
         game_to_show = unfiltered_games[random_pos]
     else :
-        raise Warning(f'No unfiltered games in the {max_size_of_studio} category.')
+        return None
             
     return game_to_show

@@ -2,6 +2,8 @@
 
 {% extends "thefiltershop/base_center_simple.html" %}
 
+{% load static %}
+
 {% block title %}
     {{ a_filter.name }}
 {% endblock %}
@@ -14,9 +16,19 @@
     </h1>
     <div class="filter_positive_or_negative">
         {% if a_filter.is_positive %}
-            A good filter! (To be replaced by a logo)
+            <div class="positive_filter">
+                <img src="{% static 'images/FilterGreen.png' %}" alt="Green Filter" class="positive_filter_img">
+                <div class="filter_name">
+                    A good filter!
+                </div>
+            </div>
         {% else %}
-            A bad filter! (To be replaced by a logo)
+            <div class="negative_filter">
+                <img src="{% static 'images/FilterRed.png' %}" alt="Red Filter" class="negative_filter_img">
+                <div class="filter_name">
+                    A bad filter!
+                </div>
+            </div>
         {% endif %}
     </div>
 

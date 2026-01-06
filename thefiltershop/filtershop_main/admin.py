@@ -77,11 +77,6 @@ class Review(GeneralAdmin):
 class Sponsor(GeneralAdmin):
     inlines = [Recommended_Games_By_Sponsor]
     list_display = ["name", "in_hall_of_shame"]
-
-@admin.register(models.Publisher,
-                models.Studio, site=admin_site) 
-class ElementWithHallOfShame(GeneralAdmin):
-    list_display = ["name", "in_hall_of_shame"]
     
 class FiltersForAVideoGameRating(admin.TabularInline) :
     model = models.FiltersForAVideoGameRating
@@ -124,6 +119,11 @@ class ImagesInline(admin.TabularInline):
 #@admin.register(models.Image, site=admin_site)     
 #class imageAdmin(GeneralAdmin):
 #    list_display = ["title", "image_tag", "photo"] # new
+@admin.register(models.Publisher,
+                models.Studio, site=admin_site) 
+class ElementWithHallOfShame(GeneralAdmin):
+    list_display = ["name", "in_hall_of_shame"]
+    inlines = [ValueForFilterAdmin] #, ImagesInline]
 
 class Links_to_shops_Inline(admin.TabularInline):
     model = models.Links_to_shops

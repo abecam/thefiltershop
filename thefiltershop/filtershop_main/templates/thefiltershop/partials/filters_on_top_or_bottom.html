@@ -42,7 +42,7 @@ function toggleVisibilityFilters(evt) {
     <div class="{% if is_on_top %}negative_filters{% else %}positive_filters{% endif %}" style="display: block;">
     {% for filter in positive_filters %}
         <div class="positive_filter">
-            <img src="{% static 'images/FilterGreen.png' %}" alt="Green Filter" class="positive_filter_img">
+            <img src="{% static 'images/FilterGreen.png' %}" alt="Positive Filter" class="positive_filter_img">
             <div class="filter_name">
                 <a href={% url 'filtershop_games:one_filter' filter.id %}>{{ filter.name }}</a>
             </div>
@@ -54,7 +54,7 @@ function toggleVisibilityFilters(evt) {
     {% endfor %}
     {% for filter in negative_filters %}
         <div class="negative_filter">
-            <img src="{% static 'images/FilterRed.png' %}" alt="Red Filter" class="negative_filter_img">
+            <img src="{% static 'images/FilterRed.png' %}" alt="Negative Filter" class="negative_filter_img">
             <div class="filter_name">
                 <a href={% url 'filtershop_games:one_filter' filter.id %}>{{ filter.name }}</a>
             </div>
