@@ -810,3 +810,33 @@ a:visited {
   display: inline-block;
   margin: 0 auto;
 }
+
+/* GitHub link styling */
+.help_us .support_links {
+  text-align: center;
+  margin-top: 8px;
+}
+.help_us .github_link {
+  display: inline-block;
+  margin: 0 6px;
+  vertical-align: middle;
+  background-color: #94dbf7;
+}
+.help_us .github_link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+.help_us .github_link img {
+  width: 36px;
+  height: 36px;
+  display: block;
+  background: transparent;
+}
+.help_us .github_text {
+  font-size: 0.95rem;
+  color: #24292f;
+  font-weight: 600;
+}

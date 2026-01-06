@@ -1,3 +1,4 @@
+{% load static %}
 <div class="right-side">
   <!-- TBD: random game, support us... ? -->
    <div class="help_us">
@@ -5,6 +6,13 @@
       <div class="kofi_support">
         <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'Q5Q652EWX');kofiwidget2.draw();</script>
       </div>
-      <!-- TO DO: add github, patreon, etc -->
+
+      <div class="support_links">
+        <a class="github_link" href="https://github.com/abecam/thefiltershop" target="_blank" rel="noopener noreferrer" title="View project on GitHub">
+          <img src="{% static 'thefiltershop/github-mark.svg' %}" alt="GitHub" />
+          <span class="github_text">Be part of the project</span>
+        </a>
+      </div>
+      <!-- TO DO: add patreon, etc -->
    </div> 
 </div>
