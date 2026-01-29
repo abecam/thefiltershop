@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="left-side">
     <!-- Pick a random non-filtered game -->
     <div class="random-non-filtered-games">  
@@ -24,5 +26,6 @@
             <a href="{% url 'filtershop_games:a_recommender' %}?level_of_contribution=SU" class="a_link-left-side">Our supporters</a>
         </div>
     </div>
+    {% include "thefiltershop/partials/_little_anim.html" %}
     <!-- with categories ? -->
 </div>
