@@ -199,8 +199,8 @@
 }
 
 .gauge-with-thumbs .thumb {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
     transition: transform 0.12s ease, opacity 0.12s ease; /* smooth hover */
 }
@@ -212,18 +212,18 @@
     outline: none;
 }
 
-.gauge-with-thumbs .thumb {
-    width: 28px;
-    height: 28px;
-    display: inline-block;
-}
-
 .gauge-with-thumbs .thumb-up {
+    width: calc(44px - 24px * var(--gauge-value, 0) / 100);
+    height: calc(44px - 24px * var(--gauge-value, 0) / 100);
     transform: translateY(0); /* center on gauge */
+    color: #79f18d;
 }
 
 .gauge-with-thumbs .thumb-down {
+    width: calc(20px + 24px * var(--gauge-value, 0) / 100);
+    height: calc(20px + 24px * var(--gauge-value, 0) / 100);
     transform: translateY(0); /* center on gauge */
+    color: #eb5858;
 }
 
 /* Keep label centered and separate from the gauge row */

@@ -3,7 +3,7 @@
 <div class="gauge-box gauge-box--teal">
     <div class="gauge-with-thumbs">
         <div class="gauge-inner">
-            <img src="{% static 'thefiltershop/thumb_up.svg' %}" alt="Thumb up for Hidden Extra Value" title="Thumb up (positive indicator)" aria-label="Thumb up for Hidden Extra Value" class="thumb thumb-up">
+            <img src="{% static 'thefiltershop/ThumbUp.svg' %}" alt="Thumb up for Hidden Extra Value" title="Thumb up (positive indicator)" aria-label="Thumb up for Hidden Extra Value" class="thumb thumb-up" style=" --gauge-value:{{hidden_full_cost_value}};">
             <div id="gauge_hidden_full_cost" class="gauge" 
                 style=" --gauge-value:{{hidden_full_cost_value}}; --gauge-display-value:{{hidden_full_cost_value}}; width:100px; height:100px; ; border:.15em solid #30bea7">
                 <div class="tick-circlebackground"></div>
@@ -30,7 +30,7 @@
                     <div class="value-label"></div>
                 </div>
             </div>
-            <img src="{% static 'thefiltershop/thumb_down.svg' %}" alt="Thumb down for Hidden Extra Value" title="Thumb down (negative indicator)" aria-label="Thumb down for Hidden Extra Value" class="thumb thumb-down">
+            <img src="{% static 'thefiltershop/ThumbDown.svg' %}" alt="Thumb down for Hidden Extra Value" title="Thumb down (negative indicator)" aria-label="Thumb down for Hidden Extra Value" class="thumb thumb-down" style=" --gauge-value:{{hidden_full_cost_value}};">
         </div>
         <div class="gauge_label">Hidden Extra Value: {{desc_hidden_full_cost}}</div>
     </div>

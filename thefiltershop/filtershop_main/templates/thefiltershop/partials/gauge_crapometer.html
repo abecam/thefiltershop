@@ -3,7 +3,7 @@
 <div class="gauge-box gauge-box--red">
     <div class="gauge-with-thumbs">
         <div class="gauge-inner">
-            <img src="{% static 'thefiltershop/thumb_up.svg' %}" alt="Thumb up for Crapometer" title="Thumb up (positive indicator)" aria-label="Thumb up for Crapometer" class="thumb thumb-up">
+            <img src="{% static 'thefiltershop/ThumbUp.svg' %}" alt="Thumb up for Crapometer" title="Thumb up (positive indicator)" aria-label="Thumb up for Crapometer" class="thumb thumb-up" style=" --gauge-value:{{crapometer_value}};">
             <div id="gauge_crapometer" class="gauge" 
                 style=" --gauge-value:{{crapometer_value}}; --gauge-display-value:{{crapometer_value}}; width:120px; height:120px; border:.15em solid #f02727">
                 <div class="tick-circlebackground"></div>
@@ -30,7 +30,7 @@
                     <div class="value-label"></div>
                 </div>
             </div>
-            <img src="{% static 'thefiltershop/thumb_down.svg' %}" alt="Thumb down for Crapometer" title="Thumb down (negative indicator)" aria-label="Thumb down for Crapometer" class="thumb thumb-down">
+            <img src="{% static 'thefiltershop/ThumbDown.svg' %}" alt="Thumb down for Crapometer" title="Thumb down (negative indicator)" aria-label="Thumb down for Crapometer" class="thumb thumb-down" style=" --gauge-value:{{crapometer_value}};">
         </div>
         <div class="gauge_label">Crapometer</div>
     </div>
