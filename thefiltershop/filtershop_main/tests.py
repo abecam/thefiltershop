@@ -64,8 +64,8 @@ class GaugeTemplateTests(TestCase):
         content = response.content.decode('utf-8')
 
         # Check that both thumb SVG references appear (one per gauge)
-        self.assertIn('thumb_up.svg', content)
-        self.assertIn('thumb_down.svg', content)
+        self.assertIn('ThumbUp.svg', content)
+        self.assertIn('ThumbDown.svg', content)
 
         # Check that aria labels and descriptive alt texts are present for both gauges
         self.assertIn('aria-label="Thumb up for Crapometer"', content)
