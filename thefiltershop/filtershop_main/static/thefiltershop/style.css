@@ -193,6 +193,10 @@ body {
   box-sizing: border-box;
 }
 
+.content-main {
+  padding-right: 20px;
+}
+
 /* Padding for text-only pages */
 .centersimplecolumn {
   padding-left: 20px;
