@@ -458,6 +458,10 @@ class Review(BaseModel):
     review_txt = models.TextField(max_length=10000, null=True, blank=True)
     note = models.IntegerField(null=False, default=5, validators=[MaxValueValidator(5), MinValueValidator(-5)]) # From -5 to 5 stars
     
+    # TO add after testings: prevent several reviews from the same profile on the same game
+    #class Meta:
+    #    unique_together = ('profile', 'game')
+    
 ########################################
 class Links_to_shops(models.Model):
     link = models.URLField()
@@ -521,3 +525,16 @@ class New_Entry_on_AppleStore(models.Model):
     
 class AllEndStringFromSteam(models.Model):
     name = models.CharField(max_length=300)
+
+### Model for giveaway
+
+class SteamKey(models.Model):
+    key_code = models.CharField(max_length=100, unique=True)
+    is_used = models.BooleanField(default=False)
+    awarded_to_hash = models.CharField(null=True, blank=True)
+    awarded_at = models.DateTimeField(null=True, blank=True)
+
+class GiveawayDay(models.Model):
+    current_day = models.DateField(unique=True)
+    was_awarded = models.BooleanField(default=False)
+    page_counter = models.IntegerField(default=0)

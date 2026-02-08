@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from django.db.models import Q
 from django.db.models import Count
@@ -5,7 +6,7 @@ from django.db.models import Count
 from datetime import datetime, timedelta, timezone
 import logging
 
-from ..models import Videogame_common, Studio, Publisher
+from ..models import Videogame_common, Studio, Publisher, GiveawayDay, SteamKey
  
 from filtershop_main.constants import SPOTLIGHT_LIMIT
 
@@ -13,6 +14,15 @@ logger = logging.getLogger(__name__)
 # To do: show featured game (low popularity, low spotlight)
 # Also cut by categories
 def index(request):
+    # Check for giveaway winner
+    # Each day, reset a page view counter and select after which # of view we will give a game. After the # of view, ensure we give a game, store a cookie
+    # Check if new day, if so, reset the counter and select a new random number between min and max views for giveaway
+    check_if_counter_reset()
+    # Check the page view counter, if reached the giveaway number, show the winning banner and set-up the hash in the cookie and the DB
+    is_winner = check_if_winner(request)
+    # to ensure we give the game with a corresponding hash in the SteamKey table, and mark the key as used.
+    # Find a way to prevent abuse by reloading the page.
+
     #latest_games = Videogame_common.objects.order_by("-date_creation")[:5]
     
     # Artisan first
@@ -36,7 +46,7 @@ def index(request):
    
     # TODO: Other kinds: Top Big(ger) Studio, They could be in a top (now or at a later point?)
     context = {"artisan_of_the_week": game_in_spotlight_artisan, "artisan_of_the_week_title_image": artisan_of_the_week_title_image, "artisan_of_the_week_title_screenshots": artisan_of_the_week_title_screenshots,
-               "indie_of_the_week": game_in_spotlight_indie, "indie_of_the_week_title_image": indie_of_the_week_title_image, "indie_of_the_week_title_screenshots": indie_of_the_week_title_screenshots,}
+               "indie_of_the_week": game_in_spotlight_indie, "indie_of_the_week_title_image": indie_of_the_week_title_image, "indie_of_the_week_title_screenshots": indie_of_the_week_title_screenshots, "is_winner": is_winner}
 
     return render(request, "thefiltershop/index.html", context)
 
@@ -85,3 +95,38 @@ def get_game_for_spotlight(max_size_of_studio) :
             # No game available...
             game_in_spotlight = None
     return game_in_spotlight
+
+def check_if_counter_reset() :
+    today = datetime.now(timezone.utc).date()
+    giveaway_day, created = GiveawayDay.objects.get_or_create(current_day=today)
+    if created :
+        # New day, reset the counter and select a new random number between min and max views for giveaway
+        giveaway_day.page_counter = random.randint(100, 1000)
+        giveaway_day.was_awarded = False
+        giveaway_day.save(update_fields=['page_counter', 'was_awarded'])
+
+def check_if_winner(request) :
+    today = datetime.now(timezone.utc).date()
+    giveaway_day = GiveawayDay.objects.get(current_day=today)
+    if not giveaway_day.was_awarded :
+        if giveaway_day.page_counter <= 0 :
+            # We have a winner, but we need to check if the cookie is already set for this user, to avoid giving multiple times the game to the same user
+            if not request.COOKIES.get('giveaway_winner') :
+                # Give the game and set the cookie
+                steam_key_to_give = SteamKey.objects.filter(is_used=False).first()
+                if steam_key_to_give != None :
+                    steam_key_to_give.is_used = True
+                    steam_key_to_give.awarded_to_hash = str(random.getrandbits(128))
+                    steam_key_to_give.awarded_at = datetime.now(timezone.utc)
+                    steam_key_to_give.save(update_fields=['is_used', 'awarded_to_hash', 'awarded_at'])
+                    giveaway_day.was_awarded = True
+                    giveaway_day.save(update_fields=['was_awarded'])
+                    # Set the cookie with the hash of the awarded key, to prevent giving multiple times to the same user
+                    request.session['giveaway_winner'] = steam_key_to_give.awarded_to_hash
+
+                    return True
+        else :
+            # Increment the counter
+            giveaway_day.page_counter -= 1
+            giveaway_day.save(update_fields=['page_counter'])
+    return False
