@@ -21,6 +21,7 @@ urlpatterns = [
     path("best_of_the_rest", views.get_best_of_the_rest, name="best_of_the_rest"),
     path("hall_of_shame", views.get_items_in_hall_of_shame, name="hall_of_shame"),
     path("our_mission", TemplateView.as_view(template_name="thefiltershop/our_mission.html"), name="our_mission"),
+    path("cvga", TemplateView.as_view(template_name="thefiltershop/cvga.html"), name="cvga"),
     path("who_are_we", TemplateView.as_view(template_name="thefiltershop/who_are_we.html"), name="who_are_we"),
     path("our_sponsors", views.get_sponsors, name="our_sponsors"),
     path("a_random_artisan_game", views.get_a_random_unfiltered_artisan_game, name="a_random_artisan_game"),
@@ -28,6 +29,7 @@ urlpatterns = [
     path("videogames_search/", views.get_search_results, name="videogames_search"),
     path("four_o_four", TemplateView.as_view(template_name="404.html"), name="404"),
     path("a_recommender", views.get_recommended_games, name="a_recommender"),
-    path("a_recommender_sponsor", views.get_recommended_games_by_sponsor, name="a_recommender_sponsor")
+    path("a_recommender_sponsor", views.get_recommended_games_by_sponsor, name="a_recommender_sponsor"),
+    path("giveaway", views.giveaway, name="giveaway"),
     #path('admin/', admin_site.urls),
 ]

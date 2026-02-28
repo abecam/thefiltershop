@@ -1,0 +1,54 @@
+{% extends "thefiltershop/base_games.html" %}
+
+{% block title %}Daily Steam Key Giveaway{% endblock %}
+
+{% block title_content %}Win a Steam key – enter your email{% endblock %}
+
+{% block content %}
+<h2>Random artisan picks (no negative filters)</h2>
+<div class="col-container">
+    {% for game in games %}
+    <div class="game-card-wrapper">
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <div class="game-title-wrapper">
+                        <img src="{{ game.vignette.url }}" alt="{{ game.name }}" class="game_thumbnail"/>
+                    </div>
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No artisan games available at the moment.</p>
+    {% endfor %}
+</div>
+
+<hr/>
+
+{% if message %}
+    <div class="notice">{{ message }}</div>
+{% endif %}
+
+{% if already_participated_today %}
+    <div class="thanks-message">
+        <p><strong>Thanks for participating today!</strong></p>
+    </div>
+{% elif has_expired_cookie %}
+    <form method="post" class="giveaway-form">
+        {% csrf_token %}
+        <p>Welcome back! It's a new day.</p>
+        <input type="hidden" name="email" value="{{ email_cookie }}" />
+        <button type="submit">Participate today again</button>
+    </form>
+{% else %}
+    <form method="post" class="giveaway-form">
+        {% csrf_token %}
+        <label for="email">Email address:</label>
+        <input type="email" id="email" name="email" required />
+        <button type="submit">Enter giveaway</button>
+    </form>
+{% endif %}
+
+{% endblock %}

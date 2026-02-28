@@ -163,6 +163,44 @@ body {
   color: rgb(55, 134, 115)k;
 }
 
+/* Giveaway menu item - responsive display */
+.giveaway-menu-item--mobile {
+  display: none;  /* hidden by default on large screens */
+}
+
+.giveaway-menu-item--mobile.a_link-left-side {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .giveaway-menu-item--mobile {
+    display: inline-block;
+    border: 2px solid #707e80;
+    border-radius: 3px;
+    background: #f3e039;
+    color: #1c1e1f;
+    text-align: center;
+    padding: 4px 4px;
+    text-decoration: none;
+    font-weight: 400;
+    transition: background 0.3s ease-in-out;
+  }
+
+  .giveaway-menu-item--mobile:hover {
+    background-color: #f5e86f;
+  }
+
+  /* If it's a span (thanks message), style appropriately */
+  .giveaway-menu-item--mobile.thanks-message {
+    background: #f3e039;
+    border: 2px solid #707e80;
+    padding: 4px 4px;
+    border-radius: 3px;
+    font-weight: 400;
+  }
+}
+
+
 /* Create two unequal columns that floats next to each other */
 /* Left column */
 .leftcolumn {   
@@ -762,6 +800,21 @@ a:visited {
   z-index: 1;
 }
 
+.giveaway_box
+{
+  font-size: 1.3rem;
+  border-radius: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  background-color: #f3e039;
+}
+
+.giveaway_box h2 {
+  padding-top: 2px;
+  text-align: center;
+}
+
 .random-non-filtered-games
 {
   font-size: 1.3rem;
@@ -817,17 +870,18 @@ a:visited {
 
 /* GitHub link styling */
 .help_us .support_links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   text-align: center;
   margin-top: 8px;
 }
 .help_us .github_link {
-  display: inline-block;
+  display: inline-flex;
   margin: 0 6px;
   vertical-align: middle;
   background-color: #94dbf7;
-}
-.help_us .github_link {
-  display: inline-flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
@@ -841,6 +895,29 @@ a:visited {
 }
 .help_us .github_text {
   font-size: 0.95rem;
+  color: #24292f;
+  font-weight: 600;
+}
+
+.help_us .nyaf_link {
+  display: block;
+  margin: 8px auto 0;
+  max-width: 100%;
+  background-color: #94dbf7;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+}
+.help_us .nyaf_link img {
+  width: 100px;
+  display: block;
+  margin: 0 auto;
+  background: transparent;
+  max-width: 100%;
+  height: auto;
+}
+.help_us .nyaf_text {
+  font-size: 0.97rem;
   color: #24292f;
   font-weight: 600;
 }

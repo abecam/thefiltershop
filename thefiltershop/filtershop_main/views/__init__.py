@@ -19,3 +19,4 @@ from .view_a_studio import studio
 from .view_a_publisher import publisher
 from .recommended_games import get_recommended_games
 from .recommended_games import get_recommended_games_by_sponsor
+from .view_giveaway import giveaway

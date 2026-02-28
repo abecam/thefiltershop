@@ -1,8 +1,10 @@
 import requests
 import logging
 import tempfile
+import random
 
 from django.contrib import admin
+from django.contrib import messages
 from django.db.models import F
 from django.core import files
 from datetime import timedelta
@@ -558,7 +560,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     def addLinkToSteam(steam_id, video_game):
         url=f"https://store.steampowered.com/app/{steam_id}"
         
-        # Fond back the Steam shop or create it
+        # Found back the Steam shop or create it
         try: 
             steam_shop = models.Online_Shop.objects.all().get(name="Steam") 
         except models.Online_Shop.DoesNotExist: 
@@ -887,3 +889,77 @@ class SoftwareAdmin(EntityAdmin):
             value_neg_filters = 300
         form.instance.crapometer = (100*value_neg_filters)/300
         form.instance.save()
+
+
+@admin.register(models.SteamKey, site=admin_site)
+class SteamKeyAdmin(admin.ModelAdmin):
+    list_display = ['key_code', 'is_used', 'awarded_at']
+    list_filter = ['is_used', 'awarded_at']
+    readonly_fields = ['awarded_at', 'awarded_to_hash']
+    search_fields = ['key_code']
+
+@admin.register(models.EmailForGiveAway, site=admin_site)
+class EmailForGiveAwayAdmin(DjangoObjectActions, admin.ModelAdmin):
+    list_display = ['email', 'current_day', 'has_won']
+    list_filter = ['current_day', 'has_won']
+    readonly_fields = ['current_day']
+    search_fields = ['email']
+
+    @action(
+        label="select random winner for today's giveaway"
+    )
+    def select_giveaway_winner(modeladmin, request, queryset):
+        """Action to select a random winner from today's participants"""
+        today = timezone.now().date()
+        today_entries = models.EmailForGiveAway.objects.filter(current_day=today)
+        
+        if not today_entries.exists():
+            modeladmin.message_user(request, "No participants for today's giveaway.", level=messages.WARNING)
+            return
+        
+        # Check if already selected a winner for today
+        if models.GiveawayWinner.objects.filter(date_won=today).exists():
+            modeladmin.message_user(request, "A winner has already been selected for today!", level=messages.WARNING)
+            return
+        
+        # Get an available steam key
+        available_key = models.SteamKey.objects.filter(is_used=False).first()
+        if not available_key:
+            modeladmin.message_user(request, "No available Steam keys to award!", level=messages.WARNING)
+            return
+        
+        # Select random winner
+        winner_entry = random.choice(list(today_entries))
+        
+        # Create winner record
+        winner = models.GiveawayWinner.objects.create(
+            email=winner_entry.email,
+            steam_key=available_key
+        )
+        
+        # Mark steam key as used
+        available_key.is_used = True
+        available_key.awarded_to_hash = str(random.getrandbits(128))
+        available_key.awarded_at = timezone.now()
+        available_key.save()
+        
+        # Update participant as won
+        winner_entry.has_won += 1
+        winner_entry.save()
+        
+        modeladmin.message_user(
+            request, 
+            f"🎉 Winner selected! {winner_entry.email} wins a Steam key! (Winner ID: {winner.id})",
+            level=messages.SUCCESS
+        )
+
+    select_giveaway_winner.short_description = "🎲 Select random winner for today's giveaway"
+    changelist_actions = ['select_giveaway_winner']
+
+@admin.register(models.GiveawayWinner, site=admin_site)
+class GiveawayWinnerAdmin(admin.ModelAdmin):
+    list_display = ['email', 'date_won', 'steam_key']
+    list_filter = ['date_won']
+    readonly_fields = ['date_won', 'email']
+    search_fields = ['email']
+    ordering = ['-date_won']

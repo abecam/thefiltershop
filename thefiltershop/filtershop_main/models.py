@@ -534,7 +534,18 @@ class SteamKey(models.Model):
     awarded_to_hash = models.CharField(null=True, blank=True)
     awarded_at = models.DateTimeField(null=True, blank=True)
 
-class GiveawayDay(models.Model):
+class EmailForGiveAway(models.Model):
     current_day = models.DateField(unique=True)
-    was_awarded = models.BooleanField(default=False)
-    page_counter = models.IntegerField(default=0)
+    email = models.EmailField(null=False, blank=False)
+    has_won = models.IntegerField(default=0)
+
+class GiveawayWinner(models.Model):
+    email = models.EmailField(null=False, blank=False)
+    date_won = models.DateField(auto_now_add=True)
+    steam_key = models.ForeignKey(SteamKey, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-date_won']
+    
+    def __str__(self):
+        return f"{self.email} won on {self.date_won}"
