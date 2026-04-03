@@ -3,7 +3,7 @@
         <h2>Daily giveaway</h2>
         <div class="link-left-side">
             {% if giveaway_already_participated_today %}
-                <p class="thanks-message">Thanks for participating!</p>
+                <p class="thanks-message-side">Thanks for participating!</p>
             {% else %}
                 <a href="{% url 'filtershop_games:giveaway' %}" class="a_link-left-side">Register for the daily giveaway</a>
             {% endif %}
