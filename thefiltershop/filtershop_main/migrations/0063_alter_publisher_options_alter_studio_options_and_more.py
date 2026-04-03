@@ -43,6 +43,20 @@ class Migration(migrations.Migration):
             model_name='publisher',
             name='descriptionOfShame',
         ),
+        migrations.RunSQL(
+            sql=[
+                "ALTER TABLE filtershop_main_videogame_common_publishers DROP CONSTRAINT IF EXISTS filtershop_main_vide_publisher_id_6b944ba3_fk_filtersho",
+                "ALTER TABLE filtershop_main_software_publishers DROP CONSTRAINT IF EXISTS filtershop_main_soft_publisher_id_3eabd0c2_fk_filtersho",
+            ],
+            reverse_sql=[
+                "ALTER TABLE filtershop_main_videogame_common_publishers ADD CONSTRAINT filtershop_main_vide_publisher_id_6b944ba3_fk_filtersho FOREIGN KEY (publisher_id) REFERENCES filtershop_main_publisher(id) DEFERRABLE INITIALLY DEFERRED",
+                "ALTER TABLE filtershop_main_software_publishers ADD CONSTRAINT filtershop_main_soft_publisher_id_3eabd0c2_fk_filtersho FOREIGN KEY (publisher_id) REFERENCES filtershop_main_publisher(id) DEFERRABLE INITIALLY DEFERRED",
+            ],
+        ),
+        migrations.RemoveField(
+            model_name='publisher',
+            name='last_changed_by',
+        ),
         migrations.RemoveField(
             model_name='publisher',
             name='id',
@@ -50,10 +64,6 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='publisher',
             name='in_hall_of_shame',
-        ),
-        migrations.RemoveField(
-            model_name='publisher',
-            name='last_changed_by',
         ),
         migrations.RemoveField(
             model_name='publisher',
@@ -85,15 +95,25 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='studio',
+            name='last_changed_by',
+        ),
+        migrations.RunSQL(
+            sql=[
+                "ALTER TABLE filtershop_main_videogame_common_studios DROP CONSTRAINT IF EXISTS filtershop_main_vide_studio_id_18e649c6_fk_filtersho",
+                "ALTER TABLE filtershop_main_software_studios DROP CONSTRAINT IF EXISTS filtershop_main_soft_studio_id_8823549c_fk_filtersho",
+            ],
+            reverse_sql=[
+                "ALTER TABLE filtershop_main_videogame_common_studios ADD CONSTRAINT filtershop_main_vide_studio_id_18e649c6_fk_filtersho FOREIGN KEY (studio_id) REFERENCES filtershop_main_studio(id) DEFERRABLE INITIALLY DEFERRED",
+                "ALTER TABLE filtershop_main_software_studios ADD CONSTRAINT filtershop_main_soft_studio_id_8823549c_fk_filtersho FOREIGN KEY (studio_id) REFERENCES filtershop_main_studio(id) DEFERRABLE INITIALLY DEFERRED",
+            ],
+        ),
+        migrations.RemoveField(
+            model_name='studio',
             name='id',
         ),
         migrations.RemoveField(
             model_name='studio',
             name='in_hall_of_shame',
-        ),
-        migrations.RemoveField(
-            model_name='studio',
-            name='last_changed_by',
         ),
         migrations.RemoveField(
             model_name='studio',
@@ -113,10 +133,30 @@ class Migration(migrations.Migration):
             field=models.OneToOneField(auto_created=True, default=1, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='filtershop_main.entity'),
             preserve_default=False,
         ),
+        migrations.RunSQL(
+            sql=[
+                "ALTER TABLE filtershop_main_videogame_common_publishers ADD CONSTRAINT filtershop_main_vide_publisher_id_6b944ba3_fk_filtersho FOREIGN KEY (publisher_id) REFERENCES filtershop_main_publisher(entity_ptr_id) DEFERRABLE INITIALLY DEFERRED",
+                "ALTER TABLE filtershop_main_software_publishers ADD CONSTRAINT filtershop_main_soft_publisher_id_3eabd0c2_fk_filtersho FOREIGN KEY (publisher_id) REFERENCES filtershop_main_publisher(entity_ptr_id) DEFERRABLE INITIALLY DEFERRED",
+            ],
+            reverse_sql=[
+                "ALTER TABLE filtershop_main_videogame_common_publishers DROP CONSTRAINT IF EXISTS filtershop_main_vide_publisher_id_6b944ba3_fk_filtersho",
+                "ALTER TABLE filtershop_main_software_publishers DROP CONSTRAINT IF EXISTS filtershop_main_soft_publisher_id_3eabd0c2_fk_filtersho",
+            ],
+        ),
         migrations.AddField(
             model_name='studio',
             name='entity_ptr',
             field=models.OneToOneField(auto_created=True, default=1, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='filtershop_main.entity'),
             preserve_default=False,
+        ),
+        migrations.RunSQL(
+            sql=[
+                "ALTER TABLE filtershop_main_videogame_common_studios ADD CONSTRAINT filtershop_main_vide_studio_id_18e649c6_fk_filtersho FOREIGN KEY (studio_id) REFERENCES filtershop_main_studio(entity_ptr_id) DEFERRABLE INITIALLY DEFERRED",
+                "ALTER TABLE filtershop_main_software_studios ADD CONSTRAINT filtershop_main_soft_studio_id_8823549c_fk_filtersho FOREIGN KEY (studio_id) REFERENCES filtershop_main_studio(entity_ptr_id) DEFERRABLE INITIALLY DEFERRED",
+            ],
+            reverse_sql=[
+                "ALTER TABLE filtershop_main_videogame_common_studios DROP CONSTRAINT IF EXISTS filtershop_main_vide_studio_id_18e649c6_fk_filtersho",
+                "ALTER TABLE filtershop_main_software_studios DROP CONSTRAINT IF EXISTS filtershop_main_soft_studio_id_8823549c_fk_filtersho",
+            ],
         ),
     ]
