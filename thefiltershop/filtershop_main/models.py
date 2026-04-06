@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 import PIL.Image
 
 class User(AbstractUser):
-    pass
+    is_pending_approval = models.BooleanField(default=False, help_text="User needs admin approval to access admin panel")
 
 class Group(Group):
     pass

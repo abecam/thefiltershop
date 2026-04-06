@@ -47,8 +47,19 @@ class Recommended_Games_By_Sponsor(admin.TabularInline):
 class ProfileAdmin(admin.ModelAdmin):
     exclude= ['number_of_contrib', 'last_changed_by']
     
-@admin.register(models.User, models.Group, site=admin_site)
-class USerGroupAdmin(admin.ModelAdmin):
+@admin.register(models.User, site=admin_site)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'email', 'is_staff', 'is_pending_approval', 'date_joined']
+    list_filter = ['is_staff', 'is_pending_approval', 'date_joined']
+    actions = ['approve_users']
+    
+    def approve_users(self, request, queryset):
+        queryset.update(is_staff=True, is_pending_approval=False)
+        self.message_user(request, f"Approved {queryset.count()} user(s).")
+    approve_users.short_description = "Approve selected users for admin access"
+
+@admin.register(models.Group, site=admin_site)
+class GroupAdmin(admin.ModelAdmin):
     exclude= ['last_changed_by']
 
 @admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
