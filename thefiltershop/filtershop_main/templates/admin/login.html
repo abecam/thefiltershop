@@ -1,0 +1,41 @@
+{% extends "admin/login.html" %}
+{% load socialaccount %}
+
+{% block content %}
+{{ block.super }}
+<div style="margin-top: 30px; text-align: center;">
+    <p style="margin-bottom: 15px; color: #666;">Or sign in with:</p>
+    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;" class="social-login">
+        <a href="{% provider_login_url "google" %}?next={{ request.GET.next|urlencode }}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #f39087; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">
+           Google
+        </a>
+        <a href="{% provider_login_url "facebook" %}?next={{ request.GET.next|urlencode }}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #4267B2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">
+           Facebook
+        </a>
+        <a href="{% provider_login_url "linkedin_oauth2" %}?next={{ request.GET.next|urlencode }}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #0077b5; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">
+           LinkedIn
+        </a>
+        <a href="{% provider_login_url "github" %}?next={{ request.GET.next|urlencode }}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #333; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">
+           GitHub
+        </a>
+    </div>
+</div>
+<style>
+    .social-login a:hover {
+        opacity: 0.8;
+    }
+    @media (max-width: 600px) {
+        .social-login {
+            flex-direction: column;
+            align-items: center;
+        }
+        .social-login a {
+            width: 200px;
+        }
+    }
+</style>
+{% endblock %}

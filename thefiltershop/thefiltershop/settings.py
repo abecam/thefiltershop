@@ -42,6 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cookie_consent',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.linkedin_oauth2',
+    'allauth.socialaccount.providers.github',
+    # 'allauth.socialaccount.providers.steam',  # Temporarily removed due to python-openid compatibility
 ]
 
 MIDDLEWARE = [
@@ -52,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'thefiltershop.urls'
@@ -159,6 +169,70 @@ STATICFILES_DIRS = (path.join(BASE_DIR, "static"),)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "filtershop_main.User"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = False
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_ENABLED = True
+
+SOCIALACCOUNT_ADAPTER = 'filtershop_main.adapters.SocialAccountAdapter'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': environ.get('GOOGLE_CLIENT_ID', ''),
+            'secret': environ.get('GOOGLE_CLIENT_SECRET', ''),
+        }
+    },
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'en_US',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v13.0',
+        'APP': {
+            'client_id': environ.get('FACEBOOK_CLIENT_ID', ''),
+            'secret': environ.get('FACEBOOK_CLIENT_SECRET', ''),
+        }
+    },
+    'linkedin_oauth2': {
+        'SCOPE': ['r_liteprofile', 'r_emailaddress'],
+        'PROFILE_FIELDS': ['id', 'firstName', 'lastName', 'emailAddress', 'profilePicture(displayImage~:playableStreams)'],
+        'APP': {
+            'client_id': environ.get('LINKEDIN_CLIENT_ID', ''),
+            'secret': environ.get('LINKEDIN_CLIENT_SECRET', ''),
+        }
+    },
+    'github': {
+        'SCOPE': ['user:email'],
+        'APP': {
+            'client_id': environ.get('GITHUB_CLIENT_ID', ''),
+            'secret': environ.get('GITHUB_CLIENT_SECRET', ''),
+        }
+    },
+}
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'

@@ -26,6 +26,7 @@ from filtershop_main.admin import admin_site
 urlpatterns = [
     path("", include("filtershop_main.urls")),
     path('cookies/', include('cookie_consent.urls')),
+    path('accounts/', include('allauth.urls')),
     path(
         "admin/password_reset/",
         auth_views.PasswordResetView.as_view(),
