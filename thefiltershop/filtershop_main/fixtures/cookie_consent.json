@@ -1,0 +1,64 @@
+[
+  {
+    "model": "cookie_consent.cookiegroup",
+    "pk": 1,
+    "fields": {
+      "varname": "necessary",
+      "name": "Necessary Cookies",
+      "description": "These cookies are essential for the website to function properly, including session handling for administrators and saving filter preferences.",
+      "is_required": true,
+      "is_deletable": false,
+      "ordering": 1,
+      "created": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cookie_consent.cookiegroup",
+    "pk": 2,
+    "fields": {
+      "varname": "giveaway",
+      "name": "Giveaway Cookies",
+      "description": "These cookies store your email address when you participate in our giveaways.",
+      "is_required": false,
+      "is_deletable": true,
+      "ordering": 2,
+      "created": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cookie_consent.cookie",
+    "pk": 1,
+    "fields": {
+      "cookiegroup": 1,
+      "name": "sessionid",
+      "description": "Django session cookie for maintaining user sessions, particularly for admin access.",
+      "path": "/",
+      "domain": "",
+      "created": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cookie_consent.cookie",
+    "pk": 2,
+    "fields": {
+      "cookiegroup": 1,
+      "name": "filter_preferences",
+      "description": "Stores user filter position preferences for better browsing experience.",
+      "path": "/",
+      "domain": "",
+      "created": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cookie_consent.cookie",
+    "pk": 3,
+    "fields": {
+      "cookiegroup": 2,
+      "name": "giveaway_email",
+      "description": "Stores email address for giveaway participation.",
+      "path": "/",
+      "domain": "",
+      "created": "2024-01-01T00:00:00Z"
+    }
+  }
+]

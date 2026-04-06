@@ -23,6 +23,7 @@ urlpatterns = [
     path("our_mission", TemplateView.as_view(template_name="thefiltershop/our_mission.html"), name="our_mission"),
     path("cvga", TemplateView.as_view(template_name="thefiltershop/cvga.html"), name="cvga"),
     path("who_are_we", TemplateView.as_view(template_name="thefiltershop/who_are_we.html"), name="who_are_we"),
+    path("privacy_policy", TemplateView.as_view(template_name="thefiltershop/privacy_policy.html"), name="privacy_policy"),
     path("our_sponsors", views.get_sponsors, name="our_sponsors"),
     path("a_random_artisan_game", views.get_a_random_unfiltered_artisan_game, name="a_random_artisan_game"),
     path("a_random_indie_game", views.get_a_random_unfiltered_indie_game, name="a_random_indie_game"),

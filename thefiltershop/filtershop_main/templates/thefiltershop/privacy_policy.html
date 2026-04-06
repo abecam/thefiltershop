@@ -1,0 +1,58 @@
+{% extends "thefiltershop/base_center_simple.html" %}
+{% load cookie_consent_tags %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block title_content %}Privacy Policy{% endblock %}
+
+{% block centersimplecolumn %}
+  <h1>Privacy Policy</h1>
+
+  <p>The Buoy is not tracking its users. Browsing users do not need (nor can) to log in and we are not tracking the visits.</p>
+
+  <p>We use cookies only for the following purposes:</p>
+
+  <h3>Necessary Cookies (Always Active)</h3>
+  <ul>
+    <li><strong>Session Cookies:</strong> Used to maintain secure sessions for admin users accessing the administrative interface. These cookies are essential for website functionality and cannot be declined.</li>
+    <li><strong>Filter Preferences:</strong> Saves your preferred filter positions to enhance your browsing experience and remember your settings between visits.</li>
+  </ul>
+
+  <h3>Optional Cookies</h3>
+  <ul>
+    <li><strong>Giveaway Email Cookie:</strong> If you choose to participate in our giveaway, we may store your email address in a cookie to facilitate your participation. This cookie is only set with your explicit consent.</li>
+  </ul>
+
+  <h3>Cookie Preferences</h3>
+  <div class="cookie-preference">
+    <h4>Giveaway Email Cookie</h4>
+    <p>Allow us to store your email address for giveaway participation.</p>
+    <div class="cookie-toggle">
+      {% if request|cookie_group_accepted:"giveaway" %}
+        <span class="cookie-status cookie-status--accepted">✓ Accepted</span>
+        <form class="cookie-consent-form" action="{% url "cookie_consent_decline" "giveaway" %}?next={% url "filtershop_games:privacy_policy" %}" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="cookie-toggle-btn cookie-toggle-btn--decline">Decline</button>
+        </form>
+      {% else %}
+        <span class="cookie-status cookie-status--declined">✗ Declined</span>
+        <form class="cookie-consent-form" action="{% url "cookie_consent_accept" "giveaway" %}?next={% url "filtershop_games:privacy_policy" %}" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="cookie-toggle-btn cookie-toggle-btn--accept">Accept</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <p>You can manage your cookie preferences at any time using the cookie consent banner at the bottom of the page.</p>
+
+  <h2>Cookie Consent</h2>
+
+  <p>For the optional email cookie used in our giveaway feature, we obtain your explicit consent before setting this cookie. You can manage your cookie preferences at any time.</p>
+
+  <h2>Contact Us</h2>
+
+  <p>If you have any questions about this Privacy Policy, please contact us through our website.</p>
+
+  <p><em>Last updated: April 2026</em></p>
+{% endblock %}

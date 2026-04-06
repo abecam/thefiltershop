@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from ..models import Videogame_common, Studio, Publisher, EmailForGiveAway
 from django.db.models import Count, Q
+from cookie_consent.util import get_cookie_value_from_request
 
 
 def giveaway(request):
@@ -36,19 +37,24 @@ def giveaway(request):
         # prefer the posted email, fall back to cookie if the field is empty
         email = request.POST.get('email') or email_cookie
         if email:
-            # store/refresh the cookie and record today's entry
-            response = redirect('filtershop_games:giveaway')
-            response.set_cookie('giveaway_email', email, max_age=30 * 24 * 60 * 60)
-            entry, created = EmailForGiveAway.objects.get_or_create(
-                current_day=today,
-                defaults={'email': email},
-            )
-            if not created and entry.email != email:
-                entry.email = email
-                entry.save(update_fields=['email'])
-            # a small message will be shown after redirection
-            request.session['giveaway_message'] = 'Thanks for participating today!'
-            return response
+            # Check if user has consented to giveaway cookies
+            giveaway_consent = get_cookie_value_from_request(request, "giveaway")
+            if giveaway_consent:
+                # store/refresh the cookie and record today's entry
+                response = redirect('filtershop_games:giveaway')
+                response.set_cookie('giveaway_email', email, max_age=30 * 24 * 60 * 60)
+                entry, created = EmailForGiveAway.objects.get_or_create(
+                    current_day=today,
+                    defaults={'email': email},
+                )
+                if not created and entry.email != email:
+                    entry.email = email
+                    entry.save(update_fields=['email'])
+                # a small message will be shown after redirection
+                request.session['giveaway_message'] = 'Thanks for participating today!'
+                return response
+            else:
+                message = 'Please accept the giveaway cookies to participate.'
         else:
             message = 'Please provide a valid email address.'
     else:
