@@ -24,6 +24,7 @@ from django.contrib.auth import views as auth_views
 from filtershop_main.admin import admin_site
 
 urlpatterns = [
+    path("api/", include("filtershop_main.api.urls")),
     path("", include("filtershop_main.urls")),
     path('cookies/', include('cookie_consent.urls')),
     path('accounts/', include('allauth.urls')),

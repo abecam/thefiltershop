@@ -5,6 +5,7 @@
 !app/logs/.gitkeep
 
 env
+.env
 node_modules
 # Email spool folder
 /app/spool/*
@@ -67,3 +68,5 @@ thefiltershop/filtershop_main/__pycache__/
 .vscode/settings.json
 thefiltershop/log/debug.log
 thefiltershop/pyvenv.cfg
+
+venv
