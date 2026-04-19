@@ -1,6 +1,8 @@
+version: '1.0'
+
 services:
   thebuoy:
-    build: .
+    image: ${DOCKER_IMAGE:-ghcr.io/abecam/thefiltershop:latest}
     ports:
       - "8000:8000"
     environment:
