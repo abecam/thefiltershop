@@ -607,6 +607,14 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             return
 
         steam_api_url = 'https://partner.steam-api.com/IStoreService/GetAppList/v1/'
+        steam_api_batch_size = 1000
+        batch_size_setting = os.environ.get('STEAM_API_BATCH_SIZE', 1000)
+        if batch_size_setting:
+            try:
+                steam_api_batch_size = batch_size_setting
+            except ValueError:
+                logger.warning("Invalid STEAM_API_BATCH_SIZE=%r, using default %d", batch_size_setting, steam_api_batch_size)
+
         params = {
             'key': steam_api_key,
             'include_games': 'true',
@@ -614,12 +622,17 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             'include_software': 'false',
             'include_videos': 'false',
             'include_hardware': 'false',
-            'max_results': 50000,
+            'max_results': steam_api_batch_size,
         }
 
         all_apps = []
         last_appid = None
-        while True:
+        max_loop_count = 1000000 // steam_api_batch_size
+        loop_count = 0
+        
+        while loop_count < max_loop_count:
+            loop_count = loop_count + 1
+
             request_params = params.copy()
             if last_appid is not None:
                 request_params['last_appid'] = last_appid
@@ -644,12 +657,19 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 break
 
             all_apps.extend(apps)
-            last_appid = apps[-1].get('appid')
-
-            if len(apps) < int(request_params['max_results']):
+            next_appid = apps[-1].get('appid')
+            if next_appid is None or next_appid == last_appid:
                 break
 
-        logger.info("Fetching all games from Steam - downloaded");
+            last_appid = next_appid
+            if len(apps) < steam_api_batch_size:
+                break
+
+        if loop_count >= max_loop_count:# Just in case, to avoid infinite loop if something goes wrong with the API
+            modeladmin.message_user(request, "Reached maximum loop count while fetching from Steam. Stopping to avoid infinite loop.")
+            logger.warning("Reached maximum loop count while fetching from Steam. Stopping to avoid infinite loop.")
+            
+        logger.info(f"Fetching all games from Steam - downloaded {len(all_apps)} entries");
         
         models.New_Entry_on_Steam.objects.all().delete()
         
