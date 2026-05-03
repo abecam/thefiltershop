@@ -1,4 +1,8 @@
-version: '1.0'
+x-postgres-env: &postgres-env   # Anchor defined in an extension field (x- prefix = ignored by Compose).
+                                 # Stores the three vars that both services need identically.
+  POSTGRES_DB:       ${POSTGRES_DB:-thefiltershop}
+  POSTGRES_USER:     ${POSTGRES_USER:-postgres}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-totolebo}
 
 services:
   thebuoy:
@@ -6,9 +10,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-thefiltershop}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-totolebo}
+      <<: *postgres-env   # Merges the three shared vars in here...
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       DEBUG: ${DEBUG:-false}
@@ -21,11 +23,15 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-thefiltershop}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-totolebo}
+      <<: *postgres-env   # Merges the three shared vars in here...
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:                                          # Added to make depends_on meaningful.
+        test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-thefiltershop}"]
+        interval: 10s      # Check every 10 seconds.
+        timeout: 5s        # Fail the check if it takes longer than 5s.
+        retries: 5         # Mark as unhealthy after 5 consecutive failures.
+        start_period: 10s  # Grace period on first start before failures count against retries.
 
 volumes:
   postgres_data:
