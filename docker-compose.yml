@@ -16,7 +16,7 @@ services:
       DEBUG: ${DEBUG:-false}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-your-secret-key}
     volumes:
-      - media:/thefiltershop/media
+      - media:/app/thefiltershop/media
     depends_on:
       - db
 
