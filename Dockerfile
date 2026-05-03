@@ -46,7 +46,11 @@ ENV PYTHONPATH=/app/thefiltershop
  
 # Collect static assets for production
 RUN cd thefiltershop;python manage.py collectstatic --noinput
- 
+
+# Create media directory and copy default media files
+RUN mkdir -p /app/media && chown -R appuser:appuser /app/media
+COPY --chown=appuser:appuser default_media/* /app/media/
+
 # Switch to non-root user
 USER appuser
  
