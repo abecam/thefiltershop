@@ -455,7 +455,7 @@ class Profile(BaseModel):
 class Review(BaseModel):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey(Videogame_common, on_delete=models.CASCADE, null=False)
-    review_txt = models.TextField(max_length=10000, null=True, blank=True)
+    review_txt = models.TextField(max_length=10000, null=True, blank=True, verbose_name="Your review for this game", help_text="You can write a review for this game, which will be visible on the game page.")
     note = models.IntegerField(null=False, default=5, validators=[MaxValueValidator(5), MinValueValidator(-5)]) # From -5 to 5 stars
     
     # TO add after testings: prevent several reviews from the same profile on the same game

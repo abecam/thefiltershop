@@ -1,3 +1,4 @@
+import os
 import requests
 import logging
 import tempfile
@@ -198,6 +199,7 @@ class NewEntryOnSteam(admin.ModelAdmin):
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
 class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
+    list_display = ["name", "appid"]
 
     @action(
         label="Fetch all full Video Game information from Steam"
@@ -598,9 +600,55 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
     def fetch_all_from_steam(modeladmin, request, queryset):
         logger.info("Fetching all games from Steam");
-        steam_api_url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
-        response = requests.get(steam_api_url)
-        data = response.json()
+        steam_api_key = os.environ.get('STEAM_API_KEY')
+        if not steam_api_key:
+            modeladmin.message_user(request, "Steam API key is missing. Please set STEAM_API_KEY in the environment.")
+            logger.error("STEAM_API_KEY environment variable is not set.")
+            return
+
+        steam_api_url = 'https://partner.steam-api.com/IStoreService/GetAppList/v1/'
+        params = {
+            'key': steam_api_key,
+            'include_games': 'true',
+            'include_dlc': 'false',
+            'include_software': 'false',
+            'include_videos': 'false',
+            'include_hardware': 'false',
+            'max_results': 50000,
+        }
+
+        all_apps = []
+        last_appid = None
+        while True:
+            request_params = params.copy()
+            if last_appid is not None:
+                request_params['last_appid'] = last_appid
+
+            response = requests.get(steam_api_url, params=request_params)
+            if response.status_code != 200:
+                modeladmin.message_user(request, f"Failed to fetch data from Steam ({response.status_code}).")
+                logger.error(f"Steam fetch failed with status {response.status_code}: {response.text}")
+                return
+
+            data = response.json()
+            apps = None
+            if isinstance(data, dict):
+                apps = data.get('response', {}).get('apps') or data.get('applist', {}).get('apps')
+
+            if apps is None:
+                modeladmin.message_user(request, "Unexpected Steam API response structure.")
+                logger.error(f"Unexpected Steam API response: {data}")
+                return
+
+            if not apps:
+                break
+
+            all_apps.extend(apps)
+            last_appid = apps[-1].get('appid')
+
+            if len(apps) < int(request_params['max_results']):
+                break
+
         logger.info("Fetching all games from Steam - downloaded");
         
         models.New_Entry_on_Steam.objects.all().delete()
@@ -608,7 +656,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         logger.info("Fetching all games from Steam - all models deleted");
         
         # Populate the model
-        for app_data in data['applist']['apps']:
+        for app_data in all_apps:
             app_id = app_data['appid']
             app_name = app_data['name']
             
@@ -703,7 +751,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     actions = [update_several_from_steam, update_popularity_from_steam]
     list_display = ["name", "appid"]
     ordering = ["name"]
-    readonly_fields = ["name", "appid"]
+    #readonly_fields = ["name", "appid"]
     search_fields = ["name", "appid"]
    
    

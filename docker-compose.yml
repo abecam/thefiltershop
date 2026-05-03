@@ -13,6 +13,8 @@ services:
       POSTGRES_PORT: 5432
       DEBUG: ${DEBUG:-false}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-your-secret-key}
+    volumes:
+      - media:/thefiltershop/media
     depends_on:
       - db
 
@@ -27,3 +29,4 @@ services:
 
 volumes:
   postgres_data:
+  media:
