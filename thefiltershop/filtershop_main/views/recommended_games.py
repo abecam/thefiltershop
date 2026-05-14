@@ -1,7 +1,7 @@
 import random
 import logging
 
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 
 from django.shortcuts import get_object_or_404
@@ -20,10 +20,13 @@ def get_recommended_games(request):
     else:
         a_recommender = get_a_random_contributor(request.GET.get("level_of_contribution"))
 
+    if not a_recommender:
+        logger.warning(f'No recommender found for the given criteria.')
+        return render(request, "thefiltershop/recommended.html", {"recommender": None, "page_obj": None, "categories": None, "selected_category": category_id})
+    
     # Get all artisan games
     all_recommended_games = get_all_games_for_recommender(a_recommender)
 
-    print(all_recommended_games)
     categories_in_recommended = all_recommended_games.first().categories.all()
 
     for a_game in all_recommended_games.all():
@@ -55,6 +58,10 @@ def get_recommended_games_by_sponsor(request):
     else:
         a_recommender = get_a_random_sponsor()
 
+    if not a_recommender:
+        logger.warning(f'No recommender found for the given criteria.')
+        return render(request, "thefiltershop/recommended.html", {"recommender": None, "page_obj": None, "categories": None, "selected_category": category_id})
+    
     # Get all artisan games
     all_recommended_games = get_all_recommended_games_for_sponsor(a_recommender)
 
@@ -107,7 +114,10 @@ def get_a_random_contributor(kind_of_contributor) :
     else :
         contributors = Profile.objects.filter()[:1]
 
-        contributor_to_show = contributors[0]
+        if len(contributors) >= 1 :
+            contributor_to_show = contributors[0]
+        else :
+            return None
 
         logger.warning(f'No contributors in the {kind_of_contributor} category.')
             
@@ -137,7 +147,10 @@ def get_a_random_sponsor() :
     else :
         sponsors = Profile.objects.filter()[:1]
 
-        sponsor_to_show = sponsors[0]
+        if len(sponsors) >= 1 :
+            sponsor_to_show = sponsors[0]
+        else :
+            return None
 
         logger.warning(f'No sponsors available.')
             
