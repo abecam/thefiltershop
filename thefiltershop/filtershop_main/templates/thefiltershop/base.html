@@ -47,10 +47,7 @@
     <div class="row">
         {% block main_content %}{% endblock %}
     </div>
-</body>
-</html>
-
-{% url "cookie_consent_cookie_group_list" as url_cookies %}
+    {% url "cookie_consent_cookie_group_list" as url_cookies %}
 <template id="cookie-consent__cookie-bar">
     <div class="cookie-bar" style="position: fixed; bottom: 0; left: 0; right: 0; background: #333; color: #fff; padding: 10px; text-align: center; z-index: 1000;">
         This site uses cookies for better performance and user experience.
@@ -75,3 +72,6 @@
       declineSelector: '.cookie-consent__decline',
     });
 </script>
+
+</body>
+</html>
