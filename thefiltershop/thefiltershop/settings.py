@@ -28,7 +28,7 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", 'django-insecure-t&z-(wfbc!a7evev-
 DEBUG = bool(environ.get("DEBUG", default="True"))
 
 ALLOWED_HOSTS = environ.get('DJANGO_ALLOWED_HOSTS', "127.0.0.1").split(",")
-CSRF_TRUSTED_ORIGINS = environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "http://127.0.0.1").split(",")
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition

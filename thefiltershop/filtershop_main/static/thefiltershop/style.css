@@ -421,6 +421,23 @@ a:visited {
     background: #40E29E;
   }
 
+  
+.header-logo-link {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  display: inline;
+  color: inherit;
+  text-decoration: none;
+}
+
+.header-logo-link:visited,
+.header-logo-link:hover,
+.header-logo-link:active {
+  background: none;
+  color: inherit;
+}
+
   .image_link {
     border: 0px solid #cfcfcf;
     border-radius: 10px;
