@@ -61,11 +61,11 @@ But we should aim as being self-sufficient and sustainable: the approach for tha
 
 As one game can be sold differently depending on the store, the filtering can change for the same game depending on the store. Similarly the filtering and the presentation will depend on the platform: a game might be a regular premium game on one platform, but an abusive freemium on another.
 
-Games might still have a review (or several, but it is not planned yet), but it is not the main purpose of the buoy and these will be kept short and mostly prioritized - if done by curators - for the smallest studio and yet-unknown games. Popular games don't need yet another help!
+All games from smaller studios should get at least a review with an encouragement to let a review on Steam (still WIP as the reviews now are an admin action).
 
 Finally, as part of progressive marketing, I am thinking about recycling one experimental game - Days of The Tokens - to have exchange token for indies. By adding payload to the token and an APIs, we will allow developer to use them for in-game bonuses, with the strength of the token to change the reward. A fun way to promote a game. The promotion will be fully free and hopefully paid by the premium version of the game: by paying a small fee the small banner ads disappear (but we might fully remove it anyway) and a premium token is added that gives a constant benefit. Currently watching full screen ads give a temporary premium token (for a long time, there is no benefit watching many ads). 
 
-We will also actively advertise for the filter shop on regular advertisement circuits by insisting on the quality of the games listed, showcasing selected one (only from artisans), and contrasting with others games, offering an island of good games.
+We will also actively advertise for the buoy on regular advertisement circuits by insisting on the quality of the games listed, showcasing selected one (only from artisans), and contrasting with others games, offering an island of good games.
 
 The goal is to get a win-win situation where good and honest developers have better chances to sell, and the players get better games 🙂
 
@@ -73,7 +73,7 @@ The goal is to get a win-win situation where good and honest developers have bet
 
 The main goal is to get something working ASAP, and raise awareness quite quickly.
 
-## Quick setup for contributors ✅
+## Quick setup for contributors
 
 If you want to try the project locally quickly, there are two easy options:
 
@@ -98,14 +98,9 @@ Run tests locally: `cd thefiltershop && python manage.py test`
 
 The buoy will mostly need motivated curators, persons that like the products (so video games at first) and want to help put the good ones, the small ones. There might be "super"-curators, that have some administrative right. That is something fully open to discussion! But the need for curation will probably ask for a semi-open model: i.e. if we open the edition to everyone, like for Wikipedia, the "cheaters" will probably come in full force if the shop becomes a success, negating its goal!
 
-And it desperately needs more developer. If you are a developer and would like to help, you are fully welcome. Some points to consider:
+And more technical persons would be great, mostly for the front-end. I chose to write custom CSS (and pure CSS, no framework or library) and JS, as to keep the HTML very lean (so fast and light) and also have a strong identity: it might be hugly but that's its hugliness :). But if there are CSS Ninja around, a refined look would probably be great.
 
-- It is mostly web-development :). I myself don't really like doing that, but that cannot be otherwise,
-- All level of experience is welcomed!
-- And there is no expectation on how many hours you will work on it (and it's valid for curators as well). I am myself working on it when I can.
-- I am still quite advanced for full stack development, also not bad with databases, so will be able to review pretty much everything. So if you are a full beginner, feel still free to join. You will probably bring a lot that I miss, but I can make sure this thing works :) (security is another matter though... :| ),
-    All the code will be Open-source, with a MIT licence, and shared on GitHub,
-    I will rent a server. If anybody would like to do some sysadmin, it's an opportunity, otherwise I will do it.
+Of course it's currently my own ideas, so it will also benefit from other inputs. For that we can discuss (for now) on the sub-reddit (recycled from the initial idea): https://www.reddit.com/r/thefiltershop/
 
 # The future of collaboration
 
