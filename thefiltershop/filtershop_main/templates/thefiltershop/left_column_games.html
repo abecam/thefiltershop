@@ -1,3 +1,4 @@
+{% load static %}
 <div class="left-side">
     <div class="giveaway_box">  
         <h2>Daily giveaway</h2>
@@ -34,6 +35,25 @@
             <a href="{% url 'filtershop_games:a_recommender' %}?level_of_contribution=SU" class="a_link-left-side">Our supporters</a>
         </div>
     </div>
-    {% include "thefiltershop/partials/_little_anim.html" %}
     <!-- with categories ? -->
+    <div class="help_us help_us_left">
+      <h2> Various ways to help us </h2>
+      <div class="kofi_support">
+        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'Q5Q652EWX');kofiwidget2.draw();</script>
+      </div>
+
+      <div class="support_links">
+        <a class="github_link" href="https://github.com/abecam/thefiltershop" target="_blank" rel="noopener noreferrer" title="View project on GitHub">
+          <img src="{% static 'thefiltershop/github-mark.svg' %}" alt="GitHub" />
+          <span class="github_text">Be part of the project</span>
+        </a>
+        <a class="nyaf_link" href="https://store.steampowered.com/app/1378660/NYAF/" target="_blank" rel="noopener noreferrer" title="Check our game, wishlist or buy">
+          <img src="{% static 'thefiltershop/images/NYAF_capsule.jpg' %}" alt="NYAF" />
+          <div class="nyaf_text">Check our game, wishlist or buy!</div>
+        </a>
+      </div>
+       
+      <!-- TO DO: add patreon, etc -->
+    </div> 
+    {% include "thefiltershop/partials/_little_anim.html" %} 
 </div>

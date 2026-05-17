@@ -200,7 +200,6 @@ body {
   }
 }
 
-
 /* Create two unequal columns that floats next to each other */
 /* Left column */
 .leftcolumn {   
@@ -210,7 +209,7 @@ body {
   background-color: #d5ffee;
   /*background-color: #dafafa;*/
   padding-left: 20px;
-  display: flex;
+  padding-right: 20px;
   box-sizing: border-box;
   align-items: baseline;
 }
@@ -357,38 +356,6 @@ body {
   text-align: center;
   background: #ddd;
   margin-top: 20px;
-}
-
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 1200px) {
-    /* Hide right column on narrow screens to simplify layout */
-  .rightcolumn {
-    display: none;
-  }
-  /* 20% more space for the center column */
-  .centercolumn {
-    width: 80%;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .leftcolumn {   
-    display: none;
-  }
-
-    /* Hide right column on narrow screens to simplify layout */
-  .rightcolumn {
-    display: none;
-  }
-}
-
-
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
 }
 
 a {
@@ -949,6 +916,7 @@ a:visited {
 
 .recommendations h2 {
   padding-top: 2px;
+  font-size: clamp(0.1rem, 1.9vw, 1.3rem);
 }
 
 .help_us {
@@ -958,6 +926,11 @@ a:visited {
   padding-right: 20px;
   padding-bottom: 10px;
   background-color: #f7d794;
+}
+
+/* Duplicate the help us block in the left column and show it when the screen is not wide enough for the right column */
+.help_us_left {
+  display: none;
 }
 
 .help_us h2 {
@@ -1103,4 +1076,41 @@ a:visited {
 
 .cookie-toggle-btn--decline:hover {
   background-color: #c82333;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 1200px) {
+    /* Hide right column on narrow screens to simplify layout */
+  .rightcolumn {
+    display: none;
+  }
+
+  .help_us_left {
+    display: block;
+  }
+
+  /* 20% more space for the center column */
+  .centercolumn {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .leftcolumn {   
+    display: none;
+  }
+
+    /* Hide right column on narrow screens to simplify layout */
+  .rightcolumn {
+    display: none;
+  }
+}
+
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
 }
