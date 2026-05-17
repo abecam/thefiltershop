@@ -398,6 +398,19 @@ a:visited {
   text-decoration: none;
 }
 
+
+/* Ko-fi support image - responsive and centered */
+.kofi_support_left {
+  text-align: center;
+}
+.kofi_support_left img {
+  display: content;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  border: 0;
+}
+
 .header-logo-link:visited,
 .header-logo-link:hover,
 .header-logo-link:active {
@@ -947,6 +960,19 @@ a:visited {
 .help_us .kofi_support div {
   display: inline-block;
   margin: 0 auto;
+}
+
+.help_us .kofi_support_left {
+  text-align: center;
+  background: none;
+}
+
+.help_us .kofi_support_left a {
+  background: none;
+}
+
+.help_us .kofi_support_left a:visited {
+  background: none;
 }
 
 /* GitHub link styling */
