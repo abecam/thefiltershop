@@ -809,7 +809,7 @@ class VideoGameAdmin(DjangoObjectActions, EntityAdmin):
     @action(
         label="Check the spotlight count and reset it to 0 for all if needed."
     )
-    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
+    @admin.action(description="Check the spotlight count and reset it to 0 for all if needed.")
     def check_spotlight_count(modeladmin, request, queryset):
         logger.info("Getting all game that hasn't been in the spotlight for more than 1 year");
         
@@ -825,7 +825,7 @@ class VideoGameAdmin(DjangoObjectActions, EntityAdmin):
         logger.info(f"Will reset {last_in_spotlight.count()} games");
         
         for aGame in last_in_spotlight:
-            #aGame.spotlight_count = 0
+            aGame.spotlight_count = 0
             logger.info(f"Would have resetted {aGame.name}")
         modeladmin.message_user(request, f"Finished, for {last_in_spotlight.count()} games.")
                 

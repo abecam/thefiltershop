@@ -72,7 +72,7 @@ def get_best_of_the_rest(request):
     category_id = request.GET.get('category_id')  # Get the selected category ID from the query parameters
     
     # get_all_best_of_the_rest return a list, so the filtering for category needs to be done before.
-    list_of_best_of_the_rest = get_all_best_of_the_rest(category_id)
+    list_of_best_of_the_rest = get_all_games_for_size(Studio.SizeInPersons.MEDIUM) | get_all_games_for_size(Studio.SizeInPersons.BIG) | get_all_games_for_size(Studio.SizeInPersons.HUGE)
         
     paginator = Paginator(list_of_best_of_the_rest, 25)  # Show 25 contacts per page.
 
@@ -100,40 +100,6 @@ def get_all_games_that_made_it() :
     all_for_size = Videogame_common.objects.filter(Q(studios__size_of_studio =  Studio.SizeInPersons.ARTISAN) | Q(studios__size_of_studio =  Studio.SizeInPersons.INDIE), ~Q(they_have_made_it = Videogame_common.TheyHaveMadeIt.NO))
     
     return all_for_size
-
-def get_all_best_of_the_rest(for_category) :
-    # On all filtered games, find which one would actually be good.
-    # Best of the rest: gameplay_rating > 80 & good_wo_iap > 80 & good_wo_ads > 80 & use_psycho_tech == 0
-    # ! -1 for good_wo_iap or good_wo_ads or use_psycho_tech means that they don't use it at all!
-    if for_category is not None :
-        # Apply category filtering if a category is selected
-        pre_filtered_games = Videogame_common.objects.filter (categories__id=for_category)
-        all_filtered_games = pre_filtered_games.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
-    else :
-        all_filtered_games = Videogame_common.objects.annotate(number_of_filters=Count('valueforfilter', filter=Q(valueforfilter__filter__is_positive=False))).exclude( number_of_filters = 0).order_by("crapometer").order_by("known_popularity")[:100]
-        
-    # And exclude all that don't respect the rules
-    remaining_games = []
-    nb_of_remaing_games = 0
-    
-    for a_game in all_filtered_games :
-        all_rating = a_game.videogame_rating_set.all()
-        will_add = True
-        for a_rating in all_rating :
-            if a_rating.gameplay_rating < 80 or a_rating.good_wo_iap < 80 or a_rating.good_wo_ads < 80 or a_rating.use_psycho_tech > 0 :
-                will_add = False
-                print(f"Will exclude {a_game.name}")
-                break
-           
-        if will_add :     
-            remaining_games.append(a_game)      
-            
-        nb_of_remaing_games+=1
-        
-        if nb_of_remaing_games > 40 :
-            break
-        
-    return remaining_games
 
 def get_a_random_unfiltered_artisan_game(request) :
     found_game = get_a_random_game_for_size(Studio.SizeInPersons.ARTISAN)
