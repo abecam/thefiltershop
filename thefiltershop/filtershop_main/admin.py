@@ -6,7 +6,7 @@ import random
 
 from django.contrib import admin
 from django.contrib import messages
-from django.db.models import F
+from django.db.models import F, Exists, Q, OuterRef
 from django.core import files
 from datetime import timedelta
 from django.utils import timezone
@@ -981,7 +981,7 @@ class SteamKeyAdmin(admin.ModelAdmin):
 class EmailForGiveAwayAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = ['email', 'current_day', 'has_won']
     list_filter = ['current_day', 'has_won']
-    readonly_fields = ['current_day']
+    #readonly_fields = ['current_day']
     search_fields = ['email']
 
     @action(
@@ -1013,7 +1013,67 @@ class EmailForGiveAwayAdmin(DjangoObjectActions, admin.ModelAdmin):
         # Create winner record
         winner = models.GiveawayWinner.objects.create(
             email=winner_entry.email,
-            steam_key=available_key
+            steam_key=available_key,
+            date_won=today
+        )
+        
+        available_key.is_used = True
+        available_key.awarded_to_hash = str(random.getrandbits(128))
+        available_key.awarded_at = timezone.now()
+        available_key.save()
+        
+        # Update participant as won
+        winner_entry.has_won += 1
+        winner_entry.save()
+        
+        modeladmin.message_user(
+            request, 
+            f"🎉 Winner selected! {winner_entry.email} wins a Steam key! (Winner ID: {winner.id})",
+            level=messages.SUCCESS
+        )
+
+    select_giveaway_winner.short_description = "🎲 Select random winner for today's giveaway"
+
+    @action(
+        label="select random winner for pending days"
+    )
+    def select_giveaway_winner_for_pending_day(modeladmin, request, queryset):
+        """Action to select a random winner from the days before if there are pending days without winner, starting from the oldest one"""
+        # Find the oldest `current_day` that has participants but no GiveawayWinner for that day.
+        subquery = models.GiveawayWinner.objects.filter(date_won=OuterRef('current_day'))
+        last_day_with_participants_with_no_winner = (
+            models.EmailForGiveAway.objects
+            .annotate(has_winner=Exists(subquery))
+            .filter(has_winner=False)
+            .order_by('current_day')
+            .first()
+        )
+
+        if not last_day_with_participants_with_no_winner:
+            modeladmin.message_user(request, "No pending days without a winner.", level=messages.WARNING)
+            return
+
+        lastday_entries = models.EmailForGiveAway.objects.filter(current_day=last_day_with_participants_with_no_winner.current_day)
+        
+        # Check if already selected a winner for this day 
+        if models.GiveawayWinner.objects.filter(date_won=last_day_with_participants_with_no_winner.current_day).exists():
+            modeladmin.message_user(request, "A winner has already been selected for "+last_day_with_participants_with_no_winner.current_day.strftime("%Y-%m-%d")+"!", level=messages.WARNING)
+            return
+        
+        # Get an available steam key
+        available_key = models.SteamKey.objects.filter(is_used=False).first()
+        if not available_key:
+            modeladmin.message_user(request, "No available Steam keys to award!", level=messages.WARNING)
+            return
+        
+        # Select random winner
+        winner_entry = random.choice(list(lastday_entries))
+        
+        # Create winner record
+        winner = models.GiveawayWinner.objects.create(
+            email=winner_entry.email,
+            steam_key=available_key,
+            date_won=last_day_with_participants_with_no_winner.current_day
         )
         
         # Mark steam key as used
@@ -1032,8 +1092,9 @@ class EmailForGiveAwayAdmin(DjangoObjectActions, admin.ModelAdmin):
             level=messages.SUCCESS
         )
 
-    select_giveaway_winner.short_description = "🎲 Select random winner for today's giveaway"
-    changelist_actions = ['select_giveaway_winner']
+    select_giveaway_winner_for_pending_day.short_description = "🎲 Select random winner for pending days"
+
+    changelist_actions = ['select_giveaway_winner', 'select_giveaway_winner_for_pending_day']
 
 @admin.register(models.GiveawayWinner, site=admin_site)
 class GiveawayWinnerAdmin(admin.ModelAdmin):

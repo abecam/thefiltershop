@@ -535,13 +535,13 @@ class SteamKey(models.Model):
     awarded_at = models.DateTimeField(null=True, blank=True)
 
 class EmailForGiveAway(models.Model):
-    current_day = models.DateField(unique=True)
+    current_day = models.DateField(unique=False)
     email = models.EmailField(null=False, blank=False)
     has_won = models.IntegerField(default=0)
 
 class GiveawayWinner(models.Model):
     email = models.EmailField(null=False, blank=False)
-    date_won = models.DateField(auto_now_add=True)
+    date_won = models.DateField(null=False, blank=False)
     steam_key = models.ForeignKey(SteamKey, on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
