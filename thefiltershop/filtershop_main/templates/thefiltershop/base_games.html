@@ -3,8 +3,8 @@
 
 {% block main_content %}
     <div class="search_input">
-        <img width="40" src="{% static 'thefiltershop/images/Search.png' %}" alt="Search">
-        <form action="/videogames_search/" method="get">
+        <img width="40" src="{% static 'thefiltershop/images/Search.png' %}" alt="Search" onclick="if(document.getElementById('keywords').value.length >= 3) { document.getElementById('search_form').submit(); }">
+        <form id="search_form" action="/videogames_search/" method="get">
             <input id="keywords" name="keywords" type="text" value="" minlength="3" required />
             <input type="submit" hidden />
         </form>
