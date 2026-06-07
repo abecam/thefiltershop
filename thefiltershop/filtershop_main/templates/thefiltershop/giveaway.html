@@ -1,31 +1,10 @@
-{% extends "thefiltershop/base_games.html" %}
+{% extends "thefiltershop/base_center_simple.html" %}
 
 {% block title %}Daily Steam Key Giveaway{% endblock %}
 
 {% block title_content %}Win a Steam key – enter your email{% endblock %}
 
-{% block content %}
-<h2>Random artisan picks (no negative filters)</h2>
-<div class="col-container">
-    {% for game in games %}
-    <div class="game-card-wrapper">
-        <div class="game-card">
-            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
-                <div class='game-card-content'>
-                    <div class="game-title-wrapper">
-                        <img src="{{ game.vignette.url }}" alt="{{ game.name }}" class="game_thumbnail"/>
-                    </div>
-                    <p>{{ game.description }}</p>
-                </div>
-            </a>
-        </div>
-    </div>
-    {% empty %}
-    <p>No artisan games available at the moment.</p>
-    {% endfor %}
-</div>
-
-<hr/>
+{% block centersimplecolumn %}
 
 {% if message %}
     <div class="notice">{{ message }}</div>
@@ -57,5 +36,27 @@
         </form>
     </div>
 {% endif %}
+
+<hr/>
+
+<h2>Random artisan picks (no negative filters)</h2>
+<div class="col-container">
+    {% for game in games %}
+    <div class="game-card-wrapper">
+        <div class="game-card">
+            <a href="{% url 'filtershop_games:game' game.id %}" class="image_link">
+                <div class='game-card-content'>
+                    <div class="game-title-wrapper">
+                        <img src="{{ game.vignette.url }}" alt="{{ game.name }}" class="game_thumbnail"/>
+                    </div>
+                    <p>{{ game.description }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No artisan games available at the moment.</p>
+    {% endfor %}
+</div>
 
 {% endblock %}
