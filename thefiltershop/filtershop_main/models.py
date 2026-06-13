@@ -228,7 +228,7 @@ class Videogame_common(Entity):
     link_sold_from_dev = models.URLField(null=True, blank=True, verbose_name="Direct link from the developer, if any. Allow to get 100% of the sale.")
     special_sale = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Percentage off the sale, directly only",help_text="If you want to apply a special sale only visible here - you will have to apply it yourself. It should not be tracked by an external site as to not hurt future sales")
     special_bonuses = models.TextField(max_length=1000, null=True, blank=True, verbose_name="Given bonuses if someone buy the game")
-    are_special_bonuses_global = models.BooleanField(default=False, verbose_name="If global, all shops should give the bonus(es), otherwise only from your direct sales")
+    are_special_bonuses_global = models.BooleanField(default=False, verbose_name="If the bonuses are for all shops (checked) or only from your direct sales")
     general_sale = models.IntegerField(default=0, validators=[MaxValueValidator(100), MinValueValidator(0)], verbose_name="Percentage off the sale, external shops (mostly Steam)",help_text="If the game is on sale on Steam at least or other external shop")
 
     game_type = models.CharField(max_length=300)
@@ -467,6 +467,7 @@ class Links_to_shops(models.Model):
     link = models.URLField()
     identity = models.CharField(max_length=300)
     shop = models.ForeignKey(Online_Shop, on_delete=models.CASCADE, related_name="on_shop")
+    not_a_true_shop = models.BooleanField(default=False, verbose_name="If the shop is not a true shop (i.e. it's a link to a free drm free copy, a port or something else), check this box so that it will be displayed differently")
     for_Entity = models.ForeignKey(Entity, on_delete=models.CASCADE, null=True, blank=True)
     
 class Software(Entity):

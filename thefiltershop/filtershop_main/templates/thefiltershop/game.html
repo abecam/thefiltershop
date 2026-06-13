@@ -25,6 +25,18 @@
         </h1>
         <p>{{ a_game.description }}</p>
 
+        {% if a_game.special_bonuses %}
+            <div class="special-bonuses">
+                <h3>Special Bonuses:</h3>
+                {% if a_game.are_special_bonuses_global %}
+                    <p><em>These bonuses apply to all purchases, including external shops.</em></p>
+                {% else %}
+                    <p><em>These bonuses apply only to purchases made through the developer's direct link.</em></p>
+                {% endif %}
+                <p>{{ a_game.special_bonuses }}</p>
+            </div>
+        {% endif %}
+
         {% include "thefiltershop/partials/stars.html" with avg_note=avg_note %}
 
         <div class="gauges-box">
@@ -54,11 +66,16 @@
             {% endif %}
             {% for link_to_shop in links_to_shops %}
                 <!-- TODO: Replace by shop icon (?) -->
-                <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}
-                {% if a_game.general_sale > 0 %}
-                    - {{a_game.general_sale}}% Off
+                 {% if link_to_shop.not_a_true_shop %}
+                    <a href={{link_to_shop.link}} class="shop_link">{{ link_to_shop.shop.name }}
+                    </a>
+                {% else %}
+                    <a href={{link_to_shop.link}} class="shop_link">Buy on {{ link_to_shop.shop.name }}
+                    {% if a_game.general_sale > 0 %}
+                        - {{a_game.general_sale}}% Off
+                    {% endif %}
+                    </a>
                 {% endif %}
-                </a>
             {% endfor %}
         </div>
 
