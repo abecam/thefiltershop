@@ -710,10 +710,10 @@ a:visited {
   gap: 20px;
 }
  
- .header-bar {
+.header-bar {
     display: inline-block;
     position: relative;
-	  width: 100%;
+    width: 100%;
     height: 50px;
     background: none;
     border: none;
@@ -725,16 +725,31 @@ a:visited {
     text-shadow:  1px 1px #000000;
     padding: 0%;
     vertical-align: middle;
-  }
+}
 
- .header-bar .header-title {
+.header-bar .header-title {
     display: table-cell;
     position: absolute;
     height: 100%;
     top: 25px;
     left: 40%;
     padding: 0%;
-  }
+}
+
+/* Applied when text exceeds threshold */
+.header-bar.title-long {
+    padding-bottom: 16px;
+}
+
+.header-bar.title-long .header-title {
+    /*position: fixed;
+    display: block;
+    height: auto;*/
+    top: 40px;
+    left: unset;
+    /*text-align: left;
+    padding-top: 54px; */ /* pushes it below the rest of the header bar content */
+}
 
   .header-image-block {
     display: flex;
