@@ -736,7 +736,7 @@ a:visited {
     padding: 0%;
 }
 
-@media screen and (max-width: 1080px) {
+@media screen and (max-aspect-ratio: 1) {
   .header-bar {
       padding-bottom: 16px;
   }
