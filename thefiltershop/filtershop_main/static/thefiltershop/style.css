@@ -736,19 +736,16 @@ a:visited {
     padding: 0%;
 }
 
-/* Applied when text exceeds threshold */
-.header-bar.title-long {
-    padding-bottom: 16px;
-}
+@media screen and (max-width: 1080px) {
+  .header-bar {
+      padding-bottom: 16px;
+  }
 
-.header-bar.title-long .header-title {
-    /*position: fixed;
-    display: block;
-    height: auto;*/
-    top: 40px;
-    left: unset;
-    /*text-align: left;
-    padding-top: 54px; */ /* pushes it below the rest of the header bar content */
+  .header-bar .header-title {
+      top: 40px;
+      left: unset;
+      padding-left: 20px;
+  }
 }
 
   .header-image-block {

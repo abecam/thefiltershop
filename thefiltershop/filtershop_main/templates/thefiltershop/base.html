@@ -28,17 +28,7 @@
             </div>
             <div class="header-title">
                 <h1>{% block title_content %}{% endblock %}</h1>
-            </div>  
-               <script>
-                  const TITLE_THRESHOLD = 30;
-
-                    document.querySelectorAll('.header-bar').forEach(bar => {
-                        const title = bar.querySelector('.header-title');
-                        if (title && title.textContent.trim().length > TITLE_THRESHOLD) {
-                        bar.classList.add('title-long');
-                        }
-                    });
-                </script>
+            </div>
         </div>
         <div class="header-image-block">
             <img src="{% static 'thefiltershop/images/FilterWhiteGr.png' %}" alt="FilterHeader" class="header-image">
