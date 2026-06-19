@@ -354,8 +354,33 @@ body {
 .footer {
   padding: 20px;
   text-align: center;
-  background: #ddd;
+  background: #d5ffee;
   margin-top: 20px;
+  font-size: 20px;
+}
+
+.footer a {
+  color: #345f68;
+  background-color: transparent;
+  padding: 0;
+  display: inline;
+  border-radius: 0;
+  transition: color 0.3s ease-in-out;
+}
+
+.footer a:visited {
+  color: #345f68;
+  background-color: transparent;
+}
+
+.footer a:hover {
+  color: #40E29E;
+  background-color: transparent;
+}
+
+.footer a:active {
+  color: #40E29E;
+  background-color: transparent;
 }
 
 a {
