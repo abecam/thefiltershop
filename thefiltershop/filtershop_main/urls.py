@@ -20,7 +20,7 @@ urlpatterns = [
     path("they_made_it", views.get_artisans_and_indies_games_that_made_it, name="they_made_it"),
     path("best_of_the_rest", views.get_best_of_the_rest, name="best_of_the_rest"),
     path("hall_of_shame", views.get_items_in_hall_of_shame, name="hall_of_shame"),
-    path("our_mission", TemplateView.as_view(template_name="thefiltershop/our_mission.html"), name="our_mission"),
+    path("explanations", TemplateView.as_view(template_name="thefiltershop/explanations.html"), name="explanations"),
     path("cvga", TemplateView.as_view(template_name="thefiltershop/cvga.html"), name="cvga"),
     path("who_are_we", TemplateView.as_view(template_name="thefiltershop/who_are_we.html"), name="who_are_we"),
     path("privacy_policy", TemplateView.as_view(template_name="thefiltershop/privacy_policy.html"), name="privacy_policy"),

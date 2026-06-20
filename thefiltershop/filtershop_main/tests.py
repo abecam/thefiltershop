@@ -424,13 +424,13 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'thefiltershop/hall_of_shame.html')
 
-    def test_our_mission_view(self):
+    def test_explanations_view(self):
         from django.urls import reverse
         
-        url = reverse('filtershop_games:our_mission')
+        url = reverse('filtershop_games:explanations')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'thefiltershop/our_mission.html')
+        self.assertTemplateUsed(response, 'thefiltershop/explanations.html')
 
     def test_who_are_we_view(self):
         from django.urls import reverse
