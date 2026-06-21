@@ -32,5 +32,6 @@ urlpatterns = [
     path("a_recommender", views.get_recommended_games, name="a_recommender"),
     path("a_recommender_sponsor", views.get_recommended_games_by_sponsor, name="a_recommender_sponsor"),
     path("giveaway", views.giveaway, name="giveaway"),
+    path("test404", TemplateView.as_view(template_name="404.html"), name="test404"),
     #path('admin/', admin_site.urls),
 ]

@@ -32,7 +32,7 @@ let iFrame = 0
 let transparence = 20;
 
 function setup() {
-  ourCanva = createCanvas(250, 200);
+  ourCanva = createCanvas(500, 400);
   ourCanva.center('horizontal');
   setSegments(0, 2, 100, 400, 200, 200);
   setSegments(0, 4, 100, 400, 200, 200);
@@ -41,7 +41,7 @@ function setup() {
 
 function draw() {
   // Your draw code here
-  background(214,245,247,transparence);
+  background(213, 255, 238, transparence);
   // Call the method to draw points with squares
   drawPointsWithSquares();
 
@@ -78,9 +78,9 @@ function draw() {
       iPosInPool = 0; // Start again from 0
 
       // As we will morph, they will be the target of the update morphing.
-      setSegments(nb1, 2, 100, 400, 400, 200)
-      setSegments(nb2, 4, 100, 400, 400, 200)
-      setSegments(nb3, 6, 100, 400, 400, 200)
+      setSegments(nb1, 2, 200, 400, 400, 200)
+      setSegments(nb2, 4, 200, 400, 400, 200)
+      setSegments(nb3, 6, 200, 400, 400, 200)
     }
   }
 }
@@ -100,7 +100,7 @@ function drawPointsWithSquares() {
         let b = colB[iDraw] * 255;
         fill(r2, g, b);
         noStroke();
-        square(x, y, 5); // Adjust the size of the square as needed
+        square(x, y, 12); // Adjust the size of the square as needed
       }
     }
 
@@ -122,7 +122,7 @@ function drawPointsWithSquares() {
 
       fill(r, g, b);
       noStroke();
-      square(x, y, 5); // Adjust the size of the square as needed
+      square(x, y, 12); // Adjust the size of the square as needed
     }
   }
 }
