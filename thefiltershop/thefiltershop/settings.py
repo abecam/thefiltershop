@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY", 'django-insecure-t&z-(wfbc!a7evev-m6cjvv=1(i_b743+0q+0^(!tto8)e0d1!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(environ.get("DEBUG", default="True"))
+DEBUG = environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = environ.get('DJANGO_ALLOWED_HOSTS', "127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS = environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "http://127.0.0.1").split(",")
