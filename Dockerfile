@@ -58,4 +58,13 @@ USER appuser
 EXPOSE 8000 
  
 # Start the application using Granian and serve collected static assets
-CMD ["granian", "--interface", "wsgi", "--static-path-route", "/static", "--static-path-mount", "/app/thefiltershop/staticfiles", "thefiltershop.wsgi:application", "--log-level", "info", "--backpressure","100","--host", "0.0.0.0", "--port", "8000"]
+CMD ["granian", "--interface", "wsgi", \
+  "--static-path-route", "/static", \
+  "--static-path-mount", "/app/thefiltershop/staticfiles", \
+  "--static-path-route", "/media", \
+  "--static-path-mount", "/app/thefiltershop/media", \
+  "thefiltershop.wsgi:application", \
+  "--log-level", "info", \
+  "--backpressure", "100", \
+  "--host", "0.0.0.0", \
+  "--port", "8000"]
