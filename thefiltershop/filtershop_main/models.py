@@ -53,7 +53,7 @@ class TypeOfEntity(BaseModel):
     filters = models.ManyToManyField(Filter, blank=True)
             
 class Tag(BaseModel):
-    good_or_bad = models.IntegerField()
+    good_or_bad = models.IntegerField(verbose_name="Good or Bad", help_text="1 for good, -1 for bad", validators=[MaxValueValidator(1), MinValueValidator(-1)]) # Should be clarified.
     parent_tag = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     
 class Entity(BaseModel):
