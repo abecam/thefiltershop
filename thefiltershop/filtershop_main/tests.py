@@ -280,8 +280,8 @@ class GaugeTemplateTests(TestCase):
         # Check that aria labels and descriptive alt texts are present for both gauges
         self.assertIn('aria-label="Thumb up for Crapometer"', content)
         self.assertIn('aria-label="Thumb down for Crapometer"', content)
-        self.assertIn('aria-label="Thumb up for Hidden Extra Value"', content)
-        self.assertIn('aria-label="Thumb down for Hidden Extra Value"', content)
+        self.assertIn('aria-label="Thumb up for Hidden Full Cost"', content)
+        self.assertIn('aria-label="Thumb down for Hidden Full Cost"', content)
 
         # Check that each gauge is wrapped in its own .gauge-box with the proper modifier
         self.assertIn('gauge-box--red', content)
