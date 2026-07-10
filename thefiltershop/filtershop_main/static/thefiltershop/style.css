@@ -484,7 +484,6 @@ a:visited {
 
   .current-page {
     padding-left: 10px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.35);
     font-size: 1.425rem; /* halved from 2.85rem */
     white-space: nowrap;
     line-height: 1;
