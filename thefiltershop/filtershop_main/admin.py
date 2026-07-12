@@ -737,6 +737,19 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 nbOfUpdate+= 1
         
         modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games") 
+
+    @action(
+        label="Fetch the raw review count from Steam"
+    )
+    @admin.action(description="Fetch the raw review count from Steam for the selected entries")
+    def update_raw_review_count_from_steam(modeladmin, request, queryset):
+        nbOfUpdate = 0
+
+        for one_entry in queryset:
+            if EntryOnSteam.get_raw_review_count(modeladmin, request, one_entry):
+                nbOfUpdate += 1
+
+        modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games")
    
     def get_review_count(modeladmin, request, one_entry):
         print('one entry to update ->',one_entry)
@@ -783,12 +796,40 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             modeladmin.message_user(request, "Please select an item first.")
             
         return False
+
+    def get_raw_review_count(modeladmin, request, one_entry):
+        print('one entry to update ->', one_entry)
+        app_id = one_entry.appid
+        logger.info(f"Will try to fetch using id {app_id} for {one_entry}")
+        if app_id:
+            with urlopen(f"https://store.steampowered.com/app/{app_id}") as response:
+                soup = BeautifulSoup(response, 'html.parser')
+                if soup:
+                    reviewCount = soup.find(itemprop="reviewCount")
+                    if reviewCount:
+                        reviewCountContent = int(reviewCount.get("content"))
+                        one_entry.raw_review_count = reviewCountContent
+                        one_entry.save(update_fields=["raw_review_count"])
+                        print(f"Stored raw review count for {one_entry.name}: {reviewCountContent}")
+                        return True
+                    else:
+                        modeladmin.message_user(request, f"No review yet for {one_entry.name}.")
+                        one_entry.raw_review_count = -1
+                        one_entry.save(update_fields=["raw_review_count"])
+                else:
+                    modeladmin.message_user(request, f"Could not fetch the Steam page for {one_entry.name}.")
+                    one_entry.raw_review_count = -2
+                    one_entry.save(update_fields=["raw_review_count"])
+        else:
+            modeladmin.message_user(request, "Please select an item first.")
+
+        return False
                                     
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
     #changelist_actions = ('update_several_from_steam',)
     changelist_actions = ('fetch_all_from_steam',)
-    actions = [update_several_from_steam, update_popularity_from_steam]
-    list_display = ["name", "appid", "videogame"]
+    actions = [update_several_from_steam, update_popularity_from_steam, update_raw_review_count_from_steam]
+    list_display = ["name", "appid", "videogame", "raw_review_count"]
     ordering = ["-videogame", "name"]
     #readonly_fields = ["name", "appid"]
     search_fields = ["name", "appid"]

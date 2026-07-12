@@ -502,6 +502,7 @@ class Software(Entity):
 class Entry_on_Steam(models.Model):
     appid = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=600, null=True, blank=True)
+    raw_review_count = models.IntegerField(default=0)
     videogame = models.ForeignKey(
         'Videogame_common',
         on_delete=models.SET_NULL,

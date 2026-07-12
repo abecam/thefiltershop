@@ -65,3 +65,29 @@ class SteamAdminTests(TestCase):
         self.assertTrue(result)
         entry.refresh_from_db()
         self.assertEqual(entry.name, "Synced Game")
+
+    def test_get_raw_review_count_stores_value_on_entry(self):
+        entry = Entry_on_Steam.objects.create(
+            appid=98765,
+            name="Raw Count Game",
+        )
+
+        class DummyAdmin:
+            def message_user(self, request, message):
+                return None
+
+        html = b'<html><body><span itemprop="reviewCount" content="77"></span></body></html>'
+
+        class DummyResponse:
+            def __enter__(self):
+                return BytesIO(html)
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        with patch("filtershop_main.admin.urlopen", return_value=DummyResponse()):
+            result = EntryOnSteam.get_raw_review_count(DummyAdmin(), None, entry)
+
+        self.assertTrue(result)
+        entry.refresh_from_db()
+        self.assertEqual(entry.raw_review_count, 77)
