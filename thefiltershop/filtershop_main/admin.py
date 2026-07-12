@@ -199,7 +199,6 @@ class NewEntryOnSteam(admin.ModelAdmin):
 
 @admin.register(models.Entry_on_Steam, site=admin_site)
 class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
-    list_display = ["name", "appid"]
 
     @action(
         label="Fetch all full Video Game information from Steam"
@@ -230,10 +229,11 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
                 except models.Videogame_common.DoesNotExist:               
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
+                    entry = queryset.first() if hasattr(queryset, 'first') else queryset
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id, entry)
                     
                     # Update the known popularity (nb of reviews in Steam)
-                    EntryOnSteam.get_review_count(modeladmin, request, queryset)
+                    EntryOnSteam.get_review_count(modeladmin, request, entry)
             else:
                 modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
         else:
@@ -284,10 +284,12 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game.save()
                     
                     # Update the known popularity (nb of reviews in Steam)
-                    EntryOnSteam.get_review_count(modeladmin, request, queryset)
+                    entry = queryset.first() if hasattr(queryset, 'first') else queryset
+                    EntryOnSteam.get_review_count(modeladmin, request, entry)
                     
                 except models.Videogame_common.DoesNotExist:               
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
+                    entry = queryset.first() if hasattr(queryset, 'first') else queryset
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id, entry)
             else:
                 modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
         else:
@@ -326,7 +328,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     video_game = models.Videogame_common.objects.all().get(name=content['name']) 
                     modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
                 except models.Videogame_common.DoesNotExist:
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id)
+                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id, one_entry)
                     
                     # Update the known popularity (nb of reviews in Steam)
                     EntryOnSteam.get_review_count(modeladmin, request, one_entry)
@@ -335,7 +337,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             else:
                 modeladmin.message_user(request, "Please select an item first.")
                 
-    def getDataFromSteam(modeladmin, request, content, id):
+    def getDataFromSteam(modeladmin, request, content, id, entry=None):
         # If there is no video game type yet, create it
         try: 
             video_game_type = models.TypeOfEntity.objects.all().get(name="Video Game") 
@@ -382,6 +384,11 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         # And the link to Steam
         EntryOnSteam.addLinkToSteam(id,video_game)
         video_game.save()
+
+        if entry is not None:
+            entry.videogame = video_game
+            entry.name = video_game.name
+            entry.save()
 
         # link to shop: f"https://store.steampowered.com/app/{id}"
         modeladmin.message_user(request, "Information fetched successfully.")
@@ -595,9 +602,9 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         linkToSteam.save()
         
     @action(
-        label="Refresh the list of all Video Game entries from Steam - warning, takes several minutes"
+        label="No working anymore, need registration - Refresh the list of all Video Game entries from Steam - warning, takes several minutes"
     )
-    @admin.action(description="Fetch all Video Game referenced in Steam to populate this list")
+    @admin.action(description="No working anymore, need registration - Fetch all Video Game referenced in Steam to populate this list")
     def fetch_all_from_steam(modeladmin, request, queryset):
         logger.info("Fetching all games from Steam");
         steam_api_key = os.environ.get('STEAM_API_KEY')
@@ -743,19 +750,31 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     if reviewCount :
                         reviewCountContent = int(reviewCount.get("content"))
                
-                        print(reviewCountContent)
+                        print(f"Review count: {reviewCountContent}")
                 
-                        try:
-                            video_game = models.Videogame_common.objects.all().get(name=one_entry.name) 
-                            if reviewCountContent > 200 :
-                                reviewCountContent = 200
-                            if reviewCountContent < 11 :
-                                reviewCountContent = 0
-                            video_game.known_popularity = reviewCountContent / 2
-                            video_game.save()
-                            return True
-                        except models.Videogame_common.DoesNotExist:
+                        video_game = None
+                        if getattr(one_entry, "videogame_id", None):
+                            video_game = models.Videogame_common.objects.filter(pk=one_entry.videogame_id).first()
+
+                        if video_game is None:
+                            video_game = models.Videogame_common.objects.filter(name=one_entry.name).first()
+
+                        if video_game is None:
                             modeladmin.message_user(request, f"{one_entry.name} does not seem to exist in the filter shop yet.")
+                            return False
+
+                        if one_entry.name != video_game.name:
+                            one_entry.name = video_game.name
+                            one_entry.save(update_fields=["name"])
+
+                        if reviewCountContent > 200 :
+                            reviewCountContent = 200
+                        if reviewCountContent < 11 :
+                            reviewCountContent = 0
+                        video_game.known_popularity = reviewCountContent / 2
+                        print(f"Updated known popularity for {one_entry.name}: {video_game.known_popularity}")
+                        video_game.save()
+                        return True
                     else:
                         modeladmin.message_user(request, f"No review yet for {one_entry.name}.")
                 else:
@@ -769,8 +788,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     #changelist_actions = ('update_several_from_steam',)
     changelist_actions = ('fetch_all_from_steam',)
     actions = [update_several_from_steam, update_popularity_from_steam]
-    list_display = ["name", "appid"]
-    ordering = ["name"]
+    list_display = ["name", "appid", "videogame"]
+    ordering = ["-videogame", "name"]
     #readonly_fields = ["name", "appid"]
     search_fields = ["name", "appid"]
    

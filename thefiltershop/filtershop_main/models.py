@@ -501,7 +501,14 @@ class Software(Entity):
 #### Prefilled from Steam API, used to fetch a game ###############
 class Entry_on_Steam(models.Model):
     appid = models.IntegerField(null=False, blank=False)
-    name = models.CharField(max_length=600)
+    name = models.CharField(max_length=600, null=True, blank=True)
+    videogame = models.ForeignKey(
+        'Videogame_common',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='steam_entries',
+    )
     
 class Entry_on_GooglePlay(models.Model):
     appid = models.CharField(max_length=600, null=False, blank=False)
