@@ -316,22 +316,28 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                     # Check if success is true
                     subdata = data[f"{id}"]
 
+                    passed = True
                     success = subdata['success']
                     if not success:
                         modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
-                        return
+                        passed = False
                     
-                    content = subdata['data']
-                    
-                            # Check if updating or creating
-                try: 
-                    video_game = models.Videogame_common.objects.all().get(name=content['name']) 
-                    modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
-                except models.Videogame_common.DoesNotExist:
-                    EntryOnSteam.getDataFromSteam(modeladmin, request, content, id, one_entry)
-                    
-                    # Update the known popularity (nb of reviews in Steam)
-                    EntryOnSteam.get_review_count(modeladmin, request, one_entry)
+                    if passed:
+                        content = subdata['data']
+                        
+                        if content["type"] != "game":
+                            modeladmin.message_user(request, f"{content['name']} is not a game, skipping.")
+                            passed = False
+                                # Check if updating or creating
+                        if passed:
+                            try: 
+                                video_game = models.Videogame_common.objects.all().get(name=content['name']) 
+                                modeladmin.message_user(request, f"{video_game.name} is already in the filter shop. Please use force update if you really want to update it.")
+                            except models.Videogame_common.DoesNotExist:
+                                EntryOnSteam.getDataFromSteam(modeladmin, request, content, id, one_entry)
+                                
+                                # Update the known popularity (nb of reviews in Steam)
+                                EntryOnSteam.get_review_count(modeladmin, request, one_entry)
                 else:
                     modeladmin.message_user(request, f"Failed to fetch data from Steam, check the ID ({id}).")
             else:
@@ -370,9 +376,19 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         # studio(s) and publisher(s)
 
         if not "publishers" in content :
+            if not "developers" in content :
+                modeladmin.message_user(request, "Sorry, the filter shop does not support games without a publisher or developer (yet).")
+                return
             publishers = content['developers']
+        else :
+            publishers = content['publishers']
 
-        EntryOnSteam.setStudioAndPublisher(content['developers'],content['publishers'],video_game)
+        if not "developers" in content :
+            developers = " - Unknown - "
+        else :
+            developers = content['developers']
+
+        EntryOnSteam.setStudioAndPublisher(content['developers'],publishers,video_game)
 
         # 
         EntryOnSteam.setPlatforms(content['platforms'],video_game)
