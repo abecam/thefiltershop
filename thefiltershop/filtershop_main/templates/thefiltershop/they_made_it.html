@@ -1,8 +1,8 @@
 {% extends "thefiltershop/base_center_simple.html" %}
 
-{% block title %}They made it!{% endblock %}
+{% block title %}They made it!{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
-{% block title_content %}They made it!{% endblock %}
+{% block title_content %}They made it!{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
 {% block centersimplecolumn %}
     <h1>

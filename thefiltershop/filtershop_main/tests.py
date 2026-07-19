@@ -392,6 +392,21 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'thefiltershop/indies_games.html')
 
+    def test_selected_category_name_is_shown_in_titles(self):
+        from django.urls import reverse
+        from .models import Game_Category
+
+        category = Game_Category.objects.create(name='Action')
+
+        artisans_response = self.client.get(reverse('filtershop_games:artisans_games'), {'category_id': category.id})
+        self.assertContains(artisans_response, f"Artisan's games - {category.name}")
+
+        indies_response = self.client.get(reverse('filtershop_games:indies_games'), {'category_id': category.id})
+        self.assertContains(indies_response, f"Indie's games - {category.name}")
+
+        best_of_the_rest_response = self.client.get(reverse('filtershop_games:best_of_the_rest'), {'category_id': category.id})
+        self.assertContains(best_of_the_rest_response, f"Best of the rest... - {category.name}")
+
     def test_curators_view(self):
         from django.urls import reverse
         

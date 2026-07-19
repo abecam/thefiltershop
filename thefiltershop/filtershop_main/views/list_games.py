@@ -23,8 +23,9 @@ def get_artisans_games(request):
     paginator = Paginator(list_of_games_artisan, 8)  
 
     page_obj = paginator.get_page(page_number)
+    selected_category_name = Game_Category.objects.filter(id=category_id).values_list('name', flat=True).first() if category_id else None
 
-    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
+    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id, "selected_category_name": selected_category_name}
 
     return render(request, "thefiltershop/artisans_games.html", context)
 
@@ -43,8 +44,9 @@ def get_indies_games(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    selected_category_name = Game_Category.objects.filter(id=category_id).values_list('name', flat=True).first() if category_id else None
 
-    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
+    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id, "selected_category_name": selected_category_name}
 
     return render(request, "thefiltershop/indies_games.html", context)
 
@@ -62,8 +64,9 @@ def get_artisans_and_indies_games_that_made_it(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    selected_category_name = Game_Category.objects.filter(id=category_id).values_list('name', flat=True).first() if category_id else None
 
-    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
+    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id, "selected_category_name": selected_category_name}
     
     return render(request, "thefiltershop/they_made_it.html", context)
 
@@ -78,8 +81,9 @@ def get_best_of_the_rest(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    selected_category_name = Game_Category.objects.filter(id=category_id).values_list('name', flat=True).first() if category_id else None
 
-    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id}
+    context = {"page_obj": page_obj, "categories": game_categories, "selected_category": category_id, "selected_category_name": selected_category_name}
 
     return render(request, "thefiltershop/best_of_the_rest.html", context)
 

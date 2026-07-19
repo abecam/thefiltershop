@@ -1,8 +1,8 @@
 {% extends "thefiltershop/base_games.html" %}
 
-{% block title %}All artisans' games{% endblock %}
+{% block title %}All artisans' games{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
-{% block title_content %}Artisan's games{% endblock %}
+{% block title_content %}Artisan's games{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
 {% block content %}
 <div class="filter-section">

@@ -372,7 +372,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
         #   id	0
         # path_thumbnail	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.600x338.jpg?t=1687509345"
         # path_full	"https://cdn.akamai.steamstatic.com/steam/apps/1378660/ss_509aa0dc74d06b8a3544d62f2fd5b0b235c2ab84.1920x1080.jpg?t=1687509345"
-        EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
+        if "screenshots" in content:
+            EntryOnSteam.getAllThumbnails(content['screenshots'],video_game)
         # studio(s) and publisher(s)
 
         if not "publishers" in content :

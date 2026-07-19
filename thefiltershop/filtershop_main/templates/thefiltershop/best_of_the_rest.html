@@ -1,8 +1,8 @@
 {% extends "thefiltershop/base_center_simple.html" %}
 
-{% block title %}Best of the rest...{% endblock %}
+{% block title %}Best of the rest...{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
-{% block title_content %}Best of the rest...{% endblock %}
+{% block title_content %}Best of the rest...{% if selected_category_name %} - {{ selected_category_name }}{% endif %}{% endblock %}
 
 {% block centersimplecolumn %}
 <h1>Other games we still recommend</h1>
