@@ -898,7 +898,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
     #changelist_actions = ('update_several_from_steam',)
     changelist_actions = ('fetch_all_from_steam',)
-    actions = [update_several_from_steam, update_popularity_from_steam, update_raw_review_count_from_steam, update_raw_review_count_from_steam_only_new]
+    actions = [update_several_from_steam, update_popularity_from_steam, update_raw_review_count_from_steam, update_raw_review_count_from_steam_only_new, update_popularity_from_raw_review_count]
     list_display = ["name", "appid", "videogame", "raw_review_count"]
     ordering = ["-videogame", "name"]
     #readonly_fields = ["name", "appid"]
