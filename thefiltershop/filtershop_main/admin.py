@@ -783,6 +783,43 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 nbOfUpdate += 1
 
         modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games")
+
+    @action(
+        label="Update known popularity from raw review count"
+    )
+    @admin.action(description="Update the known popularity from the stored raw review count, without fetching Steam")
+    def update_popularity_from_raw_review_count(modeladmin, request, queryset):
+        nbOfUpdate = 0
+
+        for one_entry in queryset:
+            raw_review_count = getattr(one_entry, "raw_review_count", 0)
+            if raw_review_count in (None, 0):
+                continue
+
+            if raw_review_count == -1:
+                raw_review_count = 0
+
+            if raw_review_count > 200:
+                raw_review_count = 200
+            if raw_review_count < 11:
+                raw_review_count = 0
+
+            video_game = None
+            if getattr(one_entry, "videogame_id", None):
+                video_game = models.Videogame_common.objects.filter(pk=one_entry.videogame_id).first()
+
+            if video_game is None:
+                video_game = models.Videogame_common.objects.filter(name=one_entry.name).first()
+
+            if video_game is None:
+                modeladmin.message_user(request, f"{one_entry.name} does not seem to exist in the filter shop yet.")
+                continue
+
+            video_game.known_popularity = raw_review_count / 2
+            video_game.save()
+            nbOfUpdate += 1
+
+        modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games")
    
     def get_review_count(modeladmin, request, one_entry):
         print('one entry to update ->',one_entry)

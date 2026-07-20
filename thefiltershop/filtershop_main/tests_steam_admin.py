@@ -110,3 +110,24 @@ class SteamAdminTests(TestCase):
         urlopen_mock.assert_not_called()
         entry.refresh_from_db()
         self.assertEqual(entry.raw_review_count, 25)
+
+    def test_update_popularity_from_raw_review_count_translates_minus_one_to_zero(self):
+        entity_type = TypeOfEntity.objects.create(name="Video Game")
+        game = Videogame_common.objects.create(name="Stored Raw Count Game", for_type=entity_type)
+        entry = Entry_on_Steam.objects.create(
+            appid=22222,
+            name="Stored Raw Count Game",
+            videogame=game,
+            raw_review_count=-1,
+        )
+
+        class DummyAdmin:
+            def message_user(self, request, message):
+                return None
+
+        with patch("filtershop_main.admin.urlopen") as urlopen_mock:
+            EntryOnSteam.update_popularity_from_raw_review_count(DummyAdmin(), None, [entry])
+
+        game.refresh_from_db()
+        self.assertEqual(game.known_popularity, 0)
+        urlopen_mock.assert_not_called()
