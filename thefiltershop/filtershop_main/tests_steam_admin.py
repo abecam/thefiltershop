@@ -91,3 +91,22 @@ class SteamAdminTests(TestCase):
         self.assertTrue(result)
         entry.refresh_from_db()
         self.assertEqual(entry.raw_review_count, 77)
+
+    def test_update_raw_review_count_from_steam_only_new_skips_existing_value(self):
+        entry = Entry_on_Steam.objects.create(
+            appid=11111,
+            name="Existing Raw Count",
+            raw_review_count=25,
+        )
+
+        class DummyAdmin:
+            def message_user(self, request, message):
+                return None
+
+        with patch("filtershop_main.admin.urlopen") as urlopen_mock:
+            result = EntryOnSteam.update_raw_review_count_from_steam_only_new(DummyAdmin(), None, [entry])
+
+        self.assertIsNone(result)
+        urlopen_mock.assert_not_called()
+        entry.refresh_from_db()
+        self.assertEqual(entry.raw_review_count, 25)

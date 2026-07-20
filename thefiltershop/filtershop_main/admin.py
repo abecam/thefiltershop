@@ -767,6 +767,22 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 nbOfUpdate += 1
 
         modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games")
+
+    @action(
+        label="Fetch the raw review count from Steam only for entries not updated yet"
+    )
+    @admin.action(description="Fetch the raw review count from Steam only for selected entries whose value is still 0")
+    def update_raw_review_count_from_steam_only_new(modeladmin, request, queryset):
+        nbOfUpdate = 0
+
+        for one_entry in queryset:
+            if getattr(one_entry, "raw_review_count", 0) not in (None, 0):
+                continue
+
+            if EntryOnSteam.get_raw_review_count(modeladmin, request, one_entry):
+                nbOfUpdate += 1
+
+        modeladmin.message_user(request, f"Done! Updated {nbOfUpdate} games")
    
     def get_review_count(modeladmin, request, one_entry):
         print('one entry to update ->',one_entry)
@@ -845,7 +861,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ('update_one_from_steam', 'force_update_one_from_steam')
     #changelist_actions = ('update_several_from_steam',)
     changelist_actions = ('fetch_all_from_steam',)
-    actions = [update_several_from_steam, update_popularity_from_steam, update_raw_review_count_from_steam]
+    actions = [update_several_from_steam, update_popularity_from_steam, update_raw_review_count_from_steam, update_raw_review_count_from_steam_only_new]
     list_display = ["name", "appid", "videogame", "raw_review_count"]
     ordering = ["-videogame", "name"]
     #readonly_fields = ["name", "appid"]
