@@ -63,6 +63,11 @@ class UserAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     exclude= ['last_changed_by']
 
+@admin.register(models.ShortUrl, site=admin_site)
+class ShortUrlAdmin(admin.ModelAdmin):
+    list_display = ['short_code', 'target_url']
+    search_fields = ['short_code', 'target_url']
+
 @admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):
     date_hierarchy = "date_creation"
@@ -359,12 +364,16 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
             return
         # Missing: game type, studio, publisher, platforms, vignette, link to shop (should be obvious)
         video_game = models.Videogame_common(name=content['name'], description=content['short_description'], url=content['website'] , for_type=video_game_type)
+        video_game.save()
 
         # creating images
         # header_image
 
         # capsule_image
         #
+        if "header_image" not in content or "capsule_image" not in content:
+            modeladmin.message_user(request, f"Sorry, the filter shop does not support games without a header and capsule image (yet). Entry {id} is missing one of them.")
+            return
         EntryOnSteam.getCapsuleAndHeader(content['capsule_image'],content['header_image'],video_game)
         # screenshots
         # screenshots	
@@ -412,6 +421,8 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                         
     def getCapsuleAndHeader(capsule_url, header_url, model):
             # Stream the image from the url
+            if capsule_url is None or header_url is None:
+                return
             response = requests.get(capsule_url, stream=True)
 
             # Was the request OK?
@@ -510,6 +521,7 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
                 studio = models.Studio.objects.all().get(name=one_entry) 
             except models.Studio.DoesNotExist: 
                 studio = models.Studio(name=one_entry, description="")
+                print(f"Creating studio {studio.name}")
                 # We migh need to create the studio type first
                 try: 
                     studio_type = models.TypeOfEntity.objects.all().get(name="Studio") 
@@ -520,10 +532,10 @@ class EntryOnSteam(DjangoObjectActions, admin.ModelAdmin):
 
                 ### Need a vignette too
                 studio.save()
-                
+            print(f"Adding studio {studio.name} to {video_game.name}")
             # And add it
             video_game.studios.add(studio) 
-                
+
         for one_entry in publishers:
             print(f"Publisher: {one_entry}")
             

@@ -2,13 +2,39 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group
 from django.utils.safestring import mark_safe
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 import PIL.Image
 
 class User(AbstractUser):
     is_pending_approval = models.BooleanField(default=False, help_text="User needs admin approval to access admin panel")
+
+class ShortUrl(models.Model):
+    short_code = models.CharField(
+        max_length=3,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Za-z0-9]{3}$',
+                message='Short code must be exactly 3 alphanumeric characters.'
+            )
+        ],
+        help_text='Three-character code used in /sh/<code>'
+    )
+    target_url = models.URLField(verbose_name='Target URL')
+
+    def clean(self):
+        super().clean()
+        if self.short_code is not None:
+            self.short_code = self.short_code.strip()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.short_code
 
 class Group(Group):
     pass

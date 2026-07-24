@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
@@ -75,6 +76,32 @@ class EntityModelTests(TestCase):
         # Test valid
         game = Videogame_common(for_type=entity_type, name='Test Game', game_type='Indie', crapometer=50)
         game.full_clean()  # Should not raise
+
+
+class ShortUrlModelTests(TestCase):
+    def test_short_code_must_be_exactly_three_alphanumeric_characters(self):
+        from .models import ShortUrl
+
+        short_url = ShortUrl(short_code='ab', target_url='https://example.com')
+        with self.assertRaises(ValidationError):
+            short_url.full_clean()
+
+        short_url = ShortUrl(short_code='abcd', target_url='https://example.com')
+        with self.assertRaises(ValidationError):
+            short_url.full_clean()
+
+        short_url = ShortUrl(short_code='abc', target_url='https://example.com')
+        short_url.full_clean()
+
+    def test_redirect_short_url_to_target(self):
+        from .models import ShortUrl
+
+        ShortUrl.objects.create(short_code='abc', target_url='https://example.com')
+
+        response = self.client.get(reverse('filtershop_games:short_url', kwargs={'short_code': 'abc'}))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://example.com')
 
 
 class ReviewModelTests(TestCase):

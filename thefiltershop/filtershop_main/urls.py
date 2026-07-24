@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 from .admin import admin_site
@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 app_name = "filtershop_games"
 urlpatterns = [
     path("", views.index, name="index"),
+    re_path(r"^sh/(?P<short_code>[A-Za-z0-9]{3})/?$", views.redirect_short_url, name="short_url"),
     path("index", views.index, name="index"),
     path("<int:videogame_id>/", views.game, name="game"),
     path("studio/<int:studio_id>/", views.studio, name="studio"),
