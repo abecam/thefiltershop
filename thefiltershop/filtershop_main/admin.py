@@ -3,11 +3,14 @@ import requests
 import logging
 import tempfile
 import random
+import string
 
 from django.contrib import admin
 from django.contrib import messages
 from django.db.models import F, Exists, Q, OuterRef
 from django.core import files
+from django import forms
+from django.utils.html import format_html
 from datetime import timedelta
 from django.utils import timezone
 from urllib.request import urlopen
@@ -63,10 +66,43 @@ class UserAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     exclude= ['last_changed_by']
 
+class ShortUrlAdminForm(forms.ModelForm):
+    class Meta:
+        model = models.ShortUrl
+        fields = ['short_code', 'target_url']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk is None and not self.data.get('short_code'):
+            self.initial['short_code'] = self.generate_short_code()
+
+    def generate_short_code(self):
+        alphabet = string.ascii_letters + string.digits
+        for _ in range(100):
+            candidate = ''.join(random.choice(alphabet) for _ in range(3))
+            if not models.ShortUrl.objects.filter(short_code__iexact=candidate).exists():
+                return candidate
+        raise ValueError('Unable to generate a unique short code after multiple attempts.')
+
+    def clean_short_code(self):
+        short_code = self.cleaned_data.get('short_code', '').strip()
+        if not short_code:
+            short_code = self.generate_short_code()
+        return short_code
+
+
 @admin.register(models.ShortUrl, site=admin_site)
 class ShortUrlAdmin(admin.ModelAdmin):
-    list_display = ['short_code', 'target_url']
+    form = ShortUrlAdminForm
+    list_display = ['short_code', 'target_url', 'short_url_link']
     search_fields = ['short_code', 'target_url']
+
+    def short_url_link(self, obj):
+        if not obj.short_code:
+            return '-'
+        url = f'/sh/{obj.short_code}'
+        return format_html('<a href="{0}" target="_blank">{0}</a>', url)
+    short_url_link.short_description = 'Short URL'
 
 @admin.register(models.TypeOfEntity, models.TypeOfRelationBetweenFilter, models.Entity_Category, models.Platform, models.Tag, site=admin_site)
 class GeneralAdmin(admin.ModelAdmin):

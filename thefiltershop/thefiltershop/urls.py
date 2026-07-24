@@ -48,7 +48,6 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path('admin/', admin_site.urls),
-    #path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
